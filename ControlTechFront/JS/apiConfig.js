@@ -1,1 +1,1 @@
-export const API_BASE_URL = "control-tech-six.vercel.app";
+export const API_BASE_URL = "controltech-app.up.railway.app";
