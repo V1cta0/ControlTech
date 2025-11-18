@@ -9,12 +9,14 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**") // Aplica a todas as rotas da API
+        registry.addMapping("/**") // Libera todas as rotas
                 .allowedOrigins(
-                        "https://control-tech-six.vercel.app", // 1. Seu Front-end na Vercel
-                        "http://localhost:5500",             // 2. Para testes locais (opcional)
-                        "http://127.0.0.1:5500"              // 3. Variação local
+                        "https://control-tech-six.vercel.app", // <--- A URL exata do seu Front na Vercel
+                        "http://localhost:5500",             // Para testes locais
+                        "http://127.0.0.1:5500"
                 )
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT");
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 }
