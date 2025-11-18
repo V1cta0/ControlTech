@@ -10,11 +10,13 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // Libera todas as rotas
-                // CORREÇÃO: Usamos allowedOriginPatterns para aceitar qualquer porta local, como 5502
+                // CORREÇÃO DEFINITIVA: Deve-se usar 'allowedOriginPatterns' para curingas.
+                // Usamos o padrão 'http://*' para cobrir qualquer porta local e garantir que Vercel seja reconhecido.
                 .allowedOriginPatterns(
-                        "https://control-tech-six.vercel.app", // URL do Front em produção
-                        "http://localhost:*",                  // Aceita qualquer porta local (ex: 8080, 5502, 3000)
-                        "http://127.0.0.1:*"                   // Aceita qualquer porta local (incluindo 5502)
+                        "https://control-tech-six.vercel.app", // Sua URL do Front em produção
+                        "http://localhost:*",                  // Qualquer porta local (8080, 5502, etc.)
+                        "http://127.0.0.1:*",                  // Qualquer porta local
+                        "*"                                    // Curinga geral (Use apenas temporariamente para testes)
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT")
                 .allowedHeaders("*")
