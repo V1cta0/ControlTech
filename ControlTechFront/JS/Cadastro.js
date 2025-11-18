@@ -32,7 +32,7 @@ btnToggleCameraCadastro?.addEventListener('click', () => {
     });
 });
 
-// ----------------- LÓGICA DE UPLOAD DE CADASTRO (Mantida) -----------------
+// ----------------- LÓGICA DE UPLOAD DE CADASTRO (CORRIGIDA) -----------------
 
 cadastroQrInput?.addEventListener('change', () => {
     // @ts-ignore
@@ -47,28 +47,34 @@ cadastroQrInput?.addEventListener('change', () => {
 
     if (statusMsgCadastro) statusMsgCadastro.textContent = "Processando QR Code do arquivo...";
 
-    // CORRIGIDO: Usa API_BASE_URL
-    fetch(`${API_BASE_URL}/api/qrcode/ler`, {
+    // CORRIGIDO: Usa o novo endpoint /api/qrcode/decode
+    fetch(`${API_BASE_URL}/api/qrcode/decode`, { 
         method: "POST",
         body: formData
     })
-    .then(res => res.ok ? res.json() : Promise.reject("Erro ao ler QR Code"))
+    // CORRIGIDO: Novo tratamento para verificar a resposta e extrair 'qrCode'
+    .then(res => {
+        if (!res.ok) {
+            return res.text().then(text => Promise.reject(text || "Erro desconhecido ao ler QR Code."));
+        }
+        return res.json();
+    })
     .then(data => {
-        // O back-end retorna { usuario: { qrCode: "..." } } se for um QR code válido
-        const qrCodeTexto = data.usuario.qrCode;
+        // O back-end agora retorna { "qrCode": "..." }
+        const qrCodeTexto = data.qrCode; // Acessa a propriedade 'qrCode'
         if (qrCodeTexto) {
             qrCodeLido = qrCodeTexto;
             // @ts-ignore
-            if (statusMsgCadastro) statusMsgCadastro.textContent = "QR Code do arquivo lido. Prossiga com o cadastro.";
+            if (statusMsgCadastro) statusMsgCadastro.textContent = `QR Code do arquivo lido: ${qrCodeTexto}. Prossiga com o cadastro.`;
         } else {
-             throw new Error("QR Code não pôde ser extraído do arquivo.");
+             throw new Error("QR Code não pôde ser extraído ou está vazio.");
         }
     })
     .catch(err => {
         console.error(err);
         qrCodeLido = null;
         // @ts-ignore
-        if (statusMsgCadastro) statusMsgCadastro.textContent = "Erro ao ler QR Code do arquivo: " + err;
+        if (statusMsgCadastro) statusMsgCadastro.textContent = "Erro ao ler QR Code do arquivo: " + (typeof err === 'string' ? err : err.message || 'Falha na comunicação.');
     });
 
     // Código para exibir o nome do arquivo no CADASTRO (mantido)
@@ -81,6 +87,7 @@ cadastroQrInput?.addEventListener('change', () => {
 
 
 // ----------------- LÓGICA DE CADASTRO (POST) -----------------
+// ... (O restante da lógica de cadastro POST foi mantido, pois estava correto) ...
 
 btnCadastrar?.addEventListener('click', async () => {
     // @ts-ignore
