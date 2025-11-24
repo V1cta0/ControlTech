@@ -9,9 +9,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        System.out.println("Configuração de CORS aplicada!"); // Log para verificar no Railway
         registry.addMapping("/**")
-                .allowedOriginPatterns("*") // LIBERA TUDO (Seguro com allowedOriginPatterns + allowCredentials)
+                .allowedOriginPatterns("*") // Permite qualquer site acessar (Vercel, localhost, etc)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT")
                 .allowedHeaders("*")
                 .allowCredentials(true);
