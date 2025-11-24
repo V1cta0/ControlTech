@@ -1,4 +1,5 @@
-// Dicionário de traduções
+import { API_BASE_URL } from './apiConfig.js';
+
 const translations = {
     'pt': {
         'pageTitle': 'Histórico - ControlTech',
@@ -123,7 +124,7 @@ function displayUserName(lang) { const wm = document.getElementById('welcome-mes
 
 // --- LÓGICA ORIGINAL DA PÁGINA (PRESERVADA E INTEGRADA) ---
 
-const BASE_URL = "http://localhost:8080/api/historico"; // URL base da API de histórico
+const BASE_URL = `${API_BASE_URL}/api/historico`;
 
 // Função original para carregar histórico (atualizada para traduções)
 function carregarHistorico(usuarioId = null) {

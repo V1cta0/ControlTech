@@ -1,6 +1,5 @@
-// JS/Ferramenta.js (Integrando lógica de FerramentaUni.js)
+import { API_BASE_URL } from './apiConfig.js';
 
-// Dicionário de traduções (Certifique-se que 'emUsoPor' existe)
 const translations = {
     'pt': {
         'pageTitle': 'Ferramentas - SENAI ControlTech',
@@ -143,8 +142,7 @@ function formatarDataAssociacao(localDateTimeStr, lang) {
 async function buscarUsuarioDaFerramenta(ferramentaId) {
     try {
         // Este endpoint agora retorna o UsuarioStatusDTO, que inclui a dataAssociacao
-        const res = await fetch(`http://localhost:8080/api/ferramentas/${ferramentaId}/usuario`);
-        if (!res.ok) {
+            const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}/usuario`);        if (!res.ok) {
             console.warn(`Erro ${res.status} ao buscar usuário para ferramenta ${ferramentaId}.`);
             return null;
         }
@@ -163,7 +161,7 @@ async function carregarFerramentas() {
     const currentLang = localStorage.getItem('lang') || 'pt';
     const currentTrans = translations[currentLang];
     try {
-        const res = await fetch("http://localhost:8080/api/ferramentas");
+        const res = await fetch(`${API_BASE_URL}/api/ferramentas`);
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         ferramentas = await res.json();
         if (!Array.isArray(ferramentas)) {

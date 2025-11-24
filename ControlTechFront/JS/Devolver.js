@@ -1,4 +1,5 @@
-// Dicionário de traduções
+import { API_BASE_URL } from './apiConfig.js';
+
 const translations = {
     'pt': {
         'pageTitle': 'Devolução de Itens - SENAI',
@@ -204,7 +205,7 @@ function displayUserName(lang) {
 
 // --- LÓGICA PRINCIPAL DA PÁGINA ---
 
-const BASE_URL = "http://localhost:8080/api/ferramentas"; // URL base da API
+const BASE_URL = `${API_BASE_URL}/api/ferramentas`;
 
 // Pega usuário logado (se houver)
 function getUsuarioLogado() {

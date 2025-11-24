@@ -1,4 +1,5 @@
-// Dicionário de traduções (Adaptado do Ferramenta.js)
+import { API_BASE_URL } from './apiConfig.js';
+
 const translations = {
     'pt': {
         'pageTitle': 'Detalhes da Ferramenta - ControlTech',
@@ -230,7 +231,7 @@ async function atualizarStatusDaFerramenta() {
     const ferramentaId = new URLSearchParams(window.location.search).get("id");
     const lang = localStorage.getItem('lang') || 'pt';
     try {
-        const res = await fetch(`http://localhost:8080/api/ferramentas/${ferramentaId}/usuario`);
+const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}/usuario`);
         if (!res.ok) throw new Error(lang === 'pt' ? "Erro ao buscar usuário da ferramenta" : "Error fetching tool user");
         
         // A API agora retorna UsuarioStatusDTO com dataAssociacao
@@ -259,7 +260,7 @@ async function carregarFerramenta() {
     const trans = translations[lang];
 
     try {
-        const res = await fetch(`http://localhost:8080/api/ferramentas/${ferramentaId}`);
+        const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}`);
         if (!res.ok) throw new Error(trans.erroCarregar);
 
         const ferramenta = await res.json();
@@ -335,7 +336,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (statusMsg) statusMsg.textContent = "";
 
         try {
-            const assocRes = await fetch(`http://localhost:8080/api/ferramentas/associar/${ferramentaId}`, {
+            const assocRes = await fetch(`${API_BASE_URL}/api/ferramentas/associar/${ferramentaId}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ usuarioId: idUsuario })
