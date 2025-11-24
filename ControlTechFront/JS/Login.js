@@ -276,28 +276,30 @@ btnLerQrUpload?.addEventListener('click', () => {
 });
 
 
-// ----- Funções auxiliares -----
-
 function salvarUsuarioLogado(usuario) {
-    const dadosReais = usuario.usuario ?? usuario;
-    const idUsuario = dadosReais.id ?? dadosReais.usuarioId;
+    const dadosReais = usuario.usuario || usuario; 
+
+    // Garante que o ID existe
+    const idUsuario = dadosReais.id || dadosReais.usuarioId;
 
     if (!idUsuario) {
         showAlert("Erro no Sistema", "Não foi possível identificar o usuário retornado pelo servidor.");
+        console.error("Dados recebidos inválidos:", usuario);
         return;
     }
 
+    // Cria o objeto limpo para salvar
     const usuarioFormatado = {
         id: idUsuario,
-        nome: dadosReais.nome,
+        nome: dadosReais.nome || "Usuário Sem Nome", // Fallback para não quebrar
         perfil: dadosReais.perfil,
         qrCode: dadosReais.qrCode
     };
 
+    console.log("Salvando usuário no localStorage:", usuarioFormatado); // Log para depuração
     localStorage.setItem("usuarioLogado", JSON.stringify(usuarioFormatado));
 }
 
-// --- Exibir nome do arquivo ---
 const fileNameDisplay = document.getElementById('fileNameDisplay');
 loginQrInput?.addEventListener('change', () => {
     // @ts-ignore
