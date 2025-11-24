@@ -1,1 +1,1 @@
-export const API_BASE_URL = "https://controltech.dev";
+export const API_BASE_URL = "https://controltech-app.up.railway.app";
