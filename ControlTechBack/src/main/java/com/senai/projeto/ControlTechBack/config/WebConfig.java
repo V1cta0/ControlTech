@@ -16,15 +16,18 @@ public class WebConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 
-        // 1. Permite Credenciais (se precisar de login/cookies no futuro)
+        // Permite credenciais
         config.setAllowCredentials(true);
 
-        // 2. Permite TUDO (qualquer site, qualquer header, qualquer método)
+        // Permite QUALQUER origem (Frontend Vercel, Localhost, etc)
         config.addAllowedOriginPattern("*");
+
+        // Permite QUALQUER cabeçalho
         config.addAllowedHeader("*");
+
+        // Permite TODOS os métodos necessários
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"));
 
-        // 3. Aplica essa configuração para TODAS as rotas
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }

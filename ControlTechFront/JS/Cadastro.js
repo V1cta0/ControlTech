@@ -88,8 +88,14 @@ cadastroQrInput?.addEventListener('change', () => {
 
 // ----------------- LÓGICA DE CADASTRO (POST) -----------------
 // ... (O restante da lógica de cadastro POST foi mantido, pois estava correto) ...
+// ... (Importações e código da câmera permanecem iguais) ...
 
-btnCadastrar?.addEventListener('click', async () => {
+// ----------------- LÓGICA DE CADASTRO (POST) -----------------
+
+// 1. Adicione 'e' (evento) nos parênteses
+btnCadastrar?.addEventListener('click', async (e) => {
+    e.preventDefault(); // <--- 2. ESSA LINHA CORRIGE O ERRO DE FETCH (Impede refresh)
+
     // @ts-ignore
     const nome = nomeCadastroInput.value.trim();
     // @ts-ignore
@@ -110,6 +116,8 @@ btnCadastrar?.addEventListener('click', async () => {
         qrCode: qrCodeLido
     };
 
+    console.log("Tentando cadastrar em:", `${API_BASE_URL}/api/usuarios`);
+
     try {
         const response = await fetch(`${API_BASE_URL}/api/usuarios`, {
             method: 'POST',
@@ -126,13 +134,13 @@ btnCadastrar?.addEventListener('click', async () => {
 
         const usuarioCadastrado = await response.json();
 
-        // Sucesso: exibe popup
+        // Sucesso
         // @ts-ignore
         if(popupNomeCadastro) popupNomeCadastro.textContent = usuarioCadastrado.nome;
         // @ts-ignore
         if(popupCadastro) popupCadastro.classList.remove('hidden');
 
-        // Limpa os campos e o QR code
+        // Limpa tudo
         // @ts-ignore
         if (nomeCadastroInput) nomeCadastroInput.value = '';
         // @ts-ignore
@@ -143,19 +151,15 @@ btnCadastrar?.addEventListener('click', async () => {
         // @ts-ignore
         if(statusMsgCadastro) statusMsgCadastro.textContent = '';
 
-
     } catch (error) {
         console.error('Erro no cadastro:', error);
         // @ts-ignore
-        if(statusMsgCadastro) statusMsgCadastro.textContent = 'ERRO: ' + (error.message || 'Falha na comunicação com o servidor.');
+        if(statusMsgCadastro) statusMsgCadastro.textContent = 'ERRO: ' + (error.message || 'Falha na comunicação.');
     } finally {
         // @ts-ignore
         if(btnCadastrar) btnCadastrar.innerHTML = 'Cadastrar';
     }
 });
-
-
-// ----------------- POPUP E EVENTOS DE NAVEGAÇÃO -----------------
 
 document.getElementById('fecharPopupCadastro')?.addEventListener('click', () => {
     // @ts-ignore
