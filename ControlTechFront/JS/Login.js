@@ -81,25 +81,24 @@ export function stopCamera(mode) {
     }
 }
 
-// ----- Função startCamera (CORRIGIDA E OTIMIZADA) -----
 export function startCamera(mode, onScanSuccess) {
     const readerId = mode === 'login' ? 'reader-login' : 'reader-cadastro';
     const readerContainer = document.getElementById(readerId);
-    // Referencia o botão de câmera de Login pelo ID correto
     const btn = document.getElementById(mode === 'login' ? 'btnToggleCameraLogin' : 'btnToggleCameraCadastro');
-    const uploadControls = document.getElementById(mode === 'login' ? 'loginUploadControls' : 'cadastroUploadControls'); // Referência ao novo container
+    const uploadControls = document.getElementById(mode === 'login' ? 'loginUploadControls' : 'cadastroUploadControls');
 
+    // Se já estiver aberta, fecha
     if (readerContainer && readerContainer.style.display === 'block') {
         stopCamera(mode);
         return;
     }
 
+    // UI Updates
     if (readerContainer) readerContainer.style.display = 'block';
     if (btn) btn.innerHTML = '<i class="fas fa-stop-circle"></i> Parar Câmera';
-    if (uploadControls) uploadControls.style.display = 'none'; // NOVO: Oculta controles de upload
+    if (uploadControls) uploadControls.style.display = 'none';
 
-
-    // Cria a instância se necessário
+    // Instancia o leitor se não existir
     if (mode === 'login' && !html5QrCodeLogin) {
         // @ts-ignore
         html5QrCodeLogin = new Html5Qrcode(readerId);
@@ -110,13 +109,10 @@ export function startCamera(mode, onScanSuccess) {
 
     let reader = mode === 'login' ? html5QrCodeLogin : window.html5QrCodeCadastro;
 
-    // --- CORREÇÃO E OTIMIZAÇÃO ---
-    // 1. O 'config' (segundo argumento) agora contém as restrições de vídeo
     const config = {
-        fps: 25, // Mais fluido
+        fps: 25,
         qrbox: { width: 250, height: 250 },
-        disableFlip: false,
-        // As restrições de vídeo (largura/altura) vão AQUI DENTRO
+        disableFlip: false, // Importante para não espelhar a câmera traseira
         videoConstraints: {
             width: { ideal: 1280 },
             height: { ideal: 720 }
@@ -127,56 +123,48 @@ export function startCamera(mode, onScanSuccess) {
         // @ts-ignore
         Html5Qrcode.getCameras().then(devices => {
             if (devices && devices.length) {
-
-                // 2. O 'startSource' (primeiro argumento) só define a câmera
-                let startSource = devices[0].id; // Fallback: primeira câmera (webcam)
-
-                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-                if (isMobile) {
-                    // Em mobile, pedimos a câmera 'environment' (traseira)
-                    // Este objeto SÓ PODE TER UMA CHAVE (facingMode).
-                    startSource = { facingMode: { ideal: "environment" } };
-                }
                 
-                // 3. Chamada correta:
+                // --- TENTATIVA 1: Forçar Câmera Traseira (Environment) ---
                 reader.start(
-                    startSource, // Argumento 1: Qual câmera (string ou {facingMode})
-                    config,      // Argumento 2: Como usá-la (fps, qrbox, width, height)
+                    { facingMode: "environment" }, 
+                    config,
                     onScanSuccess,
-                    (error) => {
-                        // Callback de erro de scanning (ignorado)
-                    }
+                    (error) => {} // Erro de leitura de QR (ignorar)
                 )
-                .catch((err) => {
-                    console.error("ERRO CRÍTICO ao iniciar câmera:", err);
-                    
-                    // Se falhar (ex: F12 pedindo 'environment'), tenta de novo com a câmera padrão
-                    if (err.name === "OverconstrainedError" || (err.message && err.message.includes("OverconstrainedError"))) {
-                        console.warn("Falha ao pedir câmera 'environment'. Tentando câmera padrão (webcam).");
+                .catch((errBack) => {
+                    console.warn("Câmera traseira falhou ou não existe. Tentando frontal...", errBack);
+
+                    // --- TENTATIVA 2: Câmera Frontal (User) ---
+                    // Isso acontece geralmente em PCs ou se o browser bloquear a traseira
+                    reader.start(
+                        { facingMode: "user" },
+                        config,
+                        onScanSuccess,
+                        (error) => {}
+                    ).catch((errFront) => {
+                        console.warn("Câmera frontal falhou. Tentando pelo ID do dispositivo...", errFront);
+
+                        // --- TENTATIVA 3: ID Específico (Fallback final) ---
+                        // Pega a primeira câmera que o navegador listou
                         reader.start(
-                            devices[0].id, // Tenta a primeira câmera da lista (webcam no F12)
-                            config,
-                            onScanSuccess,
-                            (error) => { /* ... */ }
+                            devices[0].id, 
+                            config, 
+                            onScanSuccess, 
+                            () => {}
                         ).catch(finalErr => {
-                            // Se falhar de novo, informa o usuário.
-                            alert("ERRO: Falha ao iniciar qualquer câmera. Detalhe: " + finalErr.message);
+                            showAlert("Erro de Câmera", "Falha ao iniciar qualquer câmera: " + finalErr.message);
                             stopCamera(mode);
                         });
-                    } else {
-                        // Outro erro (ex: permissão negada)
-                        alert("ERRO: Falha ao iniciar câmera. Verifique as permissões. Detalhe: " + err.message);
-                        stopCamera(mode);
-                    }
+                    });
                 });
+
             } else {
-                alert("Nenhuma câmera detectada no seu dispositivo. Use a opção 'Escolher Arquivo'.");
+                showAlert("Câmera não encontrada", "Nenhuma câmera detectada no dispositivo.");
                 stopCamera(mode);
             }
         }).catch(err => {
-            console.error("ERRO ao listar câmeras:", err);
-            alert("ERRO: Falha ao listar dispositivos de câmera.");
+            console.error("Erro ao listar:", err);
+            showAlert("Erro", "Falha ao listar dispositivos de câmera/permissão negada.");
             stopCamera(mode);
         });
     }
