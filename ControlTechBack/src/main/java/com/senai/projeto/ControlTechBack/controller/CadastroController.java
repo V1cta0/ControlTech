@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/cadastro")
+@CrossOrigin(origins = "*")
 public class CadastroController {
 
     @Autowired

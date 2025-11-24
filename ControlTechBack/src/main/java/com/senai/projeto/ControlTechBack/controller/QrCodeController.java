@@ -17,6 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/qrcode")
+@CrossOrigin(origins = "*")
 public class QrCodeController {
 
     @Autowired

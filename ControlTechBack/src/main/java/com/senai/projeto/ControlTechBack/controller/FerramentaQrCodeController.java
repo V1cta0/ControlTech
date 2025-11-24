@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/ferramentas")
+@CrossOrigin(origins = "*")
 public class FerramentaQrCodeController {
 
     @Autowired
