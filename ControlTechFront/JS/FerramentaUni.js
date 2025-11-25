@@ -1,6 +1,5 @@
 import { API_BASE_URL } from './apiConfig.js';
 
-// Dicionário de traduções
 const translations = {
     'pt': {
         'pageTitle': 'Detalhes da Ferramenta - ControlTech',
@@ -64,18 +63,13 @@ const translations = {
     }
 };
 
-// --- FUNÇÕES DE UTILIDADE DE TEMA E IDIOMA ---
-
 let cronometroIntervalId = null;
 
 function formatarTempo(totalSeconds) {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
-
-    return [hours, minutes, seconds]
-        .map(t => t.toString().padStart(2, '0'))
-        .join(':');
+    return [hours, minutes, seconds].map(t => t.toString().padStart(2, '0')).join(':');
 }
 
 function iniciarCronometro(timestampAssociacao) {
@@ -85,17 +79,13 @@ function iniciarCronometro(timestampAssociacao) {
 
     if (!chronometerDisplay || !timeElapsedContainer) return;
 
-    if (cronometroIntervalId) {
-        clearInterval(cronometroIntervalId);
-    }
+    if (cronometroIntervalId) clearInterval(cronometroIntervalId);
     
     function atualizarCronometro() {
         const now = new Date();
         const diffMs = now.getTime() - dataAssociacao.getTime();
         const diffSeconds = Math.floor(diffMs / 1000);
-        
         if (diffSeconds < 0) return; 
-
         chronometerDisplay.textContent = formatarTempo(diffSeconds);
     }
 
@@ -104,26 +94,13 @@ function iniciarCronometro(timestampAssociacao) {
     timeElapsedContainer.classList.remove('hidden');
 }
 
-
-const setText = (id, key, trans) => {
-    const element = document.getElementById(id);
-    if (element) element.textContent = trans[key] || '';
-    else console.warn(`Elemento ID '${id}' não encontrado.`);
-};
-
-const setSpanText = (id, key, trans) => {
-    const element = document.getElementById(id)?.querySelector('span');
-    if (element) element.textContent = trans[key] || '';
-    else console.warn(`Span dentro do ID '${id}' não encontrado.`);
-};
-
+const setText = (id, key, trans) => { const element = document.getElementById(id); if (element) element.textContent = trans[key] || ''; };
+const setSpanText = (id, key, trans) => { const element = document.getElementById(id)?.querySelector('span'); if (element) element.textContent = trans[key] || ''; };
 const setInnerHtml = (id, key, trans, args = {}) => {
     const element = document.getElementById(id);
     if (element) {
         let text = trans[key] || '';
-        Object.keys(args).forEach(k => {
-            text = text.replace(`{${k}}`, args[k]);
-        });
+        Object.keys(args).forEach(k => { text = text.replace(`{${k}}`, args[k]); });
         element.innerHTML = text;
     }
 };
@@ -136,7 +113,6 @@ const updateTranslations = (lang) => {
     document.documentElement.lang = currentLang === 'pt' ? 'pt-BR' : 'en';
     document.title = trans.pageTitle || 'Ferramenta - ControlTech';
 
-    // Barra lateral
     setSpanText('nav-tools', 'sidebarTools', trans);
     setSpanText('nav-return', 'sidebarReturn', trans);
     setSpanText('nav-help', 'sidebarHelp', trans);
@@ -144,17 +120,12 @@ const updateTranslations = (lang) => {
     setSpanText('nav-exit', 'sidebarExit', trans);
     setSpanText('settings-btn', 'sidebarSettings', trans);
 
-    // Conteúdo Principal
     setInnerHtml('label-descricao', 'labelDescricao', trans); 
     setInnerHtml('label-estoque', 'labelEstoque', trans);    
-    
     setText('btn-voltar-text', 'btnVoltar', trans);
     setText('btn-associar-text', 'btnAssociar', trans);
     setText('popup-btn-fechar', 'popupBtnFechar', trans);
-
     setText('time-elapsed-label', 'timeElapsedLabel', trans);
-
-    // Popup Configurações
     setText('settings-popup-title', 'settingsPopupTitle', trans);
     setText('theme-label', 'themeLabel', trans);
     setText('lang-label', 'langLabel', trans);
@@ -162,7 +133,6 @@ const updateTranslations = (lang) => {
     updateThemeStatusText(document.body.classList.contains('dark-theme') ? 'dark' : 'light', currentLang);
     updateLanguageStatusText(currentLang);
     displayUserName(currentLang);
-    
     atualizarStatusDaFerramenta();
 };
 
@@ -173,10 +143,21 @@ const updateThemeToggleButtonVisuals = (activeTheme) => { const si = document.qu
 const saveLanguage = (lang) => { localStorage.setItem('lang', lang); updateTranslations(lang); };
 const loadLanguage = () => { const sl = localStorage.getItem('lang') || 'pt'; updateTranslations(sl); };
 const updateLanguageStatusText = (activeLang) => { const lts = document.getElementById('lang-toggle-btn')?.querySelector('span'); const ls = document.getElementById('lang-status'); if (lts) lts.textContent = activeLang.toUpperCase(); if (ls) { const transPt = translations.pt; const transEn = translations.en; if (transPt && transEn) { ls.textContent = activeLang === 'pt' ? (transPt.langStatusPT || 'Português') : (transEn.langStatusEN || 'English'); }}};
-function displayUserName(lang) { const wm = document.getElementById('welcome-message'); const une = document.getElementById('user-name'); const tr = translations[lang]; let userInfo = null; try { const su = localStorage.getItem('usuarioLogado'); if (su) userInfo = JSON.parse(su); } catch (e) { console.error("Erro ao ler usuarioLogado:", e); } if (wm && une && tr) { const du = (lang === 'pt' ? 'Usuário' : 'User'); wm.textContent = tr.welcomeMessage || (lang === 'pt' ? 'Olá,' : 'Hello,'); une.textContent = (userInfo && userInfo.nome) ? userInfo.nome : du; }};
-
-
-// --- LÓGICA PRINCIPAL DA PÁGINA ---
+function displayUserName(lang) { 
+    const welcomeMessage = document.getElementById('welcome-message'); 
+    const userNameElement = document.getElementById('user-name'); 
+    const trans = translations[lang]; 
+    let userInfo = null; 
+    try { 
+        const storedUser = localStorage.getItem('usuarioLogado'); 
+        if (storedUser) userInfo = JSON.parse(storedUser); 
+    } catch (e) { console.error("Erro ao ler usuarioLogado:", e); } 
+    if (welcomeMessage && userNameElement && trans) { 
+        const defaultUserName = (lang === 'pt' ? 'Usuário' : 'User'); 
+        welcomeMessage.textContent = trans.welcomeMessage || (lang === 'pt' ? 'Olá,' : 'Hello,'); 
+        userNameElement.textContent = (userInfo && userInfo.nome) ? userInfo.nome : defaultUserName; 
+    }
+};
 
 function atualizarStatus(usuarioNome, dataAssociacao) { 
     const statusMsg = document.getElementById("statusMsg");
@@ -195,10 +176,7 @@ function atualizarStatus(usuarioNome, dataAssociacao) {
         if (statusMsg) statusMsg.innerHTML = `${trans.statusEmUso}<strong>${usuarioNome}</strong>`;
         if (statusMsg) statusMsg.style.color = "green"; 
         if (btnAssociar) btnAssociar.disabled = true; 
-        
-        if (dataAssociacao) {
-            iniciarCronometro(dataAssociacao);
-        }
+        if (dataAssociacao) iniciarCronometro(dataAssociacao);
     } else {
         if (statusMsg) statusMsg.innerHTML = trans.statusDisponivel;
         if (statusMsg) statusMsg.style.color = "gray"; 
@@ -210,15 +188,11 @@ async function atualizarStatusDaFerramenta() {
     const ferramentaId = new URLSearchParams(window.location.search).get("id");
     const lang = localStorage.getItem('lang') || 'pt';
     try {
-        // URL CORRIGIDA
         const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}/usuario`);
-        if (!res.ok) throw new Error(lang === 'pt' ? "Erro ao buscar usuário da ferramenta" : "Error fetching tool user");
-        
+        if (!res.ok) throw new Error("Erro");
         const usuarioStatus = await res.json(); 
-
         atualizarStatus(usuarioStatus.nome, usuarioStatus.dataAssociacao); 
     } catch (err) {
-        console.error(err);
         atualizarStatus(null, null); 
     }
 }
@@ -236,7 +210,6 @@ async function carregarFerramenta() {
     const trans = translations[lang];
 
     try {
-        // URL CORRIGIDA
         const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}`);
         if (!res.ok) throw new Error(trans.erroCarregar);
 
@@ -249,28 +222,23 @@ async function carregarFerramenta() {
         if (toolImage) toolImage.src = ferramenta.imagemUrl || '/img/tools.png'; 
 
         await atualizarStatusDaFerramenta();
-
         return ferramenta;
     } catch (err) {
-        console.error("Erro ao carregar ferramenta:", err);
+        console.error("Erro:", err);
         if (toolNome) toolNome.textContent = trans.erroCarregar;
         if (statusMsg) statusMsg.textContent = err.message;
-        if (statusMsg) statusMsg.style.color = "red";
         if (btnAssociar) btnAssociar.disabled = true;
         return null;
     }
 }
 
-
 document.addEventListener("DOMContentLoaded", async () => {
     const params = new URLSearchParams(window.location.search);
     const ferramentaId = params.get("id");
-
     const btnAssociar = document.getElementById("btnAssociar");
     const statusMsg = document.getElementById("statusMsg");
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const sidebar = document.getElementById('sidebar');
-
     const popup = document.getElementById("confirmationPopup");
     const closePopupBtn = document.getElementById("closePopupBtn");
     const settingsBtn = document.getElementById('settings-btn');
@@ -286,11 +254,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const trans = translations[lang];
 
     let usuarioLogado = null;
-    try {
-        usuarioLogado = JSON.parse(localStorage.getItem("usuarioLogado"));
-    } catch (e) {
-        console.error("Erro ao ler dados do usuário:", e);
-    }
+    try { usuarioLogado = JSON.parse(localStorage.getItem("usuarioLogado")); } catch (e) {}
 
     const idUsuario = usuarioLogado?.id ?? usuarioLogado?.usuarioId;
     if (!idUsuario) {
@@ -303,9 +267,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     btnAssociar?.addEventListener("click", async () => {
         if (statusMsg) statusMsg.textContent = "";
-
         try {
-            // URL CORRIGIDA
             const assocRes = await fetch(`${API_BASE_URL}/api/ferramentas/associar/${ferramentaId}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -313,9 +275,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
 
             let resposta;
-            try {
-                resposta = await assocRes.json();
-            } catch {
+            try { resposta = await assocRes.json(); } catch { 
                 const texto = await assocRes.text();
                 throw new Error(lang === 'pt' ? "Resposta inválida do servidor: " + texto : "Invalid server response: " + texto);
             }
@@ -332,7 +292,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             ferramenta.usuarioNome = resposta.usuarioNome;
 
         } catch (err) {
-            console.error("Erro ao associar:", err);
+            console.error(err);
             if (statusMsg) {
                 statusMsg.textContent = `${lang === 'pt' ? 'Erro' : 'Error'}: ${err.message}`;
                 statusMsg.style.color = "red";
@@ -340,13 +300,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
     
-    closePopupBtn?.addEventListener("click", () => {
-        popup.style.display = "none";
-    });
-
-    // --- MENU HAMBÚRGUER (PRESENTE) ---
+    closePopupBtn?.addEventListener("click", () => popup.style.display = "none");
     hamburgerBtn?.addEventListener('click', () => sidebar?.classList.toggle('active'));
-
     settingsBtn?.addEventListener('click', (e) => {
         e.preventDefault();
         themePopup?.classList.toggle('visible');

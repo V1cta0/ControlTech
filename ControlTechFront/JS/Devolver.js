@@ -74,19 +74,13 @@ const translations = {
 const updateTranslations = (lang) => {
     const currentLang = translations[lang] ? lang : 'pt';
     const trans = translations[currentLang];
-    if (!trans) return console.error("Traduções não encontradas para:", currentLang);
+    if (!trans) return;
 
     document.documentElement.lang = currentLang === 'pt' ? 'pt-BR' : 'en';
     document.title = trans.pageTitle || 'Devolução - SENAI';
 
-    const setText = (id, key) => {
-        const element = document.getElementById(id);
-        if (element) element.textContent = trans[key] || '';
-    };
-    const setSpanText = (id, key) => {
-        const element = document.getElementById(id)?.querySelector('span');
-        if (element) element.textContent = trans[key] || '';
-    };
+    const setText = (id, key) => { const e = document.getElementById(id); if (e) e.textContent = trans[key] || ''; };
+    const setSpanText = (id, key) => { const e = document.getElementById(id)?.querySelector('span'); if (e) e.textContent = trans[key] || ''; };
 
     setSpanText('nav-tools', 'sidebarTools');
     setSpanText('nav-return', 'sidebarReturn');
@@ -100,11 +94,9 @@ const updateTranslations = (lang) => {
     setText('label-nome-func', 'labelNomeFunc');
     setText('label-data', 'labelData');
     setText('label-horario', 'labelHorario');
-
     setText('modal-text', 'modalText');
     setText('confirmBtn', 'modalBtnSim');
     setText('cancelBtn', 'modalBtnCancelar');
-
     setText('settings-popup-title', 'settingsPopupTitle');
     setText('theme-label', 'themeLabel');
     setText('lang-label', 'langLabel');
@@ -122,18 +114,28 @@ const updateTranslations = (lang) => {
     }
 };
 
-const saveTheme = (theme) => { localStorage.setItem('theme', theme); const currentLang = localStorage.getItem('lang') || 'pt'; updateThemeStatusText(theme, currentLang); updateThemeToggleButtonVisuals(theme); };
+const saveTheme = (theme) => { localStorage.setItem('theme', theme); const cl = localStorage.getItem('lang') || 'pt'; updateThemeStatusText(theme, cl); updateThemeToggleButtonVisuals(theme); };
 const loadTheme = () => { const savedTheme = localStorage.getItem('theme') || 'light'; const currentLang = localStorage.getItem('lang') || 'pt'; document.body.classList.toggle('dark-theme', savedTheme === 'dark'); updateThemeStatusText(savedTheme, currentLang); updateThemeToggleButtonVisuals(savedTheme); };
-const updateThemeStatusText = (activeTheme, lang) => { const themeStatusEl = document.getElementById('theme-status'); const trans = translations[lang]; if (themeStatusEl && trans) { themeStatusEl.textContent = activeTheme === 'dark' ? (trans.themeStatusDark || 'Tema Escuro') : (trans.themeStatusLight || 'Tema Claro'); }};
-const updateThemeToggleButtonVisuals = (activeTheme) => { const sunIcon = document.querySelector('#theme-toggle-btn .fa-sun'); const moonIcon = document.querySelector('#theme-toggle-btn .fa-moon'); if (sunIcon && moonIcon) { sunIcon.style.opacity = activeTheme === 'dark' ? '0' : '1'; sunIcon.style.transform = activeTheme === 'dark' ? 'translateY(-10px)' : 'translateY(0)'; moonIcon.style.opacity = activeTheme === 'dark' ? '1' : '0'; moonIcon.style.transform = activeTheme === 'dark' ? 'translateY(0)' : 'translateY(10px)'; }};
+const updateThemeStatusText = (at, l) => { const ts = document.getElementById('theme-status'); const tr = translations[l]; if (ts && tr) ts.textContent = at === 'dark' ? (tr.themeStatusDark || 'Escuro') : (tr.themeStatusLight || 'Claro'); };
+const updateThemeToggleButtonVisuals = (at) => { const si = document.querySelector('#theme-toggle-btn .fa-sun'); const mi = document.querySelector('#theme-toggle-btn .fa-moon'); if (si && mi) { si.style.opacity = at === 'dark' ? '0' : '1'; si.style.transform = at === 'dark' ? 'translateY(-10px)' : 'translateY(0)'; mi.style.opacity = at === 'dark' ? '1' : '0'; mi.style.transform = at === 'dark' ? 'translateY(0)' : 'translateY(10px)'; }};
 const saveLanguage = (lang) => { localStorage.setItem('lang', lang); updateTranslations(lang); };
 const loadLanguage = () => { const savedLang = localStorage.getItem('lang') || 'pt'; updateTranslations(savedLang); };
-const updateLanguageStatusText = (activeLang) => { const langToggleBtnSpan = document.getElementById('lang-toggle-btn')?.querySelector('span'); const langStatusEl = document.getElementById('lang-status'); if (langToggleBtnSpan) langToggleBtnSpan.textContent = activeLang.toUpperCase(); if (langStatusEl) { const transPt = translations.pt; const transEn = translations.en; if (transPt && transEn) { langStatusEl.textContent = activeLang === 'pt' ? (transPt.langStatusPT || 'Português') : (transEn.langStatusEN || 'English'); }}};
-function displayUserName(lang) { const welcomeMessage = document.getElementById('welcome-message'); const userNameElement = document.getElementById('user-name'); const trans = translations[lang]; let userInfo = null; try { const storedUser = localStorage.getItem('usuarioLogado'); if (storedUser) userInfo = JSON.parse(storedUser); } catch (e) { console.error("Erro ao ler usuarioLogado:", e); } if (welcomeMessage && userNameElement && trans) { const defaultUserName = (lang === 'pt' ? 'Usuário' : 'User'); welcomeMessage.textContent = trans.welcomeMessage || (lang === 'pt' ? 'Olá,' : 'Hello,'); userNameElement.textContent = (userInfo && userInfo.nome) ? userInfo.nome : defaultUserName; }};
+const updateLanguageStatusText = (al) => { const lts = document.getElementById('lang-toggle-btn')?.querySelector('span'); const ls = document.getElementById('lang-status'); if (lts) lts.textContent = al.toUpperCase(); if (ls) { const tp = translations.pt; const te = translations.en; if (tp && te) ls.textContent = al.toUpperCase() === 'PT' ? (tp.langStatusPT || 'Português') : (te.langStatusEN || 'English'); }}};
+function displayUserName(lang) { 
+    const welcomeMessage = document.getElementById('welcome-message'); 
+    const userNameElement = document.getElementById('user-name'); 
+    const trans = translations[lang]; 
+    let userInfo = null; 
+    try { const su = localStorage.getItem('usuarioLogado'); if (su) ui = JSON.parse(su); } catch (e) { console.error("Erro ao ler usuarioLogado:", e); } 
+    if (welcomeMessage && userNameElement && trans) { 
+        const defaultUserName = (lang === 'pt' ? 'Usuário' : 'User'); 
+        welcomeMessage.textContent = trans.welcomeMessage || (lang === 'pt' ? 'Olá,' : 'Hello,'); 
+        userNameElement.textContent = (userInfo && userInfo.nome) ? userInfo.nome : defaultUserName; 
+    }
+};
 
-// --- LÓGICA PRINCIPAL DA PÁGINA ---
+// --- LÓGICA PRINCIPAL ---
 
-// URL CORRIGIDA
 const BASE_URL = `${API_BASE_URL}/api/ferramentas`; 
 
 function showAlert(titulo, mensagem) {
@@ -147,11 +149,9 @@ function showAlert(titulo, mensagem) {
         titleEl.textContent = titulo;
         msgEl.textContent = mensagem;
         modal.classList.remove('hidden');
-        
         const fechar = () => modal.classList.add('hidden');
         if (btnOk) btnOk.onclick = fechar;
         if (btnClose) btnClose.onclick = fechar;
-        
         modal.onclick = (e) => { if (e.target === modal) fechar(); };
     } else {
         alert(`${titulo}\n\n${mensagem}`);
@@ -162,10 +162,7 @@ function getUsuarioLogado() {
     try {
         const usuario = localStorage.getItem("usuarioLogado");
         return usuario ? JSON.parse(usuario) : null;
-    } catch (e) {
-        console.error("Erro ao parsear usuarioLogado:", e);
-        return null;
-    }
+    } catch (e) { return null; }
 }
 
 function preencherDataHora() {
@@ -186,7 +183,6 @@ function exibirUsuarioLogado(usuario) {
     preencherDataHora(); 
 
     if (infoUsuarioDiv) infoUsuarioDiv.classList.remove("hidden");
-
     if (typeof carregarFerramentas === 'function') {
         carregarFerramentas(usuario.id);
     }
@@ -197,7 +193,7 @@ function carregarFerramentas(usuarioId) {
     const currentLang = localStorage.getItem('lang') || 'pt';
     const trans = translations[currentLang];
 
-    if (!lista || !trans) return console.error("Elemento #listaFerramentas ou traduções não encontrados.");
+    if (!lista || !trans) return;
 
     fetch(`${BASE_URL}/usuario/${usuarioId}`)
         .then(res => {
@@ -206,17 +202,14 @@ function carregarFerramentas(usuarioId) {
         })
         .then(ferramentas => {
             lista.innerHTML = ""; 
-
             if (!ferramentas || ferramentas.length === 0) {
                 lista.innerHTML = `<div class="lista-vazia">${trans.listaVazia}</div>`;
                 lista.classList.remove("hidden");
                 return;
             }
-
             ferramentas.forEach(f => {
                 const div = document.createElement("div");
                 div.className = "ferramenta-item";
-
                 div.innerHTML = `
                     <p><strong>ID:</strong> ${f.ferramentaId || 'N/A'}</p>
                     <p><strong>Nome:</strong> ${f.ferramentaNome || (currentLang === 'pt' ? 'Nome Ind.' : 'Name Unav.')}</p>
@@ -228,12 +221,11 @@ function carregarFerramentas(usuarioId) {
                 `;
                 lista.appendChild(div);
             });
-
             lista.classList.remove("hidden");
             ativarModalBotoes();
         })
         .catch(err => {
-            console.error("Erro ao carregar ferramentas:", err);
+            console.error("Erro:", err);
             lista.innerHTML = `<p class="mensagem msg-error">${trans.msgErroCarregar}</p>`;
             lista.classList.remove("hidden");
         });
@@ -269,16 +261,12 @@ document.getElementById("confirmBtn")?.addEventListener("click", function () {
     if (!observacoes) {
         const modalConfirm = document.getElementById("confirmModal");
         if (modalConfirm) modalConfirm.classList.add("hidden");
-        
         const titulo = trans.tituloAviso || "Campo Obrigatório";
         const mensagem = trans.msgObsObrigatoria || "A descrição é obrigatória.";
         showAlert(titulo, mensagem);
-        
         if (observacoesInput) {
             observacoesInput.style.border = "2px solid red";
-            observacoesInput.addEventListener('input', function() {
-                this.style.border = "";
-            }, { once: true });
+            observacoesInput.addEventListener('input', function() { this.style.border = ""; }, { once: true });
             setTimeout(() => observacoesInput.focus(), 100);
         }
         return; 
@@ -297,10 +285,7 @@ document.getElementById("confirmBtn")?.addEventListener("click", function () {
         .then(async res => {
             if (!res.ok) {
                 let errorMsg = trans.msgErroDevolver;
-                try {
-                    const errorText = await res.text();
-                    if(errorText) errorMsg += `: ${errorText}`;
-                } catch(e) {}
+                try { const t = await res.text(); if(t) errorMsg += `: ${t}`; } catch(e) {}
                 throw new Error(errorMsg);
             }
             return res.text();
@@ -317,15 +302,13 @@ document.getElementById("confirmBtn")?.addEventListener("click", function () {
             }
         })
         .catch(err => {
-            console.error("Erro na devolução:", err);
+            console.error("Erro:", err);
             if (mensagemDiv) {
                 mensagemDiv.textContent = err.message;
                 mensagemDiv.className = "mensagem msg-error";
             }
         })
-        .finally(() => {
-            ferramentaParaDevolver = null;
-        });
+        .finally(() => { ferramentaParaDevolver = null; });
 });
 
 document.getElementById("cancelBtn")?.addEventListener("click", function () {
