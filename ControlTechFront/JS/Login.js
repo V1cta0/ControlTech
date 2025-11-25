@@ -42,24 +42,26 @@ voltarLogin?.addEventListener('click', () => {
     stopCamera('cadastro');
 });
 
-// ----- Função de Alerta Personalizado -----
+// ----- Função de Alerta Personalizado (CORRIGIDA) -----
 function showAlert(titulo, mensagem) {
     const modal = document.getElementById('alertModal');
     const titleEl = document.getElementById('alertTitle');
     const msgEl = document.getElementById('alertMessage');
     const btnOk = document.getElementById('btnAlertOk');
 
+    // Se o modal existir no HTML, usa ele. Se não, usa alert normal.
     if (modal && titleEl && msgEl) {
         titleEl.textContent = titulo;
         msgEl.textContent = mensagem;
         modal.classList.remove('hidden');
         
         const fechar = () => modal.classList.add('hidden');
-        btnOk.onclick = fechar;
+        if(btnOk) btnOk.onclick = fechar;
         modal.onclick = (e) => {
             if (e.target === modal) fechar();
         };
     } else {
+        // Fallback caso esqueça de colocar o HTML do modal
         alert(`${titulo}\n\n${mensagem}`);
     }
 }
@@ -93,25 +95,22 @@ export function stopCamera(mode) {
     }
 }
 
-// ----- Função startCamera (MODO CAÇA À CÂMERA TRASEIRA) -----
+// ----- Função startCamera -----
 export function startCamera(mode, onScanSuccess) {
     const readerId = mode === 'login' ? 'reader-login' : 'reader-cadastro';
     const readerContainer = document.getElementById(readerId);
     const btn = document.getElementById(mode === 'login' ? 'btnToggleCameraLogin' : 'btnToggleCameraCadastro');
     const uploadControls = document.getElementById(mode === 'login' ? 'loginUploadControls' : 'cadastroUploadControls');
 
-    // Se já estiver aberta, fecha antes de abrir de novo
     if (readerContainer && readerContainer.style.display === 'block') {
         stopCamera(mode);
         return;
     }
 
-    // Atualiza UI
     if (readerContainer) readerContainer.style.display = 'block';
     if (btn) btn.innerHTML = '<i class="fas fa-stop-circle"></i> Parar Câmera';
     if (uploadControls) uploadControls.style.display = 'none';
 
-    // Cria a instância se não existir
     if (mode === 'login' && !html5QrCodeLogin) {
         // @ts-ignore
         html5QrCodeLogin = new Html5Qrcode(readerId);
@@ -122,57 +121,28 @@ export function startCamera(mode, onScanSuccess) {
 
     let reader = mode === 'login' ? html5QrCodeLogin : window.html5QrCodeCadastro;
 
-    const config = {
-        fps: 25,
-        qrbox: { width: 250, height: 250 },
-        // disableFlip: false deixa a lib decidir o espelhamento (melhor para compatibilidade)
-    };
+    const config = { fps: 25, qrbox: { width: 250, height: 250 } };
 
     if (reader) {
-        // 1. Pede permissão e lista as câmeras
         // @ts-ignore
         Html5Qrcode.getCameras().then(devices => {
             if (devices && devices.length) {
-                
-                let backCameraId = null;
-
-                // 2. Procura explicitamente por uma câmera "Traseira" ou "Back" ou "Environment"
                 const backCamera = devices.find(device => {
                     const label = device.label.toLowerCase();
                     return label.includes('back') || label.includes('traseira') || label.includes('environment');
                 });
 
-                if (backCamera) {
-                    backCameraId = backCamera.id;
-                    console.log("Câmera traseira encontrada pelo nome:", backCamera.label);
-                }
+                const startConfig = backCamera ? backCamera.id : { facingMode: "environment" };
 
-                // 3. Define a estratégia: ID Específico (se achou) OU 'environment' genérico
-                const startConfig = backCameraId ? backCameraId : { facingMode: "environment" };
-
-                // 4. Inicia a câmera
-                reader.start(
-                    startConfig, 
-                    config,
-                    onScanSuccess,
-                    (errorMessage) => { 
-                        // Ignora erros de frame vazio 
-                    }
-                ).catch((err) => {
-                    console.warn("Falha ao abrir câmera traseira/environment. Tentando câmera padrão...", err);
-                    
-                    // 5. Fallback Final: Se a traseira falhar (ou PC não tiver), abre a primeira que achar (Frontal/Webcam)
-                    reader.start(
-                        devices[0].id, 
-                        config, 
-                        onScanSuccess, 
-                        () => {}
-                    ).catch(finalErr => {
+                reader.start(startConfig, config, onScanSuccess, () => {})
+                .catch((err) => {
+                    console.warn("Erro câmera traseira, tentando padrão...", err);
+                    reader.start(devices[0].id, config, onScanSuccess, () => {})
+                    .catch(finalErr => {
                         showAlert("Erro Fatal", "Não foi possível iniciar nenhuma câmera.");
                         stopCamera(mode);
                     });
                 });
-
             } else {
                 showAlert("Atenção", "Nenhuma câmera detectada no dispositivo.");
                 stopCamera(mode);
@@ -184,7 +154,6 @@ export function startCamera(mode, onScanSuccess) {
         });
     }
 }
-
 
 // ----- Login via Câmera -----
 document.getElementById('btnToggleCameraLogin')?.addEventListener('click', () => {
@@ -216,6 +185,9 @@ function handleLoginSuccess(qrCodeContent) {
             if (statusMsgLogin) statusMsgLogin.textContent = "Login bem-sucedido! Redirecionando...";
             if (infoAluno) infoAluno.style.display = "block";
 
+            // Exibe popup de sucesso (Opcional, pois redireciona rápido)
+            // showAlert("Sucesso", "Login realizado!");
+
             setTimeout(() => {
                 window.location.href = '/HTML/Ferramentas.html';
             }, 500); 
@@ -230,13 +202,15 @@ function handleLoginSuccess(qrCodeContent) {
         });
 }
 
-// ----- Login via Upload -----
+// ----- Login via Upload (CORRIGIDO) -----
 const btnLerQrUpload = document.getElementById('btnLerQr');
 const loginQrInput = document.getElementById('loginQrInput');
 
 btnLerQrUpload?.addEventListener('click', () => {
     // @ts-ignore
     const file = loginQrInput.files[0];
+    
+    // 1. Validação se não escolheu arquivo
     if (!file) {
         showAlert("Atenção", "Por favor, selecione um arquivo de QR Code primeiro.");
         return;
@@ -266,11 +240,15 @@ btnLerQrUpload?.addEventListener('click', () => {
         }, 500);
 
     }, (err) => {
+        // 2. Validação se imagem é inválida (Aqui estava o alert)
         btnLerQrUpload.classList.remove('loading');
         btnLerQrUpload.innerHTML = '<i class="fas fa-qrcode"></i> Ler QR Code por Arquivo';
 
-        console.error(err);
-        showAlert("Erro de Leitura", "QR Code inválido ou não reconhecido.");
+        console.error("Erro no upload:", err);
+        
+        // Agora chama o popup bonito
+        showAlert("Erro de Leitura", "A imagem enviada não é um QR Code válido ou não pôde ser lida.");
+        
         if (infoAluno) infoAluno.style.display = "none";
     });
 });
@@ -278,25 +256,20 @@ btnLerQrUpload?.addEventListener('click', () => {
 
 function salvarUsuarioLogado(usuario) {
     const dadosReais = usuario.usuario || usuario; 
-
-    // Garante que o ID existe
     const idUsuario = dadosReais.id || dadosReais.usuarioId;
 
     if (!idUsuario) {
         showAlert("Erro no Sistema", "Não foi possível identificar o usuário retornado pelo servidor.");
-        console.error("Dados recebidos inválidos:", usuario);
         return;
     }
 
-    // Cria o objeto limpo para salvar
     const usuarioFormatado = {
         id: idUsuario,
-        nome: dadosReais.nome || "Usuário Sem Nome", // Fallback para não quebrar
+        nome: dadosReais.nome || "Usuário Sem Nome", 
         perfil: dadosReais.perfil,
         qrCode: dadosReais.qrCode
     };
 
-    console.log("Salvando usuário no localStorage:", usuarioFormatado); // Log para depuração
     localStorage.setItem("usuarioLogado", JSON.stringify(usuarioFormatado));
 }
 
