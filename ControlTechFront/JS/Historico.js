@@ -1,6 +1,5 @@
-import { API_BASE_URL } from './apiConfig.js'; // <--- IMPORTAÇÃO ADICIONADA
+import { API_BASE_URL } from './apiConfig.js';
 
-// Dicionário de traduções
 const translations = {
     'pt': {
         'pageTitle': 'Histórico - ControlTech',
@@ -56,7 +55,6 @@ const translations = {
     }
 };
 
-// --- FUNÇÕES DE LÓGICA DE TEMA E IDIOMA ---
 const updateTranslations = (lang) => {
     const currentLang = translations[lang] ? lang : 'pt';
     const trans = translations[currentLang];
@@ -65,16 +63,8 @@ const updateTranslations = (lang) => {
     document.documentElement.lang = currentLang === 'pt' ? 'pt-BR' : 'en';
     document.title = trans.pageTitle || 'Histórico - ControlTech';
 
-    const setText = (id, key) => {
-        const element = document.getElementById(id);
-        if (element) element.textContent = trans[key] || '';
-        else console.warn(`Elemento ID '${id}' não encontrado.`);
-    };
-    const setSpanText = (id, key) => {
-        const element = document.getElementById(id)?.querySelector('span');
-        if (element) element.textContent = trans[key] || '';
-        else console.warn(`Span dentro do ID '${id}' não encontrado.`);
-    };
+    const setText = (id, key) => { const element = document.getElementById(id); if (element) element.textContent = trans[key] || ''; else console.warn(`Elemento ID '${id}' não encontrado.`); };
+    const setSpanText = (id, key) => { const element = document.getElementById(id)?.querySelector('span'); if (element) element.textContent = trans[key] || ''; else console.warn(`Span dentro do ID '${id}' não encontrado.`); };
 
     setSpanText('nav-tools', 'sidebarTools');
     setSpanText('nav-return', 'sidebarReturn');
@@ -86,7 +76,6 @@ const updateTranslations = (lang) => {
     setText('header-title', 'headerTitle');
     setText('btnUsuario', 'btnMeuHistorico');
     setText('btnTodos', 'btnTodos');
-
     setText('settings-popup-title', 'settingsPopupTitle');
     setText('theme-label', 'themeLabel');
     setText('lang-label', 'langLabel');
@@ -113,12 +102,12 @@ const updateThemeStatusText = (at, l) => { const ts = document.getElementById('t
 const updateThemeToggleButtonVisuals = (at) => { const si = document.querySelector('#theme-toggle-btn .fa-sun'); const mi = document.querySelector('#theme-toggle-btn .fa-moon'); if (si && mi) { si.style.opacity = at === 'dark' ? '0' : '1'; si.style.transform = at === 'dark' ? 'translateY(-10px)' : 'translateY(0)'; mi.style.opacity = at === 'dark' ? '1' : '0'; mi.style.transform = at === 'dark' ? 'translateY(0)' : 'translateY(10px)'; }};
 const saveLanguage = (lang) => { localStorage.setItem('lang', lang); updateTranslations(lang); };
 const loadLanguage = () => { const sl = localStorage.getItem('lang') || 'pt'; updateTranslations(sl); };
-const updateLanguageStatusText = (al) => { const lts = document.getElementById('lang-toggle-btn')?.querySelector('span'); const ls = document.getElementById('lang-status'); if (lts) lts.textContent = al.toUpperCase(); if (ls) { const tp = translations.pt; const te = translations.en; if (tp && te) ls.textContent = al === 'pt' ? (tp.langStatusPT || 'PT') : (te.langStatusEN || 'EN'); }};
+const updateLanguageStatusText = (al) => { const lts = document.getElementById('lang-toggle-btn')?.querySelector('span'); const ls = document.getElementById('lang-status'); if (lts) lts.textContent = al.toUpperCase(); if (ls) { const tp = translations.pt; const te = translations.en; if (tp && te) ls.textContent = al === 'pt' ? (tp.langStatusPT || 'Português') : (te.langStatusEN || 'English'); }}};
 function displayUserName(lang) { const wm = document.getElementById('welcome-message'); const une = document.getElementById('user-name'); const tr = translations[lang]; let ui = null; try { const su = localStorage.getItem('usuarioLogado'); if (su) ui = JSON.parse(su); } catch (e) { console.error(e); } if (wm && une && tr) { const du = (lang === 'pt' ? 'Usuário' : 'User'); wm.textContent = tr.welcomeMessage || '?'; une.textContent = (ui && ui.nome) ? ui.nome : du; }};
 
-// --- LÓGICA ORIGINAL DA PÁGINA ---
+// --- LÓGICA PRINCIPAL ---
 
-const BASE_URL = `${API_BASE_URL}/api/historico`; // <--- CORREÇÃO AQUI
+const BASE_URL = `${API_BASE_URL}/api/historico`; // CORREÇÃO AQUI
 
 function carregarHistorico(usuarioId = null) {
   const url = usuarioId ? `${BASE_URL}/usuario/${usuarioId}` : `${BASE_URL}/todos`;
@@ -167,7 +156,6 @@ function carregarHistorico(usuarioId = null) {
           <p><strong>${trans.cardData}</strong> ${dataFormatada} ${horaFormatada ? (currentLang === 'pt' ? 'às' : 'at') + ' ' + horaFormatada : ''}</p>
           <p class="observacoes"><strong>${trans.cardObs}</strong> ${h.observacoes || trans.cardNenhumaObs}</p>
         `;
-
         historicoContainer.appendChild(card);
       });
     })
@@ -256,5 +244,4 @@ document.addEventListener("DOMContentLoaded", () => {
         const currentLang = localStorage.getItem('lang') || 'pt';
         saveLanguage(currentLang === 'pt' ? 'en' : 'pt');
     });
-
 });

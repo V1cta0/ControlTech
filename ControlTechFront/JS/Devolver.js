@@ -1,6 +1,5 @@
-import { API_BASE_URL } from './apiConfig.js'; // <--- IMPORTAÇÃO ADICIONADA
+import { API_BASE_URL } from './apiConfig.js';
 
-// Dicionário de traduções
 const translations = {
     'pt': {
         'pageTitle': 'Devolução de Itens - SENAI',
@@ -72,8 +71,6 @@ const translations = {
     }
 };
 
-// --- FUNÇÕES DE LÓGICA DE TEMA E IDIOMA ---
-
 const updateTranslations = (lang) => {
     const currentLang = translations[lang] ? lang : 'pt';
     const trans = translations[currentLang];
@@ -82,14 +79,8 @@ const updateTranslations = (lang) => {
     document.documentElement.lang = currentLang === 'pt' ? 'pt-BR' : 'en';
     document.title = trans.pageTitle || 'Devolução - SENAI';
 
-    const setText = (id, key) => {
-        const element = document.getElementById(id);
-        if (element) element.textContent = trans[key] || '';
-    };
-    const setSpanText = (id, key) => {
-        const element = document.getElementById(id)?.querySelector('span');
-        if (element) element.textContent = trans[key] || '';
-    };
+    const setText = (id, key) => { const element = document.getElementById(id); if (element) element.textContent = trans[key] || ''; };
+    const setSpanText = (id, key) => { const element = document.getElementById(id)?.querySelector('span'); if (element) element.textContent = trans[key] || ''; };
 
     setSpanText('nav-tools', 'sidebarTools');
     setSpanText('nav-return', 'sidebarReturn');
@@ -103,11 +94,9 @@ const updateTranslations = (lang) => {
     setText('label-nome-func', 'labelNomeFunc');
     setText('label-data', 'labelData');
     setText('label-horario', 'labelHorario');
-
     setText('modal-text', 'modalText');
     setText('confirmBtn', 'modalBtnSim');
     setText('cancelBtn', 'modalBtnCancelar');
-
     setText('settings-popup-title', 'settingsPopupTitle');
     setText('theme-label', 'themeLabel');
     setText('lang-label', 'langLabel');
@@ -134,9 +123,9 @@ const loadLanguage = () => { const savedLang = localStorage.getItem('lang') || '
 const updateLanguageStatusText = (activeLang) => { const langToggleBtnSpan = document.getElementById('lang-toggle-btn')?.querySelector('span'); const langStatusEl = document.getElementById('lang-status'); if (langToggleBtnSpan) langToggleBtnSpan.textContent = activeLang.toUpperCase(); if (langStatusEl) { const transPt = translations.pt; const transEn = translations.en; if (transPt && transEn) { langStatusEl.textContent = activeLang === 'pt' ? (transPt.langStatusPT || 'Português') : (transEn.langStatusEN || 'English'); }}};
 function displayUserName(lang) { const welcomeMessage = document.getElementById('welcome-message'); const userNameElement = document.getElementById('user-name'); const trans = translations[lang]; let userInfo = null; try { const storedUser = localStorage.getItem('usuarioLogado'); if (storedUser) userInfo = JSON.parse(storedUser); } catch (e) { console.error("Erro ao ler usuarioLogado:", e); } if (welcomeMessage && userNameElement && trans) { const defaultUserName = (lang === 'pt' ? 'Usuário' : 'User'); welcomeMessage.textContent = trans.welcomeMessage || (lang === 'pt' ? 'Olá,' : 'Hello,'); userNameElement.textContent = (userInfo && userInfo.nome) ? userInfo.nome : defaultUserName; }};
 
-// --- LÓGICA PRINCIPAL DA PÁGINA ---
+// --- LÓGICA PRINCIPAL ---
 
-const BASE_URL = `${API_BASE_URL}/api/ferramentas`; // <--- CORREÇÃO AQUI
+const BASE_URL = `${API_BASE_URL}/api/ferramentas`; // URL base da API
 
 function showAlert(titulo, mensagem) {
     const modal = document.getElementById('alertModal');
@@ -149,11 +138,9 @@ function showAlert(titulo, mensagem) {
         titleEl.textContent = titulo;
         msgEl.textContent = mensagem;
         modal.classList.remove('hidden');
-        
         const fechar = () => modal.classList.add('hidden');
         if (btnOk) btnOk.onclick = fechar;
         if (btnClose) btnClose.onclick = fechar;
-        
         modal.onclick = (e) => { if (e.target === modal) fechar(); };
     } else {
         alert(`${titulo}\n\n${mensagem}`);
@@ -271,16 +258,12 @@ document.getElementById("confirmBtn")?.addEventListener("click", function () {
     if (!observacoes) {
         const modalConfirm = document.getElementById("confirmModal");
         if (modalConfirm) modalConfirm.classList.add("hidden");
-        
         const titulo = trans.tituloAviso || "Campo Obrigatório";
         const mensagem = trans.msgObsObrigatoria || "A descrição é obrigatória.";
         showAlert(titulo, mensagem);
-        
         if (observacoesInput) {
             observacoesInput.style.border = "2px solid red";
-            observacoesInput.addEventListener('input', function() {
-                this.style.border = "";
-            }, { once: true });
+            observacoesInput.addEventListener('input', function() { this.style.border = ""; }, { once: true });
             setTimeout(() => observacoesInput.focus(), 100);
         }
         return; 
@@ -299,10 +282,7 @@ document.getElementById("confirmBtn")?.addEventListener("click", function () {
         .then(async res => {
             if (!res.ok) {
                 let errorMsg = trans.msgErroDevolver;
-                try {
-                    const errorText = await res.text();
-                    if(errorText) errorMsg += `: ${errorText}`;
-                } catch(e) {}
+                try { const t = await res.text(); if(t) errorMsg += `: ${t}`; } catch(e) {}
                 throw new Error(errorMsg);
             }
             return res.text();
@@ -325,9 +305,7 @@ document.getElementById("confirmBtn")?.addEventListener("click", function () {
                 mensagemDiv.className = "mensagem msg-error";
             }
         })
-        .finally(() => {
-            ferramentaParaDevolver = null;
-        });
+        .finally(() => { ferramentaParaDevolver = null; });
 });
 
 document.getElementById("cancelBtn")?.addEventListener("click", function () {

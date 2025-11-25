@@ -1,4 +1,4 @@
-import { API_BASE_URL } from './apiConfig.js'; // <--- IMPORTAÇÃO ADICIONADA
+import { API_BASE_URL } from './apiConfig.js';
 
 // Dicionário de traduções
 const translations = {
@@ -64,18 +64,13 @@ const translations = {
     }
 };
 
-// --- FUNÇÕES DE UTILIDADE ---
-
 let cronometroIntervalId = null;
 
 function formatarTempo(totalSeconds) {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
-
-    return [hours, minutes, seconds]
-        .map(t => t.toString().padStart(2, '0'))
-        .join(':');
+    return [hours, minutes, seconds].map(t => t.toString().padStart(2, '0')).join(':');
 }
 
 function iniciarCronometro(timestampAssociacao) {
@@ -85,17 +80,13 @@ function iniciarCronometro(timestampAssociacao) {
 
     if (!chronometerDisplay || !timeElapsedContainer) return;
 
-    if (cronometroIntervalId) {
-        clearInterval(cronometroIntervalId);
-    }
+    if (cronometroIntervalId) clearInterval(cronometroIntervalId);
     
     function atualizarCronometro() {
         const now = new Date();
         const diffMs = now.getTime() - dataAssociacao.getTime();
         const diffSeconds = Math.floor(diffMs / 1000);
-        
         if (diffSeconds < 0) return; 
-
         chronometerDisplay.textContent = formatarTempo(diffSeconds);
     }
 
@@ -104,25 +95,13 @@ function iniciarCronometro(timestampAssociacao) {
     timeElapsedContainer.classList.remove('hidden');
 }
 
-const setText = (id, key, trans) => {
-    const element = document.getElementById(id);
-    if (element) element.textContent = trans[key] || '';
-    else console.warn(`Elemento ID '${id}' não encontrado.`);
-};
-
-const setSpanText = (id, key, trans) => {
-    const element = document.getElementById(id)?.querySelector('span');
-    if (element) element.textContent = trans[key] || '';
-    else console.warn(`Span dentro do ID '${id}' não encontrado.`);
-};
-
+const setText = (id, key, trans) => { const element = document.getElementById(id); if (element) element.textContent = trans[key] || ''; else console.warn(`Elemento ID '${id}' não encontrado.`); };
+const setSpanText = (id, key, trans) => { const element = document.getElementById(id)?.querySelector('span'); if (element) element.textContent = trans[key] || ''; else console.warn(`Span dentro do ID '${id}' não encontrado.`); };
 const setInnerHtml = (id, key, trans, args = {}) => {
     const element = document.getElementById(id);
     if (element) {
         let text = trans[key] || '';
-        Object.keys(args).forEach(k => {
-            text = text.replace(`{${k}}`, args[k]);
-        });
+        Object.keys(args).forEach(k => { text = text.replace(`{${k}}`, args[k]); });
         element.innerHTML = text;
     }
 };
@@ -144,13 +123,10 @@ const updateTranslations = (lang) => {
 
     setInnerHtml('label-descricao', 'labelDescricao', trans); 
     setInnerHtml('label-estoque', 'labelEstoque', trans);    
-    
     setText('btn-voltar-text', 'btnVoltar', trans);
     setText('btn-associar-text', 'btnAssociar', trans);
     setText('popup-btn-fechar', 'popupBtnFechar', trans);
-
     setText('time-elapsed-label', 'timeElapsedLabel', trans);
-
     setText('settings-popup-title', 'settingsPopupTitle', trans);
     setText('theme-label', 'themeLabel', trans);
     setText('lang-label', 'langLabel', trans);
@@ -171,10 +147,7 @@ const loadLanguage = () => { const sl = localStorage.getItem('lang') || 'pt'; up
 const updateLanguageStatusText = (activeLang) => { const lts = document.getElementById('lang-toggle-btn')?.querySelector('span'); const ls = document.getElementById('lang-status'); if (lts) lts.textContent = activeLang.toUpperCase(); if (ls) { const transPt = translations.pt; const transEn = translations.en; if (transPt && transEn) { ls.textContent = activeLang === 'pt' ? (transPt.langStatusPT || 'Português') : (transEn.langStatusEN || 'English'); }}};
 function displayUserName(lang) { const wm = document.getElementById('welcome-message'); const une = document.getElementById('user-name'); const tr = translations[lang]; let userInfo = null; try { const su = localStorage.getItem('usuarioLogado'); if (su) userInfo = JSON.parse(su); } catch (e) { console.error("Erro ao ler usuarioLogado:", e); } if (wm && une && tr) { const du = (lang === 'pt' ? 'Usuário' : 'User'); wm.textContent = tr.welcomeMessage || (lang === 'pt' ? 'Olá,' : 'Hello,'); une.textContent = (userInfo && userInfo.nome) ? userInfo.nome : du; }};
 
-
-// --- LÓGICA PRINCIPAL DA PÁGINA ---
-
-function atualizarStatus(usuarioNome, dataAssociacao) {
+function atualizarStatus(usuarioNome, dataAssociacao) { 
     const statusMsg = document.getElementById("statusMsg");
     const btnAssociar = document.getElementById("btnAssociar");
     const timeElapsedContainer = document.getElementById('time-elapsed');
@@ -191,10 +164,7 @@ function atualizarStatus(usuarioNome, dataAssociacao) {
         if (statusMsg) statusMsg.innerHTML = `${trans.statusEmUso}<strong>${usuarioNome}</strong>`;
         if (statusMsg) statusMsg.style.color = "green"; 
         if (btnAssociar) btnAssociar.disabled = true; 
-        
-        if (dataAssociacao) {
-            iniciarCronometro(dataAssociacao);
-        }
+        if (dataAssociacao) iniciarCronometro(dataAssociacao);
     } else {
         if (statusMsg) statusMsg.innerHTML = trans.statusDisponivel;
         if (statusMsg) statusMsg.style.color = "gray"; 
@@ -206,10 +176,8 @@ async function atualizarStatusDaFerramenta() {
     const ferramentaId = new URLSearchParams(window.location.search).get("id");
     const lang = localStorage.getItem('lang') || 'pt';
     try {
-        // CORREÇÃO 1: URL DINÂMICA
         const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}/usuario`);
         if (!res.ok) throw new Error(lang === 'pt' ? "Erro ao buscar usuário da ferramenta" : "Error fetching tool user");
-        
         const usuarioStatus = await res.json(); 
         atualizarStatus(usuarioStatus.nome, usuarioStatus.dataAssociacao); 
     } catch (err) {
@@ -231,7 +199,6 @@ async function carregarFerramenta() {
     const trans = translations[lang];
 
     try {
-        // CORREÇÃO 2: URL DINÂMICA
         const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}`);
         if (!res.ok) throw new Error(trans.erroCarregar);
 
@@ -244,7 +211,6 @@ async function carregarFerramenta() {
         if (toolImage) toolImage.src = ferramenta.imagemUrl || '/img/tools.png'; 
 
         await atualizarStatusDaFerramenta();
-
         return ferramenta;
     } catch (err) {
         console.error("Erro ao carregar ferramenta:", err);
@@ -256,16 +222,13 @@ async function carregarFerramenta() {
     }
 }
 
-
 document.addEventListener("DOMContentLoaded", async () => {
     const params = new URLSearchParams(window.location.search);
     const ferramentaId = params.get("id");
-
     const btnAssociar = document.getElementById("btnAssociar");
     const statusMsg = document.getElementById("statusMsg");
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const sidebar = document.getElementById('sidebar');
-
     const popup = document.getElementById("confirmationPopup");
     const closePopupBtn = document.getElementById("closePopupBtn");
     const settingsBtn = document.getElementById('settings-btn');
@@ -281,11 +244,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const trans = translations[lang];
 
     let usuarioLogado = null;
-    try {
-        usuarioLogado = JSON.parse(localStorage.getItem("usuarioLogado"));
-    } catch (e) {
-        console.error("Erro ao ler dados do usuário:", e);
-    }
+    try { usuarioLogado = JSON.parse(localStorage.getItem("usuarioLogado")); } catch (e) { console.error("Erro ao ler dados do usuário:", e); }
 
     const idUsuario = usuarioLogado?.id ?? usuarioLogado?.usuarioId;
     if (!idUsuario) {
@@ -298,9 +257,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     btnAssociar?.addEventListener("click", async () => {
         if (statusMsg) statusMsg.textContent = "";
-
         try {
-            // CORREÇÃO 3: URL DINÂMICA
             const assocRes = await fetch(`${API_BASE_URL}/api/ferramentas/associar/${ferramentaId}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -308,9 +265,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
 
             let resposta;
-            try {
-                resposta = await assocRes.json();
-            } catch {
+            try { resposta = await assocRes.json(); } catch { 
                 const texto = await assocRes.text();
                 throw new Error(lang === 'pt' ? "Resposta inválida do servidor: " + texto : "Invalid server response: " + texto);
             }
@@ -335,12 +290,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
     
-    closePopupBtn?.addEventListener("click", () => {
-        popup.style.display = "none";
-    });
-
+    closePopupBtn?.addEventListener("click", () => popup.style.display = "none");
     hamburgerBtn?.addEventListener('click', () => sidebar?.classList.toggle('active'));
-
     settingsBtn?.addEventListener('click', (e) => {
         e.preventDefault();
         themePopup?.classList.toggle('visible');
