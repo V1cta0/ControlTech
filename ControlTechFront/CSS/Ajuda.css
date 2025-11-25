@@ -23,6 +23,7 @@ body {
 
 /* Barra Lateral (Sidebar) */
 .sidebar {
+    position: relative; 
     width: 298px;
     background-color: #004b8d;
     color: white;
@@ -306,6 +307,7 @@ body {
     opacity: 0;
     visibility: hidden;
     transform: translateY(20px);
+
     transition: transform 0.3s ease-out, opacity 0.3s ease-out, background-color 0.3s, visibility 0s 0.3s;
     text-align: center;
 }
