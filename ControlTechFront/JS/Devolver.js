@@ -120,13 +120,16 @@ const updateThemeStatusText = (at, l) => { const ts = document.getElementById('t
 const updateThemeToggleButtonVisuals = (at) => { const si = document.querySelector('#theme-toggle-btn .fa-sun'); const mi = document.querySelector('#theme-toggle-btn .fa-moon'); if (si && mi) { si.style.opacity = at === 'dark' ? '0' : '1'; si.style.transform = at === 'dark' ? 'translateY(-10px)' : 'translateY(0)'; mi.style.opacity = at === 'dark' ? '1' : '0'; mi.style.transform = at === 'dark' ? 'translateY(0)' : 'translateY(10px)'; }};
 const saveLanguage = (lang) => { localStorage.setItem('lang', lang); updateTranslations(lang); };
 const loadLanguage = () => { const savedLang = localStorage.getItem('lang') || 'pt'; updateTranslations(savedLang); };
-const updateLanguageStatusText = (al) => { const lts = document.getElementById('lang-toggle-btn')?.querySelector('span'); const ls = document.getElementById('lang-status'); if (lts) lts.textContent = al.toUpperCase(); if (ls) { const tp = translations.pt; const te = translations.en; if (tp && te) ls.textContent = al.toUpperCase() === 'PT' ? (tp.langStatusPT || 'Português') : (te.langStatusEN || 'English'); }}};
+const updateLanguageStatusText = (al) => { const lts = document.getElementById('lang-toggle-btn')?.querySelector('span'); const ls = document.getElementById('lang-status'); if (lts) lts.textContent = al.toUpperCase(); if (ls) { const tp = translations.pt; const te = translations.en; if (tp && te) ls.textContent = al.toUpperCase() === 'PT' ? (tp.langStatusPT || 'Português') : (te.langStatusEN || 'English'); }};
 function displayUserName(lang) { 
     const welcomeMessage = document.getElementById('welcome-message'); 
     const userNameElement = document.getElementById('user-name'); 
     const trans = translations[lang]; 
     let userInfo = null; 
-    try { const su = localStorage.getItem('usuarioLogado'); if (su) ui = JSON.parse(su); } catch (e) { console.error("Erro ao ler usuarioLogado:", e); } 
+    try { 
+        const storedUser = localStorage.getItem('usuarioLogado'); 
+        if (storedUser) userInfo = JSON.parse(storedUser); 
+    } catch (e) { console.error("Erro ao ler usuarioLogado:", e); } 
     if (welcomeMessage && userNameElement && trans) { 
         const defaultUserName = (lang === 'pt' ? 'Usuário' : 'User'); 
         welcomeMessage.textContent = trans.welcomeMessage || (lang === 'pt' ? 'Olá,' : 'Hello,'); 
@@ -136,6 +139,7 @@ function displayUserName(lang) {
 
 // --- LÓGICA PRINCIPAL ---
 
+// CORREÇÃO: Usa API_BASE_URL
 const BASE_URL = `${API_BASE_URL}/api/ferramentas`; 
 
 function showAlert(titulo, mensagem) {
@@ -162,7 +166,10 @@ function getUsuarioLogado() {
     try {
         const usuario = localStorage.getItem("usuarioLogado");
         return usuario ? JSON.parse(usuario) : null;
-    } catch (e) { return null; }
+    } catch (e) {
+        console.error("Erro ao parsear usuarioLogado:", e);
+        return null;
+    }
 }
 
 function preencherDataHora() {
@@ -183,6 +190,7 @@ function exibirUsuarioLogado(usuario) {
     preencherDataHora(); 
 
     if (infoUsuarioDiv) infoUsuarioDiv.classList.remove("hidden");
+
     if (typeof carregarFerramentas === 'function') {
         carregarFerramentas(usuario.id);
     }
@@ -193,7 +201,7 @@ function carregarFerramentas(usuarioId) {
     const currentLang = localStorage.getItem('lang') || 'pt';
     const trans = translations[currentLang];
 
-    if (!lista || !trans) return;
+    if (!lista || !trans) return console.error("Elemento #listaFerramentas ou traduções não encontrados.");
 
     fetch(`${BASE_URL}/usuario/${usuarioId}`)
         .then(res => {
@@ -202,14 +210,17 @@ function carregarFerramentas(usuarioId) {
         })
         .then(ferramentas => {
             lista.innerHTML = ""; 
+
             if (!ferramentas || ferramentas.length === 0) {
                 lista.innerHTML = `<div class="lista-vazia">${trans.listaVazia}</div>`;
                 lista.classList.remove("hidden");
                 return;
             }
+
             ferramentas.forEach(f => {
                 const div = document.createElement("div");
                 div.className = "ferramenta-item";
+
                 div.innerHTML = `
                     <p><strong>ID:</strong> ${f.ferramentaId || 'N/A'}</p>
                     <p><strong>Nome:</strong> ${f.ferramentaNome || (currentLang === 'pt' ? 'Nome Ind.' : 'Name Unav.')}</p>
@@ -221,11 +232,12 @@ function carregarFerramentas(usuarioId) {
                 `;
                 lista.appendChild(div);
             });
+
             lista.classList.remove("hidden");
             ativarModalBotoes();
         })
         .catch(err => {
-            console.error("Erro:", err);
+            console.error("Erro ao carregar ferramentas:", err);
             lista.innerHTML = `<p class="mensagem msg-error">${trans.msgErroCarregar}</p>`;
             lista.classList.remove("hidden");
         });
@@ -261,12 +273,16 @@ document.getElementById("confirmBtn")?.addEventListener("click", function () {
     if (!observacoes) {
         const modalConfirm = document.getElementById("confirmModal");
         if (modalConfirm) modalConfirm.classList.add("hidden");
+        
         const titulo = trans.tituloAviso || "Campo Obrigatório";
         const mensagem = trans.msgObsObrigatoria || "A descrição é obrigatória.";
         showAlert(titulo, mensagem);
+        
         if (observacoesInput) {
             observacoesInput.style.border = "2px solid red";
-            observacoesInput.addEventListener('input', function() { this.style.border = ""; }, { once: true });
+            observacoesInput.addEventListener('input', function() {
+                this.style.border = "";
+            }, { once: true });
             setTimeout(() => observacoesInput.focus(), 100);
         }
         return; 
@@ -285,7 +301,10 @@ document.getElementById("confirmBtn")?.addEventListener("click", function () {
         .then(async res => {
             if (!res.ok) {
                 let errorMsg = trans.msgErroDevolver;
-                try { const t = await res.text(); if(t) errorMsg += `: ${t}`; } catch(e) {}
+                try {
+                    const errorText = await res.text();
+                    if(errorText) errorMsg += `: ${errorText}`;
+                } catch(e) {}
                 throw new Error(errorMsg);
             }
             return res.text();
@@ -302,13 +321,15 @@ document.getElementById("confirmBtn")?.addEventListener("click", function () {
             }
         })
         .catch(err => {
-            console.error("Erro:", err);
+            console.error("Erro na devolução:", err);
             if (mensagemDiv) {
                 mensagemDiv.textContent = err.message;
                 mensagemDiv.className = "mensagem msg-error";
             }
         })
-        .finally(() => { ferramentaParaDevolver = null; });
+        .finally(() => {
+            ferramentaParaDevolver = null;
+        });
 });
 
 document.getElementById("cancelBtn")?.addEventListener("click", function () {
@@ -320,7 +341,6 @@ document.getElementById("cancelBtn")?.addEventListener("click", function () {
 document.addEventListener("DOMContentLoaded", () => {
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const sidebar = document.getElementById('sidebar');
-    const mensagemDiv = document.getElementById("mensagem");
     const settingsBtn = document.getElementById('settings-btn');
     const themePopup = document.getElementById('theme-popup');
     const closePopupBtn = document.getElementById('close-popup-btn');
@@ -330,6 +350,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadTheme();
     loadLanguage();
 
+    // --- LISTENER DO HAMBURGUER ---
     hamburgerBtn?.addEventListener('click', () => sidebar?.classList.toggle('active'));
 
     const usuarioLogado = getUsuarioLogado();
@@ -338,6 +359,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         const currentLang = localStorage.getItem('lang') || 'pt';
         const trans = translations[currentLang];
+        const mensagemDiv = document.getElementById("mensagem");
         if (mensagemDiv && trans) {
             mensagemDiv.textContent = trans.msgNaoLogado;
             mensagemDiv.className = "mensagem msg-error";

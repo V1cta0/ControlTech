@@ -76,6 +76,7 @@ const updateTranslations = (lang) => {
     setText('header-title', 'headerTitle');
     setText('btnUsuario', 'btnMeuHistorico');
     setText('btnTodos', 'btnTodos');
+
     setText('settings-popup-title', 'settingsPopupTitle');
     setText('theme-label', 'themeLabel');
     setText('lang-label', 'langLabel');
@@ -123,6 +124,7 @@ function displayUserName(lang) {
 
 // --- LÓGICA PRINCIPAL ---
 
+// CORREÇÃO: Usa API_BASE_URL
 const BASE_URL = `${API_BASE_URL}/api/historico`; 
 
 function carregarHistorico(usuarioId = null) {
@@ -240,6 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loadLanguage();
 
+    // --- LISTENER DO HAMBURGUER (MANTIDO) ---
     hamburgerBtn?.addEventListener("click", () => sidebar?.classList.toggle("active"));
 
     settingsBtn?.addEventListener('click', (e) => {
