@@ -574,17 +574,15 @@ textarea:focus {
     .sidebar {
         position: fixed;
         top: 0;
-        left: -250px;
+        left: -250px; /* Esconde exatamente a largura do menu */
         height: 100vh;
-        width: 250px;
-        padding: 2rem 1.5rem;
-        transition: left 0.3s ease-in-out;
-        z-index: 100;
+        width: 250px; /* CORRIGIDO: Era 298px, mudado para 250px para padronizar */
+        z-index: 1000; /* Aumentado para garantir que fique acima de tudo */
         box-shadow: 2px 0 5px rgba(0,0,0,0.5);
     }
 
     .sidebar.active {
-        left: 0;
+        left: 0; /* Mostra o menu */
     }
 
     .sidebar-header {
@@ -612,6 +610,7 @@ textarea:focus {
 
     .hamburger-btn {
         display: block;
+        z-index: 1001; 
     }
     .user-profile {
         display: none;
