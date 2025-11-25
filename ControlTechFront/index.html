@@ -11,7 +11,6 @@
     <script src="/JS/Login.js" type="module" defer></script>
     <script src="/JS/Cadastro.js" type="module" defer></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
@@ -56,7 +55,7 @@
 
                     <p id="abrirCadastro" class="link-cadastro">Sem registro? <strong>Fazer cadastro</strong></p>
                 </div>
-                </div>
+            </div>
 
             <div class="cadastro-box" id="cadastroBox">
                 <h3>Cadastro</h3>
@@ -73,20 +72,13 @@
                     <button id="btnToggleCameraCadastro">
                         <i class="fas fa-video"></i> Ler Crachá com Câmera
                     </button>
-
                 </div>
+
                 <input type="text" id="nomeCadastro" placeholder="Nome" />
                 <input type="text" id="perfilCadastro" placeholder="Perfil" />
                 <button id="btnCadastrar" type="button">Cadastrar</button>
                 <p id="voltarLogin" class="link-cadastro">Voltar para login</p>
                 <p id="statusMsgCadastro" style="color:red; min-height:1.4rem;"></p>
-            </div>
-            <div id="popupCadastro" class="popup hidden">
-                <div class="popup-content">
-                    <h2>✅ Cadastro Realizado</h2>
-                    <p>Usuário <strong id="popupNomeCadastro"></strong> foi cadastrado com sucesso!</p>
-                    <button id="fecharPopupCadastro">Fechar</button>
-                </div>
             </div>
 
         </div>
@@ -98,6 +90,21 @@
         <h2>✅ Login Confirmado</h2>
         <p>Seja muito bem-vindo(a), <strong id="popupNome"></strong>!</p>
         <button id="fecharPopup">Continuar</button>
+    </div>
+</div>
+
+<div id="popupCadastro" class="popup hidden">
+    <div class="popup-content">
+        <h2>✅ Cadastro Realizado</h2>
+        <p>Usuário <strong id="popupNomeCadastro"></strong> foi cadastrado com sucesso!</p>
+        <button id="fecharPopupCadastro">Fechar</button>
+    </div>
+</div>
+
+<div id="alertModal" class="popup hidden">
+    <div class="popup-content" style="border-left: 5px solid #ffcc00;"> <h2 id="alertTitle">Atenção</h2>
+        <p id="alertMessage">Mensagem de alerta aqui.</p>
+        <button id="btnAlertOk" style="background-color: #333;">OK</button>
     </div>
 </div>
 
