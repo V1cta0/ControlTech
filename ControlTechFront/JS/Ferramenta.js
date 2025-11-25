@@ -1,5 +1,6 @@
 import { API_BASE_URL } from './apiConfig.js';
 
+// Dicionário de traduções
 const translations = {
     'pt': {
         'pageTitle': 'Ferramentas - SENAI ControlTech',
@@ -13,10 +14,10 @@ const translations = {
         'searchInputPlaceholder': 'Pesquisar ferramentas...',
         'selectButton': 'Selecionar',
         'disponivel': 'Disponível',
-        'emprestado': 'Emprestado', // Fallback
-        'emUsoPor': 'Em uso por:',   // Chave para status com nome
-        'emUsoDesde': 'Em uso por: {nomeUsuario} (desde {dataHora})', // NOVO: Status com data
-        'dataNaoDisponivel': 'Data não disponível', // NOVO
+        'emprestado': 'Emprestado',
+        'emUsoPor': 'Em uso por:',
+        'emUsoDesde': 'Em uso por: {nomeUsuario} (desde {dataHora})',
+        'dataNaoDisponivel': 'Data não disponível',
         'noToolsFound': 'Nenhuma ferramenta encontrada.',
         'errorLoadingTools': 'Erro ao carregar ferramentas.',
         'settingsPopupTitle': 'Configurações',
@@ -40,10 +41,10 @@ const translations = {
         'searchInputPlaceholder': 'Search tools...',
         'selectButton': 'Select',
         'disponivel': 'Available',
-        'emprestado': 'Loaned', // Fallback
-        'emUsoPor': 'In use by:',   // Chave para status com nome
-        'emUsoDesde': 'In use by: {nomeUsuario} (since {dataHora})', // NOVO: Status with date
-        'dataNaoDisponivel': 'Date unavailable', // NOVO
+        'emprestado': 'Loaned',
+        'emUsoPor': 'In use by:',
+        'emUsoDesde': 'In use by: {nomeUsuario} (since {dataHora})',
+        'dataNaoDisponivel': 'Date unavailable',
         'noToolsFound': 'No tools found.',
         'errorLoadingTools': 'Error loading tools.',
         'settingsPopupTitle': 'Settings',
@@ -84,16 +85,15 @@ const updateTranslations = (lang) => {
     updateLanguageStatusText(currentLang); 
     displayUserName(currentLang); 
     
-    // Atualiza botões de filtro se existirem
     setText('filter-all', 'filterAll', trans);
     setText('filter-available', 'filterAvailable', trans);
     setText('filter-loaned', 'filterLoaned', trans);
     
     if (typeof renderizarFerramentas === 'function') { 
-        // Re-renderiza para atualizar o texto de status
         renderizarFerramentas(); 
     } 
 };
+
 const saveTheme = (theme) => { localStorage.setItem('theme', theme); const currentLang = localStorage.getItem('lang') || 'pt'; updateThemeStatusText(theme, currentLang); updateThemeToggleButtonVisuals(theme); };
 const loadTheme = () => { const savedTheme = localStorage.getItem('theme') || 'light'; const currentLang = localStorage.getItem('lang') || 'pt'; document.body.classList.toggle('dark-theme', savedTheme === 'dark'); updateThemeStatusText(savedTheme, currentLang); updateThemeToggleButtonVisuals(savedTheme); };
 const updateThemeStatusText = (activeTheme, lang) => { const themeStatusEl = document.getElementById('theme-status'); const trans = translations[lang]; if (themeStatusEl && trans) { themeStatusEl.textContent = activeTheme === 'dark' ? (trans.themeStatusDark || 'Tema Escuro') : (trans.themeStatusLight || 'Tema Claro'); }};
@@ -108,12 +108,9 @@ function displayUserName(lang) { const welcomeMessage = document.getElementById(
 let ferramentas = [];
 let ferramentasFiltradas = [];
 
-// NOVO: Função de utilidade para formatar o LocalDateTime recebido do backend
 function formatarDataAssociacao(localDateTimeStr, lang) {
     const trans = translations[lang];
-    if (!localDateTimeStr) {
-        return trans.dataNaoDisponivel || 'Data não disponível';
-    }
+    if (!localDateTimeStr) return trans.dataNaoDisponivel || 'Data não disponível';
     try {
         const date = new Date(localDateTimeStr);
         if (isNaN(date)) return trans.dataNaoDisponivel || 'Data não disponível';
@@ -125,7 +122,6 @@ function formatarDataAssociacao(localDateTimeStr, lang) {
         const datePart = date.toLocaleDateString(locale, dateOptions);
         const timePart = date.toLocaleTimeString(locale, timeOptions);
         
-        // Retorna "DD/MM/AAAA às HH:MM:SS" (ou formato EN)
         if (lang === 'pt') {
             return `${datePart} às ${timePart}`;
         } else {
@@ -137,18 +133,15 @@ function formatarDataAssociacao(localDateTimeStr, lang) {
     }
 }
 
-
-// Função para buscar o usuário associado a UMA ferramenta (similar a FerramentaUni)
 async function buscarUsuarioDaFerramenta(ferramentaId) {
     try {
-        // Este endpoint agora retorna o UsuarioStatusDTO, que inclui a dataAssociacao
-         const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}/usuario`);
+        // CORRIGIDO: Usa API_BASE_URL
+        const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}/usuario`);
         if (!res.ok) {
             console.warn(`Erro ${res.status} ao buscar usuário para ferramenta ${ferramentaId}.`);
             return null;
         }
         const usuarioStatus = await res.json();
-        // Retorna o objeto usuario (com nome e dataAssociacao)
         return usuarioStatus;
     } catch (err) {
         console.error(`Falha na requisição ao buscar usuário para ferramenta ${ferramentaId}:`, err);
@@ -156,12 +149,12 @@ async function buscarUsuarioDaFerramenta(ferramentaId) {
     }
 }
 
-
 async function carregarFerramentas() {
     const grid = document.getElementById("toolGrid");
     const currentLang = localStorage.getItem('lang') || 'pt';
     const currentTrans = translations[currentLang];
     try {
+        // CORRIGIDO: Usa API_BASE_URL
         const res = await fetch(`${API_BASE_URL}/api/ferramentas`);
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         ferramentas = await res.json();
@@ -170,7 +163,7 @@ async function carregarFerramentas() {
             ferramentas = [];
         }
         ferramentasFiltradas = [...ferramentas];
-        renderizarFerramentas(); // Chama renderização
+        renderizarFerramentas(); 
     } catch (err) {
         console.error("Erro ao carregar ferramentas:", err);
         if (grid && currentTrans) grid.innerHTML = `<p>${currentTrans.errorLoadingTools || 'Erro.'}</p>`;
@@ -193,44 +186,36 @@ window.renderizarFerramentas = async function() {
         return;
     }
 
-    // Usamos Promise.all para esperar todas as buscas de usuário terminarem
     const cardPromises = ferramentasFiltradas.map(async (f) => {
         const id = f.id;
         const nome = f.nome || (currentLang === 'pt' ? 'Nome Ind.' : 'Name Unav.');
         const imageUrlApi = f.imagemUrl;
 
         if (id === null || id === undefined) {
-            console.warn("Ferramenta sem ID:", f);
             return null; 
         }
 
-        // --- Busca o usuário associado ANTES de criar o card (inclui data) ---
         const usuarioInfo = await buscarUsuarioDaFerramenta(id);
         const nomeUsuarioAssociado = usuarioInfo?.nome; 
-        const dataAssociacao = usuarioInfo?.dataAssociacao; // NOVO: Pega a data de associação
+        const dataAssociacao = usuarioInfo?.dataAssociacao; 
 
-        // Determina o status final e a classe CSS com base no nome do usuário
         const isDisponivel = !nomeUsuarioAssociado; 
         let statusText;
         
         if (isDisponivel) {
             statusText = trans.disponivel;
         } else if (dataAssociacao) {
-            // NOVO: Formata a data e usa a nova chave de tradução
             const dataFormatada = formatarDataAssociacao(dataAssociacao, currentLang);
             statusText = trans.emUsoDesde
                 .replace('{nomeUsuario}', nomeUsuarioAssociado)
                 .replace('{dataHora}', dataFormatada);
         } else {
-            // Fallback: Apenas nome (se a data não vier do back-end)
             statusText = `${trans.emUsoPor} ${nomeUsuarioAssociado}`; 
         }
         
         const statusClass = isDisponivel ? 'disponivel' : 'emprestado'; 
-
         const imageUrl = imageUrlApi || "/img/tools.png";
 
-        // Cria o elemento card 
         const card = document.createElement("div");
         card.classList.add("tool-card");
         card.setAttribute("data-nome", nome);
@@ -254,21 +239,22 @@ window.renderizarFerramentas = async function() {
         return card; 
     }); 
 
-    // Espera todas as Promises (buscas de usuário e criação de cards) terminarem
     const cards = await Promise.all(cardPromises);
 
-    // Adiciona todos os cards válidos (não nulos) ao grid
     cards.forEach(card => {
         if (card) {
             grid.appendChild(card);
         }
     });
-
 } 
 
-
-// Filtra as ferramentas baseado no input de pesquisa
-function filtrarFerramentas() { /* ... (código existente) ... */ const searchInput = document.getElementById("search-input"); if (!searchInput) return; const termo = searchInput.value.trim().toLowerCase(); ferramentasFiltradas = ferramentas.filter(f => (f.nome || '').toLowerCase().includes(termo)); renderizarFerramentas(); }
+function filtrarFerramentas() { 
+    const searchInput = document.getElementById("search-input"); 
+    if (!searchInput) return; 
+    const termo = searchInput.value.trim().toLowerCase(); 
+    ferramentasFiltradas = ferramentas.filter(f => (f.nome || '').toLowerCase().includes(termo)); 
+    renderizarFerramentas(); 
+}
 
 // --- INICIALIZAÇÃO E EVENT LISTENERS ---
 document.addEventListener("DOMContentLoaded", () => { 
@@ -295,7 +281,10 @@ document.addEventListener("DOMContentLoaded", () => {
     loadTheme(); 
     loadLanguage(); 
     carregarFerramentas(); 
+    
+    // --- LISTENER DO HAMBURGUER (MANTIDO) ---
     hamburgerBtn?.addEventListener('click', () => sidebar?.classList.toggle('active')); 
+    
     searchInput?.addEventListener("input", filtrarFerramentas); 
     settingsBtn?.addEventListener('click', (e) => { 
         e.preventDefault(); 

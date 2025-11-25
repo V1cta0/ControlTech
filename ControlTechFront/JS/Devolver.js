@@ -125,7 +125,8 @@ function displayUserName(lang) { const welcomeMessage = document.getElementById(
 
 // --- LÓGICA PRINCIPAL ---
 
-const BASE_URL = `${API_BASE_URL}/api/ferramentas`; // URL base da API
+// CORREÇÃO: Usa API_BASE_URL
+const BASE_URL = `${API_BASE_URL}/api/ferramentas`; 
 
 function showAlert(titulo, mensagem) {
     const modal = document.getElementById('alertModal');
@@ -258,9 +259,11 @@ document.getElementById("confirmBtn")?.addEventListener("click", function () {
     if (!observacoes) {
         const modalConfirm = document.getElementById("confirmModal");
         if (modalConfirm) modalConfirm.classList.add("hidden");
+        
         const titulo = trans.tituloAviso || "Campo Obrigatório";
         const mensagem = trans.msgObsObrigatoria || "A descrição é obrigatória.";
         showAlert(titulo, mensagem);
+        
         if (observacoesInput) {
             observacoesInput.style.border = "2px solid red";
             observacoesInput.addEventListener('input', function() { this.style.border = ""; }, { once: true });
@@ -299,7 +302,7 @@ document.getElementById("confirmBtn")?.addEventListener("click", function () {
             }
         })
         .catch(err => {
-            console.error("Erro na devolução:", err);
+            console.error("Erro:", err);
             if (mensagemDiv) {
                 mensagemDiv.textContent = err.message;
                 mensagemDiv.className = "mensagem msg-error";
@@ -327,6 +330,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadTheme();
     loadLanguage();
 
+    // --- LISTENER DO HAMBURGUER (MANTIDO) ---
     hamburgerBtn?.addEventListener('click', () => sidebar?.classList.toggle('active'));
 
     const usuarioLogado = getUsuarioLogado();

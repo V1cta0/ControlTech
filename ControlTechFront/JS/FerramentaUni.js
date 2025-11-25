@@ -95,8 +95,8 @@ function iniciarCronometro(timestampAssociacao) {
     timeElapsedContainer.classList.remove('hidden');
 }
 
-const setText = (id, key, trans) => { const element = document.getElementById(id); if (element) element.textContent = trans[key] || ''; else console.warn(`Elemento ID '${id}' não encontrado.`); };
-const setSpanText = (id, key, trans) => { const element = document.getElementById(id)?.querySelector('span'); if (element) element.textContent = trans[key] || ''; else console.warn(`Span dentro do ID '${id}' não encontrado.`); };
+const setText = (id, key, trans) => { const element = document.getElementById(id); if (element) element.textContent = trans[key] || ''; };
+const setSpanText = (id, key, trans) => { const element = document.getElementById(id)?.querySelector('span'); if (element) element.textContent = trans[key] || ''; };
 const setInnerHtml = (id, key, trans, args = {}) => {
     const element = document.getElementById(id);
     if (element) {
@@ -134,7 +134,6 @@ const updateTranslations = (lang) => {
     updateThemeStatusText(document.body.classList.contains('dark-theme') ? 'dark' : 'light', currentLang);
     updateLanguageStatusText(currentLang);
     displayUserName(currentLang);
-    
     atualizarStatusDaFerramenta();
 };
 
@@ -176,6 +175,7 @@ async function atualizarStatusDaFerramenta() {
     const ferramentaId = new URLSearchParams(window.location.search).get("id");
     const lang = localStorage.getItem('lang') || 'pt';
     try {
+        // CORRIGIDO: Usa API_BASE_URL
         const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}/usuario`);
         if (!res.ok) throw new Error(lang === 'pt' ? "Erro ao buscar usuário da ferramenta" : "Error fetching tool user");
         const usuarioStatus = await res.json(); 
@@ -199,6 +199,7 @@ async function carregarFerramenta() {
     const trans = translations[lang];
 
     try {
+        // CORRIGIDO: Usa API_BASE_URL
         const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}`);
         if (!res.ok) throw new Error(trans.erroCarregar);
 
@@ -258,6 +259,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     btnAssociar?.addEventListener("click", async () => {
         if (statusMsg) statusMsg.textContent = "";
         try {
+            // CORRIGIDO: Usa API_BASE_URL
             const assocRes = await fetch(`${API_BASE_URL}/api/ferramentas/associar/${ferramentaId}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -291,7 +293,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     
     closePopupBtn?.addEventListener("click", () => popup.style.display = "none");
+    
+    // --- LISTENER DO HAMBURGUER (MANTIDO) ---
     hamburgerBtn?.addEventListener('click', () => sidebar?.classList.toggle('active'));
+    
     settingsBtn?.addEventListener('click', (e) => {
         e.preventDefault();
         themePopup?.classList.toggle('visible');
