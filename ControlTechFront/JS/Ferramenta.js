@@ -14,8 +14,8 @@ const translations = {
         'searchInputPlaceholder': 'Pesquisar ferramentas...',
         'selectButton': 'Selecionar',
         'disponivel': 'Disponível',
-        'emprestado': 'Emprestado',
-        'emUsoPor': 'Em uso por:',
+        'emprestado': 'Emprestado', 
+        'emUsoPor': 'Em uso por:',   
         'emUsoDesde': 'Em uso por: {nomeUsuario} (desde {dataHora})',
         'dataNaoDisponivel': 'Data não disponível',
         'noToolsFound': 'Nenhuma ferramenta encontrada.',
@@ -41,8 +41,8 @@ const translations = {
         'searchInputPlaceholder': 'Search tools...',
         'selectButton': 'Select',
         'disponivel': 'Available',
-        'emprestado': 'Loaned',
-        'emUsoPor': 'In use by:',
+        'emprestado': 'Loaned', 
+        'emUsoPor': 'In use by:',   
         'emUsoDesde': 'In use by: {nomeUsuario} (since {dataHora})',
         'dataNaoDisponivel': 'Date unavailable',
         'noToolsFound': 'No tools found.',
@@ -85,6 +85,7 @@ const updateTranslations = (lang) => {
     updateLanguageStatusText(currentLang); 
     displayUserName(currentLang); 
     
+    // Atualiza botões de filtro se existirem
     setText('filter-all', 'filterAll', trans);
     setText('filter-available', 'filterAvailable', trans);
     setText('filter-loaned', 'filterLoaned', trans);
@@ -93,7 +94,6 @@ const updateTranslations = (lang) => {
         renderizarFerramentas(); 
     } 
 };
-
 const saveTheme = (theme) => { localStorage.setItem('theme', theme); const currentLang = localStorage.getItem('lang') || 'pt'; updateThemeStatusText(theme, currentLang); updateThemeToggleButtonVisuals(theme); };
 const loadTheme = () => { const savedTheme = localStorage.getItem('theme') || 'light'; const currentLang = localStorage.getItem('lang') || 'pt'; document.body.classList.toggle('dark-theme', savedTheme === 'dark'); updateThemeStatusText(savedTheme, currentLang); updateThemeToggleButtonVisuals(savedTheme); };
 const updateThemeStatusText = (activeTheme, lang) => { const themeStatusEl = document.getElementById('theme-status'); const trans = translations[lang]; if (themeStatusEl && trans) { themeStatusEl.textContent = activeTheme === 'dark' ? (trans.themeStatusDark || 'Tema Escuro') : (trans.themeStatusLight || 'Tema Claro'); }};
@@ -135,7 +135,7 @@ function formatarDataAssociacao(localDateTimeStr, lang) {
 
 async function buscarUsuarioDaFerramenta(ferramentaId) {
     try {
-        // CORRIGIDO: Usa API_BASE_URL
+        // URL CORRIGIDA
         const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}/usuario`);
         if (!res.ok) {
             console.warn(`Erro ${res.status} ao buscar usuário para ferramenta ${ferramentaId}.`);
@@ -154,7 +154,7 @@ async function carregarFerramentas() {
     const currentLang = localStorage.getItem('lang') || 'pt';
     const currentTrans = translations[currentLang];
     try {
-        // CORRIGIDO: Usa API_BASE_URL
+        // URL CORRIGIDA
         const res = await fetch(`${API_BASE_URL}/api/ferramentas`);
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         ferramentas = await res.json();
@@ -171,7 +171,6 @@ async function carregarFerramentas() {
     }
 }
 
-// ****** FUNÇÃO RENDERIZAR ATUALIZADA ******
 window.renderizarFerramentas = async function() { 
     const grid = document.getElementById("toolGrid");
     if (!grid) return console.error("Elemento #toolGrid não encontrado.");
@@ -282,7 +281,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadLanguage(); 
     carregarFerramentas(); 
     
-    // --- LISTENER DO HAMBURGUER (MANTIDO) ---
+    // -- MENU HAMBÚRGUER (GARANTIDO) --
     hamburgerBtn?.addEventListener('click', () => sidebar?.classList.toggle('active')); 
     
     searchInput?.addEventListener("input", filtrarFerramentas); 
