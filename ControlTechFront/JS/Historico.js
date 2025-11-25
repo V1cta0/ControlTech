@@ -1,5 +1,6 @@
-import { API_BASE_URL } from './apiConfig.js';
+import { API_BASE_URL } from './apiConfig.js'; // <--- IMPORTAÇÃO ADICIONADA
 
+// Dicionário de traduções
 const translations = {
     'pt': {
         'pageTitle': 'Histórico - ControlTech',
@@ -56,7 +57,6 @@ const translations = {
 };
 
 // --- FUNÇÕES DE LÓGICA DE TEMA E IDIOMA ---
-// (Copie EXATAMENTE as mesmas funções do JS/Ferramenta.js ou JS/Devolver.js)
 const updateTranslations = (lang) => {
     const currentLang = translations[lang] ? lang : 'pt';
     const trans = translations[currentLang];
@@ -76,7 +76,6 @@ const updateTranslations = (lang) => {
         else console.warn(`Span dentro do ID '${id}' não encontrado.`);
     };
 
-    // Barra lateral
     setSpanText('nav-tools', 'sidebarTools');
     setSpanText('nav-return', 'sidebarReturn');
     setSpanText('nav-help', 'sidebarHelp');
@@ -84,32 +83,27 @@ const updateTranslations = (lang) => {
     setSpanText('nav-exit', 'sidebarExit');
     setSpanText('settings-btn', 'sidebarSettings');
 
-    // Conteúdo Principal
     setText('header-title', 'headerTitle');
     setText('btnUsuario', 'btnMeuHistorico');
     setText('btnTodos', 'btnTodos');
 
-    // Popup Configurações
     setText('settings-popup-title', 'settingsPopupTitle');
     setText('theme-label', 'themeLabel');
     setText('lang-label', 'langLabel');
 
-    // Atualiza textos de status
     updateThemeStatusText(document.body.classList.contains('dark-theme') ? 'dark' : 'light', currentLang);
     updateLanguageStatusText(currentLang);
     displayUserName(currentLang);
 
-    // Recarrega histórico para traduzir cards e mensagens
     const activeButton = document.querySelector('.select-btn.active') || document.getElementById('btnTodos');
     if (activeButton && typeof carregarHistorico === 'function') {
         const usuario = getUsuarioLogado();
         if (activeButton.id === 'btnUsuario' && usuario) {
             carregarHistorico(usuario.id);
         } else {
-            carregarHistorico(); // Carrega 'todos'
+            carregarHistorico(); 
         }
     } else {
-        // Carrega 'todos' como fallback inicial se botão ativo não for encontrado
         if (typeof carregarHistorico === 'function') carregarHistorico();
     }
 };
@@ -122,11 +116,10 @@ const loadLanguage = () => { const sl = localStorage.getItem('lang') || 'pt'; up
 const updateLanguageStatusText = (al) => { const lts = document.getElementById('lang-toggle-btn')?.querySelector('span'); const ls = document.getElementById('lang-status'); if (lts) lts.textContent = al.toUpperCase(); if (ls) { const tp = translations.pt; const te = translations.en; if (tp && te) ls.textContent = al === 'pt' ? (tp.langStatusPT || 'PT') : (te.langStatusEN || 'EN'); }};
 function displayUserName(lang) { const wm = document.getElementById('welcome-message'); const une = document.getElementById('user-name'); const tr = translations[lang]; let ui = null; try { const su = localStorage.getItem('usuarioLogado'); if (su) ui = JSON.parse(su); } catch (e) { console.error(e); } if (wm && une && tr) { const du = (lang === 'pt' ? 'Usuário' : 'User'); wm.textContent = tr.welcomeMessage || '?'; une.textContent = (ui && ui.nome) ? ui.nome : du; }};
 
-// --- LÓGICA ORIGINAL DA PÁGINA (PRESERVADA E INTEGRADA) ---
+// --- LÓGICA ORIGINAL DA PÁGINA ---
 
-const BASE_URL = `${API_BASE_URL}/api/historico`;
+const BASE_URL = `${API_BASE_URL}/api/historico`; // <--- CORREÇÃO AQUI
 
-// Função original para carregar histórico (atualizada para traduções)
 function carregarHistorico(usuarioId = null) {
   const url = usuarioId ? `${BASE_URL}/usuario/${usuarioId}` : `${BASE_URL}/todos`;
   const currentLang = localStorage.getItem('lang') || 'pt';
@@ -135,7 +128,6 @@ function carregarHistorico(usuarioId = null) {
 
   if (!historicoContainer || !trans) return console.error("Container de histórico ou traduções não encontrados.");
 
-  // Limpa container e mostra mensagem de carregamento (opcional)
   historicoContainer.innerHTML = `<p>${currentLang === 'pt' ? 'Carregando histórico...' : 'Loading history...'}</p>`;
 
   fetch(url)
@@ -144,7 +136,7 @@ function carregarHistorico(usuarioId = null) {
       return res.json();
     })
     .then(historicos => {
-      historicoContainer.innerHTML = ""; // Limpa mensagem de carregamento
+      historicoContainer.innerHTML = ""; 
 
       if (!historicos || !Array.isArray(historicos) || historicos.length === 0) {
         historicoContainer.innerHTML = `<p class="lista-vazia">${trans.msgNenhumHistorico}</p>`;
@@ -155,14 +147,12 @@ function carregarHistorico(usuarioId = null) {
         const card = document.createElement("div");
         card.classList.add("historico-card");
 
-        // Formata data/hora (API retorna LocalDateTime)
         let dataFormatada = 'N/A';
         let horaFormatada = '';
         if (h.dataDevolucao) {
             try {
-                // Tenta parsear como LocalDateTime (formato ISO como '2023-10-23T14:30:00')
                 const data = new Date(h.dataDevolucao);
-                 if (!isNaN(data)) { // Verifica se a data é válida
+                 if (!isNaN(data)) {
                     dataFormatada = data.toLocaleDateString(currentLang === 'pt' ? 'pt-BR' : 'en-US');
                     horaFormatada = data.toLocaleTimeString(currentLang === 'pt' ? 'pt-BR' : 'en-US', { hour: '2-digit', minute: '2-digit' });
                  }
@@ -171,7 +161,6 @@ function carregarHistorico(usuarioId = null) {
             }
         }
 
-        // Cria HTML do card com traduções
         card.innerHTML = `
           <h3>${h.nomeFerramenta || (currentLang === 'pt' ? 'Ferramenta?' : 'Tool?')}</h3>
           <p><strong>${trans.cardUsuario}</strong> ${h.nomeUsuario || (currentLang === 'pt' ? 'Usuário?' : 'User?')}</p>
@@ -188,7 +177,6 @@ function carregarHistorico(usuarioId = null) {
     });
 }
 
-// Função original para pegar usuário logado
 function getUsuarioLogado() {
     try {
         const usuario = localStorage.getItem("usuarioLogado");
@@ -199,13 +187,11 @@ function getUsuarioLogado() {
     }
 }
 
-// --- INICIALIZAÇÃO E EVENT LISTENERS ---
 document.addEventListener("DOMContentLoaded", () => {
-    // Referências
     const usuario = getUsuarioLogado();
     const btnUsuario = document.getElementById("btnUsuario");
     const btnTodos = document.getElementById("btnTodos");
-    const hamburgerBtn = document.getElementById("hamburger-btn"); // ID corrigido
+    const hamburgerBtn = document.getElementById("hamburger-btn");
     const sidebar = document.getElementById("sidebar");
     const settingsBtn = document.getElementById('settings-btn');
     const themePopup = document.getElementById('theme-popup');
@@ -213,56 +199,45 @@ document.addEventListener("DOMContentLoaded", () => {
     const themeToggleBtn = document.getElementById('theme-toggle-btn');
     const langToggleBtn = document.getElementById('lang-toggle-btn');
 
-    // Inicializa Tema e Idioma
     loadTheme();
-    // loadLanguage será chamado DEPOIS de definir listeners de histórico
 
-    // Função para marcar botão ativo
     function setActiveButton(activeBtn) {
         [btnUsuario, btnTodos].forEach(btn => btn?.classList.remove("active"));
         activeBtn?.classList.add("active");
     }
 
-    // Listener Botão "Meu Histórico"
     if (usuario && btnUsuario) {
         btnUsuario.addEventListener("click", () => {
             carregarHistorico(usuario.id);
             setActiveButton(btnUsuario);
         });
     } else if (btnUsuario) {
-        // Desabilita se não logado
         btnUsuario.disabled = true;
         btnUsuario.style.opacity = 0.5;
         btnUsuario.style.cursor = "not-allowed";
     }
 
-    // Listener Botão "Todos"
     if (btnTodos) {
         btnTodos.addEventListener("click", () => {
-            carregarHistorico(); // Sem ID para carregar todos
+            carregarHistorico(); 
             setActiveButton(btnTodos);
         });
     }
 
-    // Carregamento inicial (prioriza 'Meu Histórico' se logado)
-    if (usuario && btnUsuario) {
+    if (btnTodos) {
+        carregarHistorico(); 
+        setActiveButton(btnTodos);
+    } else if (usuario && btnUsuario) {
         carregarHistorico(usuario.id);
         setActiveButton(btnUsuario);
-    } else if (btnTodos) {
-        carregarHistorico();
-        setActiveButton(btnTodos);
     } else {
-        // Fallback se nenhum botão for encontrado
-         carregarHistorico();
+        carregarHistorico();
     }
 
-    // Chama loadLanguage AGORA, após definir listeners de histórico
     loadLanguage();
 
-    // Listener Hamburger
     hamburgerBtn?.addEventListener("click", () => sidebar?.classList.toggle("active"));
 
-    // Listeners Popup Configurações
     settingsBtn?.addEventListener('click', (e) => {
         e.preventDefault();
         themePopup?.classList.toggle('visible');
@@ -279,7 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     langToggleBtn?.addEventListener('click', () => {
         const currentLang = localStorage.getItem('lang') || 'pt';
-        saveLanguage(currentLang === 'pt' ? 'en' : 'pt'); // Salva e atualiza UI (recarrega histórico)
+        saveLanguage(currentLang === 'pt' ? 'en' : 'pt');
     });
 
-}); // Fim do DOMContentLoaded
+});

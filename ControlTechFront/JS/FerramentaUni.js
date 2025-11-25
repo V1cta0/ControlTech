@@ -1,5 +1,6 @@
-import { API_BASE_URL } from './apiConfig.js';
+import { API_BASE_URL } from './apiConfig.js'; // <--- IMPORTAÇÃO ADICIONADA
 
+// Dicionário de traduções
 const translations = {
     'pt': {
         'pageTitle': 'Detalhes da Ferramenta - ControlTech',
@@ -28,7 +29,6 @@ const translations = {
         'langStatusPT': 'Português',
         'langStatusEN': 'Inglês',
         'welcomeMessage': 'Olá,',
-        // NOVAS CHAVES
         'timeElapsedLabel': 'Tempo em Uso:',
         'timeDisplayInitial': '--:--:--',
     },
@@ -59,18 +59,15 @@ const translations = {
         'langStatusPT': 'Portuguese',
         'langStatusEN': 'English',
         'welcomeMessage': 'Hello,',
-        // NOVAS CHAVES
         'timeElapsedLabel': 'Time in Use:',
         'timeDisplayInitial': '--:--:--',
     }
 };
 
-// --- FUNÇÕES DE UTILIDADE DE TEMA E IDIOMA ---
+// --- FUNÇÕES DE UTILIDADE ---
 
-// Variável para armazenar o ID do intervalo do cronômetro
 let cronometroIntervalId = null;
 
-// NOVO: Função para formatar segundos em HH:MM:SS
 function formatarTempo(totalSeconds) {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -81,7 +78,6 @@ function formatarTempo(totalSeconds) {
         .join(':');
 }
 
-// NOVO: Função para iniciar o cronômetro
 function iniciarCronometro(timestampAssociacao) {
     const chronometerDisplay = document.getElementById('chronometer-display');
     const timeElapsedContainer = document.getElementById('time-elapsed');
@@ -89,33 +85,24 @@ function iniciarCronometro(timestampAssociacao) {
 
     if (!chronometerDisplay || !timeElapsedContainer) return;
 
-    // 1. Limpa qualquer cronômetro anterior
     if (cronometroIntervalId) {
         clearInterval(cronometroIntervalId);
     }
     
-    // 2. Função de atualização
     function atualizarCronometro() {
         const now = new Date();
         const diffMs = now.getTime() - dataAssociacao.getTime();
         const diffSeconds = Math.floor(diffMs / 1000);
         
-        // Evita tempo negativo (caso data futura, embora não deva ocorrer)
         if (diffSeconds < 0) return; 
 
         chronometerDisplay.textContent = formatarTempo(diffSeconds);
     }
 
-    // Executa a primeira vez imediatamente
     atualizarCronometro();
-    
-    // Inicia o intervalo de 1 segundo
     cronometroIntervalId = setInterval(atualizarCronometro, 1000);
-    
-    // Mostra o cronômetro
     timeElapsedContainer.classList.remove('hidden');
 }
-
 
 const setText = (id, key, trans) => {
     const element = document.getElementById(id);
@@ -129,7 +116,6 @@ const setSpanText = (id, key, trans) => {
     else console.warn(`Span dentro do ID '${id}' não encontrado.`);
 };
 
-// FUNÇÃO CRÍTICA MOVIDA E CORRIGIDA: Agora acessível pelos event listeners.
 const setInnerHtml = (id, key, trans, args = {}) => {
     const element = document.getElementById(id);
     if (element) {
@@ -149,7 +135,6 @@ const updateTranslations = (lang) => {
     document.documentElement.lang = currentLang === 'pt' ? 'pt-BR' : 'en';
     document.title = trans.pageTitle || 'Ferramenta - ControlTech';
 
-    // Barra lateral
     setSpanText('nav-tools', 'sidebarTools', trans);
     setSpanText('nav-return', 'sidebarReturn', trans);
     setSpanText('nav-help', 'sidebarHelp', trans);
@@ -157,30 +142,23 @@ const updateTranslations = (lang) => {
     setSpanText('nav-exit', 'sidebarExit', trans);
     setSpanText('settings-btn', 'sidebarSettings', trans);
 
-    // Conteúdo Principal
     setInnerHtml('label-descricao', 'labelDescricao', trans); 
     setInnerHtml('label-estoque', 'labelEstoque', trans);    
     
-    // CORREÇÃO DOS WARNINGS: Usando setText para elementos que são o <span> alvo
     setText('btn-voltar-text', 'btnVoltar', trans);
     setText('btn-associar-text', 'btnAssociar', trans);
     setText('popup-btn-fechar', 'popupBtnFechar', trans);
 
-    // NOVO: Traduções do cronômetro
     setText('time-elapsed-label', 'timeElapsedLabel', trans);
-    // setText('chronometer-display', 'timeDisplayInitial', trans); // Não é necessário traduzir o valor inicial, pois o cronômetro começa imediatamente
 
-    // Popup Configurações
     setText('settings-popup-title', 'settingsPopupTitle', trans);
     setText('theme-label', 'themeLabel', trans);
     setText('lang-label', 'langLabel', trans);
 
-    // Atualiza textos de status
     updateThemeStatusText(document.body.classList.contains('dark-theme') ? 'dark' : 'light', currentLang);
     updateLanguageStatusText(currentLang);
     displayUserName(currentLang);
     
-    // Forçamos a atualização do status para que o cronômetro e a mensagem sejam traduzidos
     atualizarStatusDaFerramenta();
 };
 
@@ -196,8 +174,7 @@ function displayUserName(lang) { const wm = document.getElementById('welcome-mes
 
 // --- LÓGICA PRINCIPAL DA PÁGINA ---
 
-// --- Função ATUALIZADA para atualizar status (traduzida e com cronômetro) ---
-function atualizarStatus(usuarioNome, dataAssociacao) { // Recebe dataAssociacao
+function atualizarStatus(usuarioNome, dataAssociacao) {
     const statusMsg = document.getElementById("statusMsg");
     const btnAssociar = document.getElementById("btnAssociar");
     const timeElapsedContainer = document.getElementById('time-elapsed');
@@ -215,7 +192,6 @@ function atualizarStatus(usuarioNome, dataAssociacao) { // Recebe dataAssociacao
         if (statusMsg) statusMsg.style.color = "green"; 
         if (btnAssociar) btnAssociar.disabled = true; 
         
-        // NOVO: Inicia o cronômetro se houver data de associação
         if (dataAssociacao) {
             iniciarCronometro(dataAssociacao);
         }
@@ -226,27 +202,22 @@ function atualizarStatus(usuarioNome, dataAssociacao) { // Recebe dataAssociacao
     }
 }
 
-// --- Buscar usuário associado via GET (ATUALIZADA para pegar a data) ---
 async function atualizarStatusDaFerramenta() {
     const ferramentaId = new URLSearchParams(window.location.search).get("id");
     const lang = localStorage.getItem('lang') || 'pt';
     try {
-const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}/usuario`);
+        // CORREÇÃO 1: URL DINÂMICA
+        const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}/usuario`);
         if (!res.ok) throw new Error(lang === 'pt' ? "Erro ao buscar usuário da ferramenta" : "Error fetching tool user");
         
-        // A API agora retorna UsuarioStatusDTO com dataAssociacao
         const usuarioStatus = await res.json(); 
-
-        // Passa o nome e o timestamp para a função de atualização
         atualizarStatus(usuarioStatus.nome, usuarioStatus.dataAssociacao); 
     } catch (err) {
         console.error(err);
-        // Em caso de erro de conexão, assume que não está em uso
         atualizarStatus(null, null); 
     }
 }
 
-// --- Carrega os dados da ferramenta (ATUALIZADA) ---
 async function carregarFerramenta() {
     const ferramentaId = new URLSearchParams(window.location.search).get("id");
     const toolNome = document.getElementById("toolNome");
@@ -260,25 +231,23 @@ async function carregarFerramenta() {
     const trans = translations[lang];
 
     try {
+        // CORREÇÃO 2: URL DINÂMICA
         const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}`);
         if (!res.ok) throw new Error(trans.erroCarregar);
 
         const ferramenta = await res.json();
 
-        // IMPLEMENTAÇÃO DAS VERIFICAÇÕES DE NULIDADE AQUI
         if (toolNome) toolNome.textContent = ferramenta.nome;
         if (toolId) toolId.textContent = ferramenta.id;
         if (toolDescricao) toolDescricao.textContent = ferramenta.descricao || (lang === 'pt' ? 'Sem descrição' : 'No description');
         if (toolEstoque) toolEstoque.textContent = ferramenta.quantidadeEstoque;
         if (toolImage) toolImage.src = ferramenta.imagemUrl || '/img/tools.png'; 
 
-        // Atualiza status usando GET do usuário associado
         await atualizarStatusDaFerramenta();
 
         return ferramenta;
     } catch (err) {
         console.error("Erro ao carregar ferramenta:", err);
-        // IMPLEMENTAÇÃO DAS VERIFICAÇÕES DE NULIDADE AQUI
         if (toolNome) toolNome.textContent = trans.erroCarregar;
         if (statusMsg) statusMsg.textContent = err.message;
         if (statusMsg) statusMsg.style.color = "red";
@@ -289,7 +258,6 @@ async function carregarFerramenta() {
 
 
 document.addEventListener("DOMContentLoaded", async () => {
-    // Referências do HTML (incluindo as novas)
     const params = new URLSearchParams(window.location.search);
     const ferramentaId = params.get("id");
 
@@ -306,15 +274,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const themeToggleBtn = document.getElementById('theme-toggle-btn');
     const langToggleBtn = document.getElementById('lang-toggle-btn');
 
-    
-    // Inicializa Tema e Idioma (antes de carregar os dados)
     loadTheme();
-    loadLanguage(); // Isso chama updateTranslations > displayUserName
+    loadLanguage(); 
 
     const lang = localStorage.getItem('lang') || 'pt';
     const trans = translations[lang];
 
-    // --- Verifica usuário logado ---
     let usuarioLogado = null;
     try {
         usuarioLogado = JSON.parse(localStorage.getItem("usuarioLogado"));
@@ -331,11 +296,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     let ferramenta = await carregarFerramenta();
 
-    // --- Botão associar (ATUALIZADO para usar a data de associação do retorno) ---
     btnAssociar?.addEventListener("click", async () => {
         if (statusMsg) statusMsg.textContent = "";
 
         try {
+            // CORREÇÃO 3: URL DINÂMICA
             const assocRes = await fetch(`${API_BASE_URL}/api/ferramentas/associar/${ferramentaId}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -344,7 +309,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             let resposta;
             try {
-                // A API agora retorna um Map (JSON)
                 resposta = await assocRes.json();
             } catch {
                 const texto = await assocRes.text();
@@ -353,14 +317,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (!assocRes.ok) throw new Error(resposta.erro || trans.erroFalhaAssociar);
 
-            // Usa a função setInnerHtml (agora global) para o popup
             setInnerHtml("popupMessage", "popupSucesso", trans, {
                 ferramentaNome: resposta.ferramentaNome,
                 usuarioNome: resposta.usuarioNome
             });
             popup.style.display = "flex";
 
-            // Atualiza status imediatamente (usando o novo campo dataAssociacao)
             atualizarStatus(resposta.usuarioNome, resposta.dataAssociacao);
             ferramenta.usuarioNome = resposta.usuarioNome;
 
@@ -373,15 +335,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
     
-    // --- Fechar popup de confirmação ---
     closePopupBtn?.addEventListener("click", () => {
         popup.style.display = "none";
     });
 
-    // --- Eventos do Dashboard ---
     hamburgerBtn?.addEventListener('click', () => sidebar?.classList.toggle('active'));
 
-    // Eventos Popup Configurações
     settingsBtn?.addEventListener('click', (e) => {
         e.preventDefault();
         themePopup?.classList.toggle('visible');
@@ -401,6 +360,5 @@ document.addEventListener("DOMContentLoaded", async () => {
         saveLanguage(currentLang === 'pt' ? 'en' : 'pt');
     });
 
-    // --- Atualização automática a cada 5s ---
     setInterval(atualizarStatusDaFerramenta, 5000);
 });
