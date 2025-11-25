@@ -1,6 +1,6 @@
 /* Estilos Gerais */
 * {
-    box-sizing: border-box; /* CORREÇÃO ESSENCIAL */
+    box-sizing: border-box;
 }
 
 body {
@@ -20,7 +20,7 @@ body {
 
 /* Barra Lateral */
 .sidebar {
-    width: 250px;
+    width: 250px; /* PADRONIZADO: 250px */
     background-color: #004b8d;
     color: white;
     padding: 2rem 1.5rem;
@@ -30,11 +30,44 @@ body {
     transition: left 0.3s ease-in-out, background-color 0.3s, box-shadow 0.3s; 
 }
 
-/* ... (Mantenha o restante dos estilos da barra lateral e navegação) ... */
+.sidebar-header {
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; 
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #b3cde0;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav a.active {
+    background-color: #0061c0;
+    color: white;
+}
+
+.sidebar-nav a i {
+    font-size: 1.5rem;
+    margin-right: 15px;
+}
 
 /* Estilos para o botão do hambúrguer */
 .hamburger-btn {
-    display: none; /* Inicia escondido em telas grandes */
+    display: none; 
     position: fixed;
     top: 20px;
     left: 20px;
@@ -74,182 +107,6 @@ body {
     z-index: 2;
 }
 
-/* ... (Mantenha o restante dos estilos de formulário, inputs, botões, modais) ... */
-
-/* Container de ferramentas */
-#listaFerramentas {
-    display: grid;
-    /* Padrão para telas grandes: 2 colunas ou mais */
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-    gap: 1.5rem;
-    padding: 1rem 0;
-}
-
-@media (max-width: 768px) {
-    .dashboard-container {
-        display: block; 
-    }
-
-    /* Sidebar Off-Canvas */
-    .sidebar {
-        position: fixed;
-        top: 0;
-        left: -250px; /* Esconde */
-        height: 100vh;
-        width: 298px;
-        z-index: 100;
-        box-shadow: 2px 0 5px rgba(0,0,0,0.5);
-    }
-
-    .sidebar.active {
-        left: 0; /* Mostra */
-    }
-
-    /* Conteúdo Principal: Necessário ajuste de padding para o hamburger */
-    .main-content {
-        margin-left: 0;
-        width: 100%;
-        padding: 1rem;
-        padding-top: 5rem; /* Novo: Espaço para o botão hamburger */
-    }
-
-    /* Ajusta a caixa principal em mobile */
-    .devolucao-box {
-        padding: 1.5rem;
-        max-width: 100%; /* Ocupa a largura total */
-        margin: 0 auto; /* Centraliza se a largura for menor que 100% */
-    }
-
-    .devolucao-box h1 {
-        font-size: 1.5rem;
-    }
-
-    /* Mostra o botão hamburger */
-    .hamburger-btn {
-        display: block;
-        top: 15px;
-        left: 15px;
-    }
-    
-    /* Esconde o perfil de usuário na sidebar em mobile */
-    .user-profile {
-        display: none;
-    }
-
-    /* CORREÇÃO: Força o grid a mostrar apenas 1 card por linha */
-    #listaFerramentas {
-        grid-template-columns: 1fr; 
-        gap: 1rem;
-    }
-}
-
-/* === ESTILOS DO TEMA ESCURO (MANTIDOS) === */
-/* ... (Mantenha todo o seu código body.dark-theme aqui) ... */
-/* Estilos Gerais */
-body {
-    font-family: 'Roboto', Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f0f2f5;
-    color: #333;
-    transition: background-color 0.3s, color 0.3s; /* Adicionado para tema */
-}
-
-/* Container do Dashboard */
-.dashboard-container {
-    display: flex;
-    min-height: 100vh;
-}
-
-/* Barra Lateral */
-.sidebar {
-    width: 298px;
-    background-color: #004b8d;
-    color: white;
-    padding: 2rem 1.5rem;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    transition: left 0.3s ease-in-out, background-color 0.3s, box-shadow 0.3s; /* Atualizado para tema */
-}
-
-.sidebar-header {
-    margin-bottom: 2rem;
-    font-size: 1.5rem;
-    font-weight: 700;
-    text-align: center;
-}
-
-.sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1; /* Adicionado para empurrar config para baixo */
-}
-
-.sidebar-nav a {
-    display: flex;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    margin-bottom: 0.5rem;
-    color: #b3cde0;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.sidebar-nav a:hover,
-.sidebar-nav a.active {
-    background-color: #0061c0;
-    color: white;
-}
-
-.sidebar-nav a i {
-    font-size: 1.5rem; /* Aumenta o tamanho do ícone */
-    margin-right: 15px; /* Adiciona espaço à direita do ícone */
-}
-
-/* Estilos para o botão do hambúrguer */
-.hamburger-btn {
-    display: none; /* Inicia escondido em telas grandes */
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 101;
-    background: #004b8d;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s, color 0.3s; /* Adicionado para tema */
-}
-
-.hamburger-btn:hover {
-    background: #0061c0;
-}
-
-/* Conteúdo Principal */
-.main-content {
-    flex-grow: 1;
-    padding: 2rem;
-    transition: background-color 0.3s; /* Adicionado para tema */
-}
-
-.devolucao-box {
-    background-color: #fff;
-    padding: 2rem 3rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    width: 100%;
-    max-width: 500px;
-    margin: auto;
-    text-align: center;
-    transition: box-shadow 0.3s ease, background-color 0.3s; /* Adicionado para tema */
-    position: relative;
-    z-index: 2;
-}
-
 .devolucao-box:hover {
     box-shadow: 0 6px 30px rgba(0, 58, 117, 0.35);
 }
@@ -259,7 +116,7 @@ body {
     font-weight: 700;
     font-size: 2rem;
     color: #004b8d;
-    transition: color 0.3s; /* Adicionado para tema */
+    transition: color 0.3s;
 }
 
 .info-box {
@@ -270,12 +127,11 @@ body {
     font-size: 1rem;
     color: #222;
     text-align: left;
-    transition: background-color 0.3s, color 0.3s; /* Adicionado para tema */
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .info-box p {
     margin-bottom: 0.5rem;
-
 }
 
 .input-field,
@@ -291,10 +147,9 @@ textarea {
     transition: all 0.2s ease-in-out;
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.08);
     box-sizing: border-box;
-    color: #333; /* Adicionado para tema */
+    color: #333;
 }
 
-/* Foco */
 .input-field:focus,
 textarea:focus {
     border-color: #2563eb;
@@ -312,7 +167,7 @@ textarea:focus {
     border-radius: 8px;
     font-weight: 600;
     text-align: center;
-    transition: background-color 0.3s, color 0.3s; /* Adicionado para tema */
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .msg-success {
@@ -328,20 +183,20 @@ textarea:focus {
 /* Container de ferramentas */
 #listaFerramentas {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Aumentado minmax */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
     gap: 1.5rem;
     padding: 1rem 0;
 }
 
-/* Cada card de ferramenta (Estilização Aprimorada) */
+/* Card de ferramenta */
 .ferramenta-item {
     background: white;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    padding: 1.5rem; /* Aumentado padding */
-    text-align: left; /* Alinhamento à esquerda */
+    padding: 1.5rem; 
+    text-align: left; 
     border: 1px solid #e0e0e0;
-    border-top: 6px solid #004b8d; /* Destaque azul SENAI */
+    border-top: 6px solid #004b8d; 
     transition: transform 0.2s, box-shadow 0.2s, border-color 0.3s, background-color 0.3s;
 }
 
@@ -351,7 +206,6 @@ textarea:focus {
     border-top-color: #0061c0;
 }
 
-/* Estilo para os parágrafos de informação */
 .ferramenta-item p {
     margin: 0.6rem 0;
     font-size: 1rem;
@@ -359,7 +213,6 @@ textarea:focus {
     transition: color 0.3s;
 }
 
-/* Estilo para o Nome da Ferramenta */
 .ferramenta-item p:nth-child(2) {
     font-size: 1.15rem;
     font-weight: bold;
@@ -374,12 +227,10 @@ textarea:focus {
     transition: color 0.3s;
 }
 
-/* Container de observações */
 .obs-container {
     margin: 1rem 0;
 }
 
-/* Input de observações */
 .obsInput {
     width: 100%;
     padding: 0.5rem;
@@ -398,14 +249,13 @@ textarea:focus {
     outline: none;
 }
 
-/* Botão Devolver (Estilo Pill, Full Width) */
 .btnDevolver {
     width: 100%;
     background-color: #0061c0;
     color: white;
     border: none;
     padding: 0.8rem 1rem;
-    border-radius: 50px; /* Estilo pill */
+    border-radius: 50px; 
     cursor: pointer;
     font-size: 1rem;
     font-weight: bold;
@@ -457,9 +307,6 @@ textarea:focus {
 #confirmBtn:hover { background-color: #004b8d; }
 #cancelBtn:hover { background-color: #999; }
 
-.hidden { display: none; }
-
-/* Mensagem de lista vazia */
 .lista-vazia {
     background: #f9f9f9;
     border: 2px dashed #ccc;
@@ -469,11 +316,9 @@ textarea:focus {
     color: #777;
     font-size: 1rem;
     font-weight: 500;
-    grid-column: 1 / -1; /* Faz ocupar toda a largura do grid */
+    grid-column: 1 / -1; 
     transition: background-color 0.3s, border-color 0.3s, color 0.3s;
 }
-
-/* === ADIÇÕES PARA PERFIL, CONFIGURAÇÕES E TEMA ESCURO (COPIADO E ADAPTADO) === */
 
 /* Estilos do perfil do usuário */
 .user-profile {
@@ -517,14 +362,13 @@ textarea:focus {
 
 /* Botão de Configurações */
 .settings-btn {
-
     background-color: rgba(0, 0, 0, 0.2);
 }
 .settings-btn:hover {
     background-color: #0061c0 !important;
 }
 
-/* Popup de Configurações (Mesmo estilo da página Ferramentas) */
+/* Popup de Configurações */
 .theme-popup {
     position: fixed;
     bottom: 20px;
@@ -547,7 +391,7 @@ textarea:focus {
     transform: translateY(0);
     transition-delay: 0s;
 }
-.theme-popup.hidden { display: none; } /* Fallback */
+.theme-popup.hidden { display: none; } 
 
 .popup-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; margin-bottom: 1rem; transition: border-color 0.3s; }
 .popup-header h4 { margin: 0; color: #004b8d; transition: color 0.3s; }
@@ -565,43 +409,40 @@ textarea:focus {
 .lang-toggle-btn { background: #0061c0; color: white; border: none; border-radius: 8px; padding: 10px 20px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: background-color 0.3s; }
 .lang-toggle-btn:hover { background-color: #004b8d; }
 
-/* Responsividade para telas menores */
+/* RESPONSIVIDADE */
 @media (max-width: 768px) {
     .dashboard-container {
-        flex-direction: column;
+        display: block; 
     }
 
+    /* Sidebar Off-Canvas CORRIGIDA */
     .sidebar {
         position: fixed;
         top: 0;
         left: -250px; /* Esconde exatamente a largura do menu */
         height: 100vh;
-        width: 250px; /* CORRIGIDO: Era 298px, mudado para 250px para padronizar */
-        z-index: 1000; /* Aumentado para garantir que fique acima de tudo */
+        width: 250px; /* CORRIGIDO: Padronizado em 250px */
+        z-index: 1000;
         box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+        transition: left 0.3s ease-in-out;
     }
 
     .sidebar.active {
-        left: 0; /* Mostra o menu */
+        left: 0; /* Mostra */
     }
 
-    .sidebar-header {
-        text-align: left;
-    }
-
-    .sidebar-nav {
-        flex-direction: column;
-        display: flex;
-    }
-
+    /* Conteúdo Principal */
     .main-content {
         margin-left: 0;
         width: 100%;
         padding: 1rem;
+        padding-top: 5rem;
     }
 
     .devolucao-box {
         padding: 1.5rem;
+        max-width: 100%;
+        margin: 0 auto; 
     }
 
     .devolucao-box h1 {
@@ -610,18 +451,28 @@ textarea:focus {
 
     .hamburger-btn {
         display: block;
-        z-index: 1001; 
+        top: 15px;
+        left: 15px;
+        z-index: 1001; /* Garante que fique ACIMA do menu */
     }
+    
     .user-profile {
         display: none;
     }
+
+    #listaFerramentas {
+        grid-template-columns: 1fr; 
+        gap: 1rem;
+    }
+    
+    /* Ajuste do popup de configurações */
     .theme-popup {
         left: auto; 
         right: 20px;
-    }       
+    }   
 }
 
-/* === ESTILOS DO TEMA ESCURO (COMPLETO E ATUALIZADO) === */
+/* === ESTILOS DO TEMA ESCURO === */
 body.dark-theme {
     background-color: #2c2c2c;
     color: #f0f2f5;
@@ -645,14 +496,13 @@ body.dark-theme .info-box label { color: #ccc; }
 body.dark-theme .input-field, body.dark-theme textarea { background-color: #555; color: #fff; border-color: #666; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2); }
 body.dark-theme .input-field::placeholder, body.dark-theme textarea::placeholder { color: #999; }
 body.dark-theme .input-field:focus, body.dark-theme textarea:focus { border-color: #0061c0; box-shadow: 0 0 6px rgba(37, 99, 235, 0.5); }
-body.dark-theme .mensagem.msg-success { background-color: #1f4d3a; color: #a3e9c7; } /* Verde escuro */
-body.dark-theme .mensagem.msg-error { background-color: #5f2120; color: #f9bdbb; } /* Vermelho escuro */
+body.dark-theme .mensagem.msg-success { background-color: #1f4d3a; color: #a3e9c7; } 
+body.dark-theme .mensagem.msg-error { background-color: #5f2120; color: #f9bdbb; } 
 
-/* Estilos de Card de Devolução (Dark Mode Aprimorado) */
 body.dark-theme .ferramenta-item {
     background: #444;
     border-color: #555;
-    border-top-color: #0061c0; /* Mantém o destaque azul no dark mode */
+    border-top-color: #0061c0; 
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 body.dark-theme .ferramenta-item:hover {
@@ -666,7 +516,7 @@ body.dark-theme .ferramenta-item p strong {
     color: #f0f2f5;
 }
 body.dark-theme .ferramenta-item p:nth-child(2) {
-    color: #b3cde0; /* Cor de destaque para o nome */
+    color: #b3cde0; 
 }
 
 body.dark-theme .obsInput {
@@ -688,7 +538,6 @@ body.dark-theme .btnDevolver:hover {
 }
 body.dark-theme .lista-vazia { background: #3a3a3a; border-color: #555; color: #aaa; }
 
-
 body.dark-theme .modal-content { background-color: #444; color: #f0f2f5; }
 body.dark-theme .modal-btn-confirm { background-color: #0061c0; }
 body.dark-theme .modal-btn-cancel { background-color: #777; color: #fff; }
@@ -705,7 +554,6 @@ body.dark-theme .theme-toggle-btn .fa-sun { opacity: 0; transform: translateY(-1
 body.dark-theme .theme-toggle-btn .fa-moon { opacity: 1; transform: translateY(0); color: #f1c40f; }
 body.dark-theme .lang-toggle-btn { background-color: #0061c0; }
 body.dark-theme .lang-toggle-btn:hover { background-color: #004b8d; }
-/* Adicione isso ao FINAL do arquivo */
 
 /* Animação de entrada */
 .bounce-in {
@@ -717,8 +565,6 @@ body.dark-theme .lang-toggle-btn:hover { background-color: #004b8d; }
     100% { transform: scale(1); opacity: 1; }
 }
 
-/* Garante que o novo modal tenha um z-index maior que tudo */
 #alertModal {
     z-index: 2000;
 }
-
