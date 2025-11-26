@@ -3,6 +3,7 @@ body {
     font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
     padding: 0;
+    /* ESSENCIAL: Garante que o body ocupe a altura mínima total */
     min-height: 100vh; 
     color: #333;
     
@@ -27,6 +28,7 @@ body::before {
 /* Container do Dashboard (Estrutura principal para sidebar + conteúdo) */
 .dashboard-container {
     display: flex;
+    /* Garante que a estrutura do dashboard se estenda por toda a altura */
     min-height: 100vh; 
     width: 100%;
     position: relative;
@@ -43,6 +45,9 @@ body::before {
     flex-direction: column;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
     transition: left 0.3s ease-in-out, background-color 0.3s, box-shadow 0.3s;
+    /* ESSENCIAL: Permite que a sidebar estique junto com o dashboard-container */
+    flex-shrink: 0;
+    flex-grow: 0; 
     position: relative;
 }
 
@@ -266,7 +271,7 @@ body::before {
     transform: translateY(-2px);
 }
 
-/* Pop-up (Confirmação) */
+/* Pop-up (Confirmação) - GARANTE CENTRALIZAÇÃO E VISIBILIDADE ACIMA DE TUDO */
 .popup-overlay {
     display: none;
     position: fixed;
@@ -275,9 +280,10 @@ body::before {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
+    /* Centraliza o conteúdo (o pop-up) */
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 2002; /* Z-INDEX MAIS ALTO PARA FICAR ACIMA DA SIDEBAR */
 }
 
 .popup-content {
@@ -326,13 +332,14 @@ body::before {
 .theme-popup { 
     position: fixed; 
     bottom: 20px; 
+    /* Centraliza horizontalmente no desktop */
     left: 50%; 
     background-color: #fff; 
     border-radius: 12px; 
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
     width: 280px; 
     padding: 1rem; 
-    z-index: 99; 
+    z-index: 2000; /* Z-INDEX ALTO */
     opacity: 0; 
     visibility: hidden; 
     
@@ -374,7 +381,7 @@ body::before {
     .sidebar {
         position: fixed;
         top: 0;
-        left: -260px; 
+        left: -260px; /* Garante que suma completamente */
         width: 250px;
         height: 100vh;
         z-index: 2000; 
@@ -393,6 +400,7 @@ body::before {
     .main-content {
         padding: 5.5rem 1rem 1rem 1rem; 
         margin-left: 0;
+        /* Alinha ao topo (flex-start) para permitir rolagem no mobile */
         align-items: flex-start; 
     }
     
