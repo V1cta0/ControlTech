@@ -6,8 +6,10 @@ body {
     /* ESSENCIAL: Garante que o body ocupe a altura mínima total */
     min-height: 100vh; 
     color: #333;
-    
-    /* Fundo com gradiente e padrão */
+    /* REMOVIDO: display: flex, justify-content: center, align-items: center; 
+       Isso permite que a página role e a sidebar se estique. */
+
+    /* Fundo com gradiente */
     background: linear-gradient(135deg, #f0f2f5 0%, #e6edf5 50%, #d9e7f7 100%);
     position: relative;
     overflow-x: hidden; 
@@ -28,7 +30,7 @@ body::before {
 /* Container do Dashboard (Estrutura principal para sidebar + conteúdo) */
 .dashboard-container {
     display: flex;
-    /* Garante que a estrutura do dashboard se estenda por toda a altura */
+    /* GARANTE QUE O CONTAINER ESTIQUE PARA COMPREENDER TODO O CONTEÚDO */
     min-height: 100vh; 
     width: 100%;
     position: relative;
@@ -45,10 +47,8 @@ body::before {
     flex-direction: column;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
     transition: left 0.3s ease-in-out, background-color 0.3s, box-shadow 0.3s;
-    /* ESSENCIAL: Permite que a sidebar estique junto com o dashboard-container */
-    flex-shrink: 0;
-    flex-grow: 0; 
     position: relative;
+    /* A Sidebar agora se estica automaticamente por ser um Flex Item de um container full-height */
 }
 
 .sidebar-header {
@@ -103,11 +103,11 @@ body::before {
 
 /* Estilos para o botão do hambúrguer */
 .hamburger-btn {
-    display: none; 
+    display: none;
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 2001; 
+    z-index: 2001;
     background: #004b8d;
     color: white;
     border: none;
@@ -118,13 +118,13 @@ body::before {
     transition: background-color 0.3s;
 }
 
-/* Conteúdo Principal - Centraliza o Box da Ferramenta */
+/* Conteúdo Principal - Centraliza o Box da Ferramenta no PC */
 .main-content {
     flex-grow: 1;
     padding: 2rem;
     display: flex;
-    justify-content: center; 
-    align-items: center; 
+    justify-content: center; /* Centraliza horizontalmente o .container */
+    align-items: center;   /* Centraliza verticalmente o .container no PC */
     transition: background-color 0.3s;
 }
 
@@ -283,7 +283,7 @@ body::before {
     /* Centraliza o conteúdo (o pop-up) */
     justify-content: center;
     align-items: center;
-    z-index: 2002; /* Z-INDEX MAIS ALTO PARA FICAR ACIMA DA SIDEBAR */
+    z-index: 2002; 
 }
 
 .popup-content {
@@ -339,7 +339,7 @@ body::before {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
     width: 280px; 
     padding: 1rem; 
-    z-index: 2000; /* Z-INDEX ALTO */
+    z-index: 2000; 
     opacity: 0; 
     visibility: hidden; 
     
@@ -381,7 +381,7 @@ body::before {
     .sidebar {
         position: fixed;
         top: 0;
-        left: -260px; /* Garante que suma completamente */
+        left: -260px; 
         width: 250px;
         height: 100vh;
         z-index: 2000; 
@@ -400,7 +400,7 @@ body::before {
     .main-content {
         padding: 5.5rem 1rem 1rem 1rem; 
         margin-left: 0;
-        /* Alinha ao topo (flex-start) para permitir rolagem no mobile */
+        /* Alinha o conteúdo ao topo para permitir rolagem no mobile */
         align-items: flex-start; 
     }
     
