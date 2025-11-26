@@ -1,4 +1,3 @@
-// JS/Devolver.js
 import { API_BASE_URL } from './apiConfig.js';
 
 const translations = {
@@ -75,13 +74,13 @@ const translations = {
 const updateTranslations = (lang) => {
     const currentLang = translations[lang] ? lang : 'pt';
     const trans = translations[currentLang];
-    if (!trans) return console.error("Traduções não encontradas para:", currentLang);
+    if (!trans) return;
 
     document.documentElement.lang = currentLang === 'pt' ? 'pt-BR' : 'en';
     document.title = trans.pageTitle || 'Devolução - SENAI';
 
-    const setText = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = trans[key] || ''; };
-    const setSpanText = (id, key) => { const el = document.getElementById(id)?.querySelector('span'); if (el) el.textContent = trans[key] || ''; };
+    const setText = (id, key) => { const e = document.getElementById(id); if (e) e.textContent = trans[key] || ''; };
+    const setSpanText = (id, key) => { const e = document.getElementById(id)?.querySelector('span'); if (e) e.textContent = trans[key] || ''; };
 
     setSpanText('nav-tools', 'sidebarTools');
     setSpanText('nav-return', 'sidebarReturn');
@@ -89,6 +88,7 @@ const updateTranslations = (lang) => {
     setSpanText('nav-history', 'sidebarHistory');
     setSpanText('nav-exit', 'sidebarExit');
     setSpanText('settings-btn', 'sidebarSettings');
+
     setText('form-title', 'formTitle');
     setText('label-id-func', 'labelIdFunc');
     setText('label-nome-func', 'labelNomeFunc');
@@ -100,6 +100,7 @@ const updateTranslations = (lang) => {
     setText('settings-popup-title', 'settingsPopupTitle');
     setText('theme-label', 'themeLabel');
     setText('lang-label', 'langLabel');
+
     updateThemeStatusText(document.body.classList.contains('dark-theme') ? 'dark' : 'light', currentLang);
     updateLanguageStatusText(currentLang);
     displayUserName(currentLang);
@@ -114,18 +115,32 @@ const updateTranslations = (lang) => {
 };
 
 const saveTheme = (theme) => { localStorage.setItem('theme', theme); const cl = localStorage.getItem('lang') || 'pt'; updateThemeStatusText(theme, cl); updateThemeToggleButtonVisuals(theme); };
-const loadTheme = () => { const st = localStorage.getItem('theme') || 'light'; const cl = localStorage.getItem('lang') || 'pt'; document.body.classList.toggle('dark-theme', st === 'dark'); updateThemeStatusText(st, cl); updateThemeToggleButtonVisuals(st); };
-const updateThemeStatusText = (at, l) => { const ts = document.getElementById('theme-status'); const tr = translations[l]; if (ts && tr) ts.textContent = at === 'dark' ? (tr.themeStatusDark || 'Tema Escuro') : (tr.themeStatusLight || 'Tema Claro'); };
+const loadTheme = () => { const savedTheme = localStorage.getItem('theme') || 'light'; const currentLang = localStorage.getItem('lang') || 'pt'; document.body.classList.toggle('dark-theme', savedTheme === 'dark'); updateThemeStatusText(savedTheme, currentLang); updateThemeToggleButtonVisuals(savedTheme); };
+const updateThemeStatusText = (at, l) => { const ts = document.getElementById('theme-status'); const tr = translations[l]; if (ts && tr) ts.textContent = at === 'dark' ? (tr.themeStatusDark || 'Escuro') : (tr.themeStatusLight || 'Claro'); };
 const updateThemeToggleButtonVisuals = (at) => { const si = document.querySelector('#theme-toggle-btn .fa-sun'); const mi = document.querySelector('#theme-toggle-btn .fa-moon'); if (si && mi) { si.style.opacity = at === 'dark' ? '0' : '1'; si.style.transform = at === 'dark' ? 'translateY(-10px)' : 'translateY(0)'; mi.style.opacity = at === 'dark' ? '1' : '0'; mi.style.transform = at === 'dark' ? 'translateY(0)' : 'translateY(10px)'; }};
 const saveLanguage = (lang) => { localStorage.setItem('lang', lang); updateTranslations(lang); };
-const loadLanguage = () => { const sl = localStorage.getItem('lang') || 'pt'; updateTranslations(sl); };
-const updateLanguageStatusText = (al) => { const lts = document.getElementById('lang-toggle-btn')?.querySelector('span'); const ls = document.getElementById('lang-status'); if (lts) lts.textContent = al.toUpperCase(); if (ls) { const tp = translations.pt; const te = translations.en; if (tp && te) ls.textContent = al === 'pt' ? (tp.langStatusPT || 'Português') : (te.langStatusEN || 'English'); }};
-function displayUserName(lang) { const wm = document.getElementById('welcome-message'); const une = document.getElementById('user-name'); const tr = translations[lang]; let ui = null; try { const su = localStorage.getItem('usuarioLogado'); if (su) ui = JSON.parse(su); } catch (e) { console.error(e); } if (wm && une && tr) { const du = (lang === 'pt' ? 'Usuário' : 'User'); wm.textContent = tr.welcomeMessage || '?'; une.textContent = (ui && ui.nome) ? ui.nome : du; }};
+const loadLanguage = () => { const savedLang = localStorage.getItem('lang') || 'pt'; updateTranslations(savedLang); };
+const updateLanguageStatusText = (al) => { const lts = document.getElementById('lang-toggle-btn')?.querySelector('span'); const ls = document.getElementById('lang-status'); if (lts) lts.textContent = al.toUpperCase(); if (ls) { const tp = translations.pt; const te = translations.en; if (tp && te) ls.textContent = al.toUpperCase() === 'PT' ? (tp.langStatusPT || 'Português') : (te.langStatusEN || 'English'); }};
+function displayUserName(lang) { 
+    const welcomeMessage = document.getElementById('welcome-message'); 
+    const userNameElement = document.getElementById('user-name'); 
+    const trans = translations[lang]; 
+    let userInfo = null; 
+    try { 
+        const storedUser = localStorage.getItem('usuarioLogado'); 
+        if (storedUser) userInfo = JSON.parse(storedUser); 
+    } catch (e) { console.error("Erro ao ler usuarioLogado:", e); } 
+    if (welcomeMessage && userNameElement && trans) { 
+        const defaultUserName = (lang === 'pt' ? 'Usuário' : 'User'); 
+        welcomeMessage.textContent = trans.welcomeMessage || (lang === 'pt' ? 'Olá,' : 'Hello,'); 
+        userNameElement.textContent = (userInfo && userInfo.nome) ? userInfo.nome : defaultUserName; 
+    }
+};
 
 // --- LÓGICA PRINCIPAL ---
 
-// ✅ ATUALIZADO: URL base da API via variável importada
-const FERRAMENTAS_URL = `${API_BASE_URL}/api/ferramentas`;
+// CORREÇÃO: Usa API_BASE_URL
+const BASE_URL = `${API_BASE_URL}/api/ferramentas`; 
 
 function showAlert(titulo, mensagem) {
     const modal = document.getElementById('alertModal');
@@ -133,6 +148,7 @@ function showAlert(titulo, mensagem) {
     const msgEl = document.getElementById('alertMessage');
     const btnOk = document.getElementById('btnAlertOk');
     const btnClose = document.getElementById('closeAlertBtn'); 
+
     if (modal && titleEl && msgEl) {
         titleEl.textContent = titulo;
         msgEl.textContent = mensagem;
@@ -147,7 +163,13 @@ function showAlert(titulo, mensagem) {
 }
 
 function getUsuarioLogado() {
-    try { const u = localStorage.getItem("usuarioLogado"); return u ? JSON.parse(u) : null; } catch (e) { return null; }
+    try {
+        const usuario = localStorage.getItem("usuarioLogado");
+        return usuario ? JSON.parse(usuario) : null;
+    } catch (e) {
+        console.error("Erro ao parsear usuarioLogado:", e);
+        return null;
+    }
 }
 
 function preencherDataHora() {
@@ -162,11 +184,16 @@ function exibirUsuarioLogado(usuario) {
     const funcIdEl = document.getElementById("funcId");
     const funcNomeEl = document.getElementById("funcNome");
     const infoUsuarioDiv = document.getElementById("infoUsuario");
+
     if (funcIdEl) funcIdEl.textContent = usuario.id;
     if (funcNomeEl) funcNomeEl.textContent = usuario.nome;
-    preencherDataHora();
+    preencherDataHora(); 
+
     if (infoUsuarioDiv) infoUsuarioDiv.classList.remove("hidden");
-    if (typeof carregarFerramentas === 'function') carregarFerramentas(usuario.id);
+
+    if (typeof carregarFerramentas === 'function') {
+        carregarFerramentas(usuario.id);
+    }
 }
 
 function carregarFerramentas(usuarioId) {
@@ -174,24 +201,26 @@ function carregarFerramentas(usuarioId) {
     const currentLang = localStorage.getItem('lang') || 'pt';
     const trans = translations[currentLang];
 
-    if (!lista || !trans) return;
+    if (!lista || !trans) return console.error("Elemento #listaFerramentas ou traduções não encontrados.");
 
-    // ✅ ATUALIZADO: Endpoint correto
-    fetch(`${FERRAMENTAS_URL}/usuario/${usuarioId}`)
+    fetch(`${BASE_URL}/usuario/${usuarioId}`)
         .then(res => {
             if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
             return res.json();
         })
         .then(ferramentas => {
-            lista.innerHTML = "";
+            lista.innerHTML = ""; 
+
             if (!ferramentas || ferramentas.length === 0) {
                 lista.innerHTML = `<div class="lista-vazia">${trans.listaVazia}</div>`;
                 lista.classList.remove("hidden");
                 return;
             }
+
             ferramentas.forEach(f => {
                 const div = document.createElement("div");
                 div.className = "ferramenta-item";
+
                 div.innerHTML = `
                     <p><strong>ID:</strong> ${f.ferramentaId || 'N/A'}</p>
                     <p><strong>Nome:</strong> ${f.ferramentaNome || (currentLang === 'pt' ? 'Nome Ind.' : 'Name Unav.')}</p>
@@ -203,6 +232,7 @@ function carregarFerramentas(usuarioId) {
                 `;
                 lista.appendChild(div);
             });
+
             lista.classList.remove("hidden");
             ativarModalBotoes();
         })
@@ -235,6 +265,7 @@ document.getElementById("confirmBtn")?.addEventListener("click", function () {
     const parentCard = ferramentaParaDevolver.closest('.ferramenta-item');
     const observacoesInput = parentCard?.querySelector(".obsInput");
     const observacoes = observacoesInput?.value.trim() || "";
+    
     const currentLang = localStorage.getItem('lang') || 'pt';
     const trans = translations[currentLang];
     const mensagemDiv = document.getElementById("mensagem");
@@ -242,15 +273,19 @@ document.getElementById("confirmBtn")?.addEventListener("click", function () {
     if (!observacoes) {
         const modalConfirm = document.getElementById("confirmModal");
         if (modalConfirm) modalConfirm.classList.add("hidden");
+        
         const titulo = trans.tituloAviso || "Campo Obrigatório";
         const mensagem = trans.msgObsObrigatoria || "A descrição é obrigatória.";
         showAlert(titulo, mensagem);
+        
         if (observacoesInput) {
             observacoesInput.style.border = "2px solid red";
-            observacoesInput.addEventListener('input', function() { this.style.border = ""; }, { once: true });
+            observacoesInput.addEventListener('input', function() {
+                this.style.border = "";
+            }, { once: true });
             setTimeout(() => observacoesInput.focus(), 100);
         }
-        return;
+        return; 
     }
 
     if(mensagemDiv) {
@@ -262,8 +297,7 @@ document.getElementById("confirmBtn")?.addEventListener("click", function () {
     const modal = document.getElementById("confirmModal");
     if (modal) modal.classList.add("hidden");
 
-    // ✅ ATUALIZADO: Endpoint de devolução
-    fetch(`${FERRAMENTAS_URL}/${ferramentaId}/devolver?observacoes=${encodeURIComponent(observacoes)}`, { method: "POST" })
+    fetch(`${BASE_URL}/${ferramentaId}/devolver?observacoes=${encodeURIComponent(observacoes)}`, { method: "POST" })
         .then(async res => {
             if (!res.ok) {
                 let errorMsg = trans.msgErroDevolver;
@@ -307,7 +341,6 @@ document.getElementById("cancelBtn")?.addEventListener("click", function () {
 document.addEventListener("DOMContentLoaded", () => {
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const sidebar = document.getElementById('sidebar');
-    const mensagemDiv = document.getElementById("mensagem");
     const settingsBtn = document.getElementById('settings-btn');
     const themePopup = document.getElementById('theme-popup');
     const closePopupBtn = document.getElementById('close-popup-btn');
@@ -317,6 +350,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadTheme();
     loadLanguage();
 
+    // --- LISTENER DO HAMBURGUER ---
     hamburgerBtn?.addEventListener('click', () => sidebar?.classList.toggle('active'));
 
     const usuarioLogado = getUsuarioLogado();
@@ -325,6 +359,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         const currentLang = localStorage.getItem('lang') || 'pt';
         const trans = translations[currentLang];
+        const mensagemDiv = document.getElementById("mensagem");
         if (mensagemDiv && trans) {
             mensagemDiv.textContent = trans.msgNaoLogado;
             mensagemDiv.className = "mensagem msg-error";
@@ -346,6 +381,7 @@ document.addEventListener("DOMContentLoaded", () => {
     themeToggleBtn?.addEventListener('click', () => {
         const isDark = document.body.classList.contains('dark-theme');
         saveTheme(isDark ? 'light' : 'dark');
+        document.body.classList.toggle('dark-theme');
     });
     langToggleBtn?.addEventListener('click', () => {
         const currentLang = localStorage.getItem('lang') || 'pt';

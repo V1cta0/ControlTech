@@ -1,7 +1,5 @@
-// JS/Ferramenta.js
 import { API_BASE_URL } from './apiConfig.js';
 
-// Dicionário de traduções
 const translations = {
     'pt': {
         'pageTitle': 'Ferramentas - SENAI ControlTech',
@@ -15,8 +13,8 @@ const translations = {
         'searchInputPlaceholder': 'Pesquisar ferramentas...',
         'selectButton': 'Selecionar',
         'disponivel': 'Disponível',
-        'emprestado': 'Emprestado',
-        'emUsoPor': 'Em uso por:',
+        'emprestado': 'Emprestado', 
+        'emUsoPor': 'Em uso por:',   
         'emUsoDesde': 'Em uso por: {nomeUsuario} (desde {dataHora})',
         'dataNaoDisponivel': 'Data não disponível',
         'noToolsFound': 'Nenhuma ferramenta encontrada.',
@@ -42,8 +40,8 @@ const translations = {
         'searchInputPlaceholder': 'Search tools...',
         'selectButton': 'Select',
         'disponivel': 'Available',
-        'emprestado': 'Loaned',
-        'emUsoPor': 'In use by:',
+        'emprestado': 'Loaned', 
+        'emUsoPor': 'In use by:',   
         'emUsoDesde': 'In use by: {nomeUsuario} (since {dataHora})',
         'dataNaoDisponivel': 'Date unavailable',
         'noToolsFound': 'No tools found.',
@@ -59,10 +57,9 @@ const translations = {
     }
 };
 
-// --- FUNÇÕES DE LÓGICA DE TEMA E IDIOMA ---
-const setText = (id, key, trans) => { const element = document.getElementById(id); if (element) element.textContent = trans[key] || ''; };
-const setPlaceholder = (id, key, trans) => { const element = document.getElementById(id); if (element) element.placeholder = trans[key] || ''; };
-const setSpanText = (id, key, trans) => { const element = document.getElementById(id)?.querySelector('span'); if (element) element.textContent = trans[key] || ''; };
+const setText = (id, key, trans) => { const element = document.getElementById(id); if (element) element.textContent = trans[key] || ''; else console.warn(`Elemento ID '${id}' não encontrado.`); };
+const setPlaceholder = (id, key, trans) => { const element = document.getElementById(id); if (element) element.placeholder = trans[key] || ''; else console.warn(`Elemento ID '${id}' para placeholder não encontrado.`); };
+const setSpanText = (id, key, trans) => { const element = document.getElementById(id)?.querySelector('span'); if (element) element.textContent = trans[key] || ''; else console.warn(`Span dentro do ID '${id}' não encontrado.`); };
 
 const updateTranslations = (lang) => { 
     const currentLang = translations[lang] ? lang : 'pt'; 
@@ -86,6 +83,10 @@ const updateTranslations = (lang) => {
     updateLanguageStatusText(currentLang); 
     displayUserName(currentLang); 
     
+    setText('filter-all', 'filterAll', trans);
+    setText('filter-available', 'filterAvailable', trans);
+    setText('filter-loaned', 'filterLoaned', trans);
+    
     if (typeof renderizarFerramentas === 'function') { 
         renderizarFerramentas(); 
     } 
@@ -97,45 +98,49 @@ const updateThemeToggleButtonVisuals = (activeTheme) => { const sunIcon = docume
 const saveLanguage = (lang) => { localStorage.setItem('lang', lang); updateTranslations(lang); };
 const loadLanguage = () => { const savedLang = localStorage.getItem('lang') || 'pt'; updateTranslations(savedLang); };
 const updateLanguageStatusText = (activeLang) => { const langToggleBtnSpan = document.getElementById('lang-toggle-btn')?.querySelector('span'); const langStatusEl = document.getElementById('lang-status'); if (langToggleBtnSpan) langToggleBtnSpan.textContent = activeLang.toUpperCase(); if (langStatusEl) { const transPt = translations.pt; const transEn = translations.en; if (transPt && transEn) { langStatusEl.textContent = activeLang === 'pt' ? (transPt.langStatusPT || 'Português') : (transEn.langStatusEN || 'English'); }}};
-function displayUserName(lang) { const welcomeMessage = document.getElementById('welcome-message'); const userNameElement = document.getElementById('user-name'); const trans = translations[lang]; let userInfo = null; try { const storedUser = localStorage.getItem('usuarioLogado'); if (storedUser) userInfo = JSON.parse(storedUser); } catch (e) { console.error("Erro ao ler usuarioLogado:", e); } if (welcomeMessage && userNameElement && trans) { const defaultUserName = (lang === 'pt' ? 'Usuário' : 'User'); welcomeMessage.textContent = trans.welcomeMessage || (lang === 'pt' ? 'Olá,' : 'Hello,'); userNameElement.textContent = (userInfo && userInfo.nome) ? userInfo.nome : defaultUserName; }};
-
-// --- LÓGICA PRINCIPAL DA PÁGINA ---
+function displayUserName(lang) { 
+    const welcomeMessage = document.getElementById('welcome-message'); 
+    const userNameElement = document.getElementById('user-name'); 
+    const trans = translations[lang]; 
+    let userInfo = null; 
+    try { 
+        const storedUser = localStorage.getItem('usuarioLogado'); 
+        if (storedUser) userInfo = JSON.parse(storedUser); 
+    } catch (e) { 
+        console.error("Erro ao ler usuarioLogado:", e); 
+    } 
+    if (welcomeMessage && userNameElement && trans) { 
+        const defaultUserName = (lang === 'pt' ? 'Usuário' : 'User'); 
+        welcomeMessage.textContent = trans.welcomeMessage || (lang === 'pt' ? 'Olá,' : 'Hello,'); 
+        // CORREÇÃO: Garante que pega o nome corretamente
+        userNameElement.textContent = (userInfo && userInfo.nome) ? userInfo.nome : defaultUserName; 
+    }
+};
 
 let ferramentas = [];
 let ferramentasFiltradas = [];
 
 function formatarDataAssociacao(localDateTimeStr, lang) {
     const trans = translations[lang];
-    if (!localDateTimeStr) {
-        return trans.dataNaoDisponivel || 'Data não disponível';
-    }
+    if (!localDateTimeStr) return trans.dataNaoDisponivel || 'Data não disponível';
     try {
         const date = new Date(localDateTimeStr);
         if (isNaN(date)) return trans.dataNaoDisponivel || 'Data não disponível';
-
         const locale = lang === 'pt' ? 'pt-BR' : 'en-US';
         const dateOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
         const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
-
         const datePart = date.toLocaleDateString(locale, dateOptions);
         const timePart = date.toLocaleTimeString(locale, timeOptions);
-        
         return lang === 'pt' ? `${datePart} às ${timePart}` : `${datePart} at ${timePart}`;
-    } catch (e) {
-        return trans.dataNaoDisponivel || 'Data não disponível';
-    }
+    } catch (e) { return trans.dataNaoDisponivel || 'Data não disponível'; }
 }
 
 async function buscarUsuarioDaFerramenta(ferramentaId) {
     try {
-        // ✅ ATUALIZADO: Usa API_BASE_URL
         const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}/usuario`);
         if (!res.ok) return null;
         return await res.json();
-    } catch (err) {
-        console.error(`Falha ao buscar usuário da ferramenta ${ferramentaId}:`, err);
-        return null;
-    }
+    } catch (err) { return null; }
 }
 
 async function carregarFerramentas() {
@@ -143,7 +148,6 @@ async function carregarFerramentas() {
     const currentLang = localStorage.getItem('lang') || 'pt';
     const currentTrans = translations[currentLang];
     try {
-        // ✅ ATUALIZADO: Usa API_BASE_URL
         const res = await fetch(`${API_BASE_URL}/api/ferramentas`);
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         ferramentas = await res.json();
@@ -152,7 +156,7 @@ async function carregarFerramentas() {
         renderizarFerramentas(); 
     } catch (err) {
         console.error("Erro ao carregar ferramentas:", err);
-        if (grid) grid.innerHTML = `<p>${currentTrans?.errorLoadingTools || 'Erro ao carregar ferramentas.'}</p>`;
+        if (grid && currentTrans) grid.innerHTML = `<p>${currentTrans.errorLoadingTools || 'Erro.'}</p>`;
     }
 }
 
@@ -172,10 +176,10 @@ window.renderizarFerramentas = async function() {
 
     const cardPromises = ferramentasFiltradas.map(async (f) => {
         const id = f.id;
-        const nome = f.nome || (currentLang === 'pt' ? 'Nome Ind.' : 'Name Unav.');
+        const nome = f.nome || 'Nome Indisponível';
         const imageUrlApi = f.imagemUrl;
 
-        if (id == null) return null; 
+        if (id === null || id === undefined) return null; 
 
         const usuarioInfo = await buscarUsuarioDaFerramenta(id);
         const nomeUsuarioAssociado = usuarioInfo?.nome; 
@@ -188,9 +192,7 @@ window.renderizarFerramentas = async function() {
             statusText = trans.disponivel;
         } else if (dataAssociacao) {
             const dataFormatada = formatarDataAssociacao(dataAssociacao, currentLang);
-            statusText = trans.emUsoDesde
-                .replace('{nomeUsuario}', nomeUsuarioAssociado)
-                .replace('{dataHora}', dataFormatada);
+            statusText = trans.emUsoDesde.replace('{nomeUsuario}', nomeUsuarioAssociado).replace('{dataHora}', dataFormatada);
         } else {
             statusText = `${trans.emUsoPor} ${nomeUsuarioAssociado}`; 
         }
@@ -217,7 +219,6 @@ window.renderizarFerramentas = async function() {
                 window.location.href = `FerramentaUni.html?id=${id}`;
             });
         }
-
         return card; 
     }); 
 
@@ -242,24 +243,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const closePopupBtn = document.getElementById('close-popup-btn'); 
     const themeToggleBtn = document.getElementById('theme-toggle-btn'); 
     const langToggleBtn = document.getElementById('lang-toggle-btn'); 
-    
     let usuarioLogado = null; 
     try { 
         const storedUser = localStorage.getItem("usuarioLogado"); 
         if (storedUser) usuarioLogado = JSON.parse(storedUser); 
     } catch (e) { console.error(e); } 
-    
     if (!usuarioLogado) { 
         alert("Faça login para continuar."); 
         window.location.href = "/index.html"; 
         return; 
     } 
-    
     loadTheme(); 
     loadLanguage(); 
     carregarFerramentas(); 
     
+    // CORREÇÃO: Evento hambúrguer garantido
     hamburgerBtn?.addEventListener('click', () => sidebar?.classList.toggle('active')); 
+    
     searchInput?.addEventListener("input", filtrarFerramentas); 
     settingsBtn?.addEventListener('click', (e) => { 
         e.preventDefault(); 
@@ -272,10 +272,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }); 
     themeToggleBtn?.addEventListener('click', () => { 
         const isDark = document.body.classList.contains('dark-theme'); 
-        saveTheme(isDark ? 'light' : 'dark'); 
+        const newTheme = isDark ? 'light' : 'dark'; 
+        document.body.classList.toggle('dark-theme'); 
+        saveTheme(newTheme); 
     }); 
     langToggleBtn?.addEventListener('click', () => { 
         const currentLang = localStorage.getItem('lang') || 'pt'; 
-        saveLanguage(currentLang === 'pt' ? 'en' : 'pt'); 
+        const newLang = currentLang === 'pt' ? 'en' : 'pt'; 
+        saveLanguage(newLang); 
     }); 
 });
