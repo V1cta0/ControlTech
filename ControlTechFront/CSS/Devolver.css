@@ -119,6 +119,15 @@ body {
     font-size: 2rem;
     color: #004b8d;
     transition: color 0.3s; 
+    /* Estilo para ícone no H1 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.devolucao-box h1 i {
+    font-size: 1.5em; 
+    color: #0061c0;
 }
 
 .info-box {
@@ -196,7 +205,7 @@ textarea:focus {
 .ferramenta-item {
     background: white;
     border-radius: 12px;
-    /* Aumenta o padding interno para simular o "p-5" do Bootstrap */
+    /* Aplicando o padding robusto (similar ao p-5) */
     padding: 2.5rem; 
     text-align: left; 
     border: 1px solid #e0e0e0;
@@ -217,6 +226,16 @@ textarea:focus {
     font-size: 1rem;
     color: #555;
     transition: color 0.3s;
+    /* Para alinhar ícones com o texto */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Estilo dos Ícones dentro do card */
+.ferramenta-item p .icon-sm {
+    font-size: 0.9em;
+    color: #0061c0; /* Cor de destaque para o ícone */
 }
 
 /* Estilo para o Nome da Ferramenta */
@@ -349,6 +368,7 @@ textarea:focus {
 #alertModal {
     z-index: 2002;
 }
+
 
 /* === ADIÇÕES PARA PERFIL, CONFIGURAÇÕES E TEMA ESCURO (Z-INDEX PADRONIZADO) === */
 
@@ -573,7 +593,7 @@ body.dark-theme .lang-toggle-btn:hover { background-color: #004b8d; }
     100% { transform: scale(1); opacity: 1; }
 }
 
-/* Garante que o novo modal tenha um z-index maior que tudo */
+/* Z-INDEX do modal de alerta (garantido) */
 #alertModal {
     z-index: 2002;
 }

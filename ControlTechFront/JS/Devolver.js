@@ -225,14 +225,14 @@ function carregarFerramentas(usuarioId) {
                 div.className = "ferramenta-item";
 
                 div.innerHTML = `
-                    <p><strong>ID:</strong> ${f.ferramentaId || 'N/A'}</p>
-                    <p><strong>Nome:</strong> ${f.ferramentaNome || (currentLang === 'pt' ? 'Nome Ind.' : 'Name Unav.')}</p>
-                    <p class="obs-container">
-                       <label for="obs-${f.ferramentaId}" class="sr-only">Observações</label> 
-                       <input type="text" id="obs-${f.ferramentaId}" class="obsInput" placeholder="${trans.obsPlaceholder}" required>
-                    </p>
-                    <button class="btnDevolver" data-id="${f.ferramentaId}">${trans.btnDevolver}</button>
-                `;
+                <p><i class="fas fa-hashtag icon-sm"></i> <strong>ID:</strong> ${f.ferramentaId || 'N/A'}</p>
+                <p><i class="fas fa-tag icon-sm"></i> <strong>Nome:</strong> ${f.ferramentaNome || (currentLang === 'pt' ? 'Nome Ind.' : 'Name Unav.')}</p>
+                <p class="obs-container">
+                    <label for="obs-${f.ferramentaId}" class="sr-only"><i class="fas fa-comment-alt icon-sm"></i> Observações</label> 
+                    <input type="text" id="obs-${f.ferramentaId}" class="obsInput" placeholder="${trans.obsPlaceholder}" required>
+                </p>
+                <button class="btnDevolver" data-id="${f.ferramentaId}">${trans.btnDevolver}</button>
+            `;
                 lista.appendChild(div);
             });
 
