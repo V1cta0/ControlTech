@@ -158,8 +158,8 @@ body {
 }
 
 .main-header {
-    /* COR DE FUNDO AZUL CLARO SUAVE REFORÇADA */
-    background-color: #e3f2fd; 
+    /* CORREÇÃO: Cor de fundo mais suave no light theme */
+    background-color: #f6f9fc; 
     padding: 1rem 2rem; 
     border-radius: 0 0 12px 12px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
@@ -186,7 +186,8 @@ body {
     /* MANTIDO: Fonte responsiva para o título do Header */
     font-size: clamp(1.2rem, 2.5vw, 1.8rem); 
     color: #004b8d;
-    margin: 25px; 
+    /* CORREÇÃO: Remove margem de 25px, deixando 0 para melhor controle em layouts flex */
+    margin: 0; 
     font-weight: 900; 
     transition: color 0.3s; 
 }
@@ -644,6 +645,8 @@ body.dark-theme .cta-standalone-container {
     margin: 0 auto;
 }
 .feature-card {
+    /* CORREÇÃO: Adiciona borda sutil para definir o box no light theme */
+    border: 1px solid #e0e0e0;
     transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s, border-color 0.3s, border-top-color 0.4s;
 }
 /* Para o texto do card (parágrafos dentro de .tool-card) */
@@ -663,7 +666,8 @@ body.dark-theme .cta-standalone-container {
 }
 .hover-border-glow:hover {
     border-top: 5px solid #ff9800; /* Muda a cor da borda ao passar o mouse */
-    box-shadow: 0 10px 40px rgba(0, 97, 192, 0.4); /* Efeito de brilho azul */
+    /* CORREÇÃO: Suaviza o box-shadow azul para não ser "muito forte" */
+    box-shadow: 0 10px 40px rgba(0, 97, 192, 0.2); 
     transform: translateY(-5px);
 }
 
@@ -672,7 +676,8 @@ body.dark-theme .cta-standalone-container {
 .team-section {
     padding: 5rem 2rem;
     text-align: center;
-    background-color: #e6e6e6; 
+    /* CORREÇÃO: Deixa o fundo um pouco mais claro para não ser tão forte o contraste */
+    background-color: #f3f3f3; 
 }
 .team-grid.flex-centered {
     display: flex;
@@ -687,6 +692,8 @@ body.dark-theme .cta-standalone-container {
     padding: 1.5rem;
     background: white;
     border-radius: 12px;
+    /* CORREÇÃO: Adiciona borda sutil para definir o box no light theme */
+    border: 1px solid #e0e0e0; 
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     width: 150px;
     display: flex; 
@@ -869,6 +876,7 @@ body.dark-theme .cta-standalone-container {
         justify-content: center;
     }
 }
+
 .perfis {
     text-decoration: none;
     color: #0061c0;
