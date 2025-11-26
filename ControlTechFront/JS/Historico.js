@@ -1,6 +1,6 @@
+// JS/Historico.js
 import { API_BASE_URL } from './apiConfig.js';
 
-// --- CONFIGURAÇÃO DE TRADUÇÕES ---
 const translations = {
     'pt': {
         'pageTitle': 'Histórico - ControlTech',
@@ -56,59 +56,45 @@ const translations = {
     }
 };
 
-// --- FUNÇÕES DE TEMA E IDIOMA ---
 const updateTranslations = (lang) => {
     const currentLang = translations[lang] ? lang : 'pt';
     const trans = translations[currentLang];
-    
-    if (!trans) return;
+    if (!trans) return console.error("Traduções não encontradas:", currentLang);
 
     document.documentElement.lang = currentLang === 'pt' ? 'pt-BR' : 'en';
-    document.title = trans.pageTitle;
+    document.title = trans.pageTitle || 'Histórico - ControlTech';
 
-    // Função auxiliar segura para texto
-    const setText = (id, key) => { 
-        const el = document.getElementById(id); 
-        if (el) el.textContent = trans[key] || ''; 
-    };
-    
-    const setSpanText = (id, key) => { 
-        const el = document.getElementById(id)?.querySelector('span'); 
-        if (el) el.textContent = trans[key] || ''; 
-    };
+    const setText = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = trans[key] || ''; };
+    const setSpanText = (id, key) => { const el = document.getElementById(id)?.querySelector('span'); if (el) el.textContent = trans[key] || ''; };
 
-    // Atualiza textos da Sidebar
     setSpanText('nav-tools', 'sidebarTools');
     setSpanText('nav-return', 'sidebarReturn');
     setSpanText('nav-help', 'sidebarHelp');
     setSpanText('nav-history', 'sidebarHistory');
     setSpanText('nav-exit', 'sidebarExit');
     setSpanText('settings-btn', 'sidebarSettings');
-
-    // Atualiza textos da Página
     setText('header-title', 'headerTitle');
     setText('btnUsuario', 'btnMeuHistorico');
     setText('btnTodos', 'btnTodos');
     setText('settings-popup-title', 'settingsPopupTitle');
     setText('theme-label', 'themeLabel');
     setText('lang-label', 'langLabel');
-
     updateThemeStatusText(document.body.classList.contains('dark-theme') ? 'dark' : 'light', currentLang);
     updateLanguageStatusText(currentLang);
     displayUserName(currentLang);
 
-    // Recarrega o histórico para atualizar textos dos cards (se necessário)
     const activeButton = document.querySelector('.select-btn.active') || document.getElementById('btnTodos');
-    if (activeButton) {
+    if (activeButton && typeof carregarHistorico === 'function') {
         const usuario = getUsuarioLogado();
         if (activeButton.id === 'btnUsuario' && usuario) {
             carregarHistorico(usuario.id);
         } else {
-            carregarHistorico(); 
+            carregarHistorico();
         }
+    } else {
+        if (typeof carregarHistorico === 'function') carregarHistorico();
     }
 };
-
 const saveTheme = (theme) => { localStorage.setItem('theme', theme); const cl = localStorage.getItem('lang') || 'pt'; updateThemeStatusText(theme, cl); updateThemeToggleButtonVisuals(theme); };
 const loadTheme = () => { const st = localStorage.getItem('theme') || 'light'; const cl = localStorage.getItem('lang') || 'pt'; document.body.classList.toggle('dark-theme', st === 'dark'); updateThemeStatusText(st, cl); updateThemeToggleButtonVisuals(st); };
 const updateThemeStatusText = (at, l) => { const ts = document.getElementById('theme-status'); const tr = translations[l]; if (ts && tr) ts.textContent = at === 'dark' ? (tr.themeStatusDark || 'Escuro') : (tr.themeStatusLight || 'Claro'); };
@@ -116,41 +102,21 @@ const updateThemeToggleButtonVisuals = (at) => { const si = document.querySelect
 const saveLanguage = (lang) => { localStorage.setItem('lang', lang); updateTranslations(lang); };
 const loadLanguage = () => { const sl = localStorage.getItem('lang') || 'pt'; updateTranslations(sl); };
 const updateLanguageStatusText = (al) => { const lts = document.getElementById('lang-toggle-btn')?.querySelector('span'); const ls = document.getElementById('lang-status'); if (lts) lts.textContent = al.toUpperCase(); if (ls) { const tp = translations.pt; const te = translations.en; if (tp && te) ls.textContent = al === 'pt' ? (tp.langStatusPT || 'PT') : (te.langStatusEN || 'EN'); }};
+function displayUserName(lang) { const wm = document.getElementById('welcome-message'); const une = document.getElementById('user-name'); const tr = translations[lang]; let ui = null; try { const su = localStorage.getItem('usuarioLogado'); if (su) ui = JSON.parse(su); } catch (e) { console.error(e); } if (wm && une && tr) { const du = (lang === 'pt' ? 'Usuário' : 'User'); wm.textContent = tr.welcomeMessage || '?'; une.textContent = (ui && ui.nome) ? ui.nome : du; }};
 
-function displayUserName(lang) { 
-    const welcomeMessage = document.getElementById('welcome-message'); 
-    const userNameElement = document.getElementById('user-name'); 
-    const trans = translations[lang]; 
-    let userInfo = null; 
-    try { 
-        const storedUser = localStorage.getItem('usuarioLogado'); 
-        if (storedUser) userInfo = JSON.parse(storedUser); 
-    } catch (e) { 
-        console.error("Erro ao ler usuarioLogado:", e); 
-    } 
-    if (welcomeMessage && userNameElement && trans) { 
-        const defaultUserName = (lang === 'pt' ? 'Usuário' : 'User'); 
-        welcomeMessage.textContent = trans.welcomeMessage || 'Olá,'; 
-        userNameElement.textContent = (userInfo && userInfo.nome) ? userInfo.nome : defaultUserName; 
-    }
-}
+// --- LÓGICA PRINCIPAL ---
 
-// --- LÓGICA PRINCIPAL CORRIGIDA ---
-
-// 1. Uso de Template String (Crase) para montar a URL
-const BASE_URL = `${API_BASE_URL}/api/historico`; 
+// ✅ ATUALIZADO: URL base da API via variável importada
+const HISTORICO_URL = `${API_BASE_URL}/api/historico`;
 
 function carregarHistorico(usuarioId = null) {
-  // 2. Correção da URL com crase
-  const url = usuarioId ? `${BASE_URL}/usuario/${usuarioId}` : `${BASE_URL}/todos`;
-  
+  const url = usuarioId ? `${HISTORICO_URL}/usuario/${usuarioId}` : `${HISTORICO_URL}/todos`;
   const currentLang = localStorage.getItem('lang') || 'pt';
   const trans = translations[currentLang];
   const historicoContainer = document.getElementById("historicoContainer");
 
-  if (!historicoContainer) return;
+  if (!historicoContainer || !trans) return;
 
-  // 3. Correção do HTML com crase
   historicoContainer.innerHTML = `<p>${currentLang === 'pt' ? 'Carregando histórico...' : 'Loading history...'}</p>`;
 
   fetch(url)
@@ -160,36 +126,24 @@ function carregarHistorico(usuarioId = null) {
     })
     .then(historicos => {
       historicoContainer.innerHTML = ""; 
-
       if (!historicos || !Array.isArray(historicos) || historicos.length === 0) {
-        // 4. Correção do HTML com crase
         historicoContainer.innerHTML = `<p class="lista-vazia">${trans.msgNenhumHistorico}</p>`;
         return;
       }
-
       historicos.forEach(h => {
         const card = document.createElement("div");
         card.classList.add("historico-card");
-
         let dataFormatada = 'N/A';
         let horaFormatada = '';
-        
-        // Validação da data
         if (h.dataDevolucao) {
             try {
-                // Se a data vier como array [ano, mes, dia...], o JS precisa de ajuste, 
-                // mas se vier string ISO "2023-10-27T...", o new Date funciona direto.
                 const data = new Date(h.dataDevolucao);
                  if (!isNaN(data)) {
                     dataFormatada = data.toLocaleDateString(currentLang === 'pt' ? 'pt-BR' : 'en-US');
                     horaFormatada = data.toLocaleTimeString(currentLang === 'pt' ? 'pt-BR' : 'en-US', { hour: '2-digit', minute: '2-digit' });
                  }
-            } catch (e) {
-                 console.error("Erro data:", e);
-            }
+            } catch (e) { console.error("Erro data:", e); }
         }
-
-        // 5. Correção Crítica: Uso de crase (`) para o innerHTML multilinhas
         card.innerHTML = `
           <h3>${h.nomeFerramenta || (currentLang === 'pt' ? 'Ferramenta?' : 'Tool?')}</h3>
           <p><strong>${trans.cardUsuario}</strong> ${h.nomeUsuario || (currentLang === 'pt' ? 'Usuário?' : 'User?')}</p>
@@ -200,22 +154,15 @@ function carregarHistorico(usuarioId = null) {
       });
     })
     .catch(err => {
-      console.error("Erro ao carregar:", err);
-      // 6. Correção do HTML com crase
+      console.error("Erro histórico:", err);
       historicoContainer.innerHTML = `<p class="mensagem msg-error">${trans.msgErroHistorico}</p>`;
     });
 }
 
 function getUsuarioLogado() {
-    try {
-        const usuario = localStorage.getItem("usuarioLogado");
-        return usuario ? JSON.parse(usuario) : null;
-    } catch(e) {
-        return null;
-    }
+    try { const u = localStorage.getItem("usuarioLogado"); return u ? JSON.parse(u) : null; } catch(e) { return null; }
 }
 
-// INICIALIZAÇÃO
 document.addEventListener("DOMContentLoaded", () => {
     const usuario = getUsuarioLogado();
     const btnUsuario = document.getElementById("btnUsuario");
@@ -231,8 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadTheme();
 
     function setActiveButton(activeBtn) {
-        if(btnUsuario) btnUsuario.classList.remove("active");
-        if(btnTodos) btnTodos.classList.remove("active");
+        [btnUsuario, btnTodos].forEach(btn => btn?.classList.remove("active"));
         activeBtn?.classList.add("active");
     }
 
@@ -243,29 +189,29 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     } else if (btnUsuario) {
         btnUsuario.disabled = true;
-        btnUsuario.style.opacity = "0.5";
+        btnUsuario.style.opacity = 0.5;
         btnUsuario.style.cursor = "not-allowed";
-        btnUsuario.title = "Faça login para ver seu histórico";
     }
 
     if (btnTodos) {
         btnTodos.addEventListener("click", () => {
-            carregarHistorico(); 
+            carregarHistorico();
             setActiveButton(btnTodos);
         });
     }
 
-    // Define botão ativo inicial (mas não chama carregarHistorico, pois loadLanguage vai chamar)
     if (btnTodos) {
+        carregarHistorico(); 
         setActiveButton(btnTodos);
     } else if (usuario && btnUsuario) {
+        carregarHistorico(usuario.id);
         setActiveButton(btnUsuario);
+    } else {
+        carregarHistorico();
     }
 
-    // loadLanguage chama updateTranslations, que detecta o botão ativo e chama carregarHistorico
     loadLanguage();
 
-    // Listeners da UI
     hamburgerBtn?.addEventListener("click", () => sidebar?.classList.toggle("active"));
 
     settingsBtn?.addEventListener('click', (e) => {
@@ -280,7 +226,6 @@ document.addEventListener("DOMContentLoaded", () => {
     themeToggleBtn?.addEventListener('click', () => {
         const isDark = document.body.classList.contains('dark-theme');
         saveTheme(isDark ? 'light' : 'dark');
-        document.body.classList.toggle('dark-theme');
     });
     langToggleBtn?.addEventListener('click', () => {
         const currentLang = localStorage.getItem('lang') || 'pt';
