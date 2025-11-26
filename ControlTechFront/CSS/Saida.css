@@ -328,7 +328,7 @@ body {
 
     .theme-popup {
         left: auto;
-        right: 0px;
+        right: -10px;
     }   
 }
 
