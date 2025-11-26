@@ -83,10 +83,12 @@ const updateTranslations = (lang) => {
     updateLanguageStatusText(currentLang); 
     displayUserName(currentLang); 
     
+    // Estas chaves parecem não existir no HTML/CSS, mantendo por segurança
     setText('filter-all', 'filterAll', trans);
     setText('filter-available', 'filterAvailable', trans);
     setText('filter-loaned', 'filterLoaned', trans);
     
+    // Renderiza novamente após mudar o idioma para atualizar textos nos cards
     if (typeof renderizarFerramentas === 'function') { 
         renderizarFerramentas(); 
     } 
@@ -119,6 +121,8 @@ function displayUserName(lang) {
 
 let ferramentas = [];
 let ferramentasFiltradas = [];
+// Variável de controle para prevenir a condição de corrida
+let currentRenderToken = 0; 
 
 function formatarDataAssociacao(localDateTimeStr, lang) {
     const trans = translations[lang];
@@ -145,8 +149,7 @@ async function buscarUsuarioDaFerramenta(ferramentaId) {
 
 async function carregarFerramentas() {
     const grid = document.getElementById("toolGrid");
-    const currentLang = localStorage.getItem('lang') || 'pt';
-    const currentTrans = translations[currentLang];
+    const currentTrans = translations[localStorage.getItem('lang') || 'pt'];
     try {
         const res = await fetch(`${API_BASE_URL}/api/ferramentas`);
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
@@ -163,11 +166,16 @@ async function carregarFerramentas() {
 window.renderizarFerramentas = async function() { 
     const grid = document.getElementById("toolGrid");
     if (!grid) return;
-    grid.innerHTML = ""; 
-
+    
+    // 1. Gera um novo token para esta requisição
+    const renderToken = ++currentRenderToken;
+    
     const currentLang = localStorage.getItem('lang') || 'pt';
     const trans = translations[currentLang];
     if (!trans) return;
+
+    // Limpa a tela imediatamente, mas só adiciona os novos itens se esta for a última requisição ativa
+    grid.innerHTML = ""; 
 
     if (ferramentasFiltradas.length === 0) {
         grid.innerHTML = `<p>${trans.noToolsFound}</p>`;
@@ -175,6 +183,9 @@ window.renderizarFerramentas = async function() {
     }
 
     const cardPromises = ferramentasFiltradas.map(async (f) => {
+        // 2. Verifica se uma nova renderização foi iniciada antes de continuar o processamento do card
+        if (renderToken !== currentRenderToken) return null; 
+        
         const id = f.id;
         const nome = f.nome || 'Nome Indisponível';
         const imageUrlApi = f.imagemUrl;
@@ -182,6 +193,10 @@ window.renderizarFerramentas = async function() {
         if (id === null || id === undefined) return null; 
 
         const usuarioInfo = await buscarUsuarioDaFerramenta(id);
+        
+        // 3. Verifica novamente após a chamada assíncrona
+        if (renderToken !== currentRenderToken) return null;
+
         const nomeUsuarioAssociado = usuarioInfo?.nome; 
         const dataAssociacao = usuarioInfo?.dataAssociacao; 
 
@@ -223,7 +238,24 @@ window.renderizarFerramentas = async function() {
     }); 
 
     const cards = await Promise.all(cardPromises);
-    cards.forEach(card => { if (card) grid.appendChild(card); });
+    
+    // 4. Última verificação antes de anexar ao DOM
+    if (renderToken !== currentRenderToken) {
+        console.log(`Renderização obsoleta cancelada (Token: ${renderToken}).`);
+        return; // Aborta a renderização
+    }
+
+    cards.forEach(card => { 
+        // Apenas anexa se o card não foi marcado como nulo (cancelado no meio do processamento)
+        if (card) grid.appendChild(card); 
+    });
+
+    // Se a lista foi filtrada para 0 itens mas o loop de promises rodou,
+    // precisamos garantir que a mensagem de 'no tools found' apareça.
+    if (grid.children.length === 0 && ferramentasFiltradas.length > 0) {
+         // Este caso é improvável após a correção, mas garante um fallback
+         grid.innerHTML = `<p>${trans.noToolsFound}</p>`;
+    }
 } 
 
 function filtrarFerramentas() { 
@@ -231,6 +263,7 @@ function filtrarFerramentas() {
     if (!searchInput) return; 
     const termo = searchInput.value.trim().toLowerCase(); 
     ferramentasFiltradas = ferramentas.filter(f => (f.nome || '').toLowerCase().includes(termo)); 
+    // A função renderizarFerramentas agora lida com o controle de concorrência
     renderizarFerramentas(); 
 }
 
