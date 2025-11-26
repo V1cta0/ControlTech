@@ -419,8 +419,8 @@ body {
     .sidebar {
         position: fixed;
         top: 0;
-        left: -260px;
-        width: 230px;
+        left: -300px;
+        width: 250px;
         height: 100vh;
         z-index: 2000;
         box-shadow: 2px 0 5px rgba(0,0,0,0.5);
