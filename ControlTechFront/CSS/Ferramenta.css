@@ -155,14 +155,18 @@ body {
 }
 
 .search-input {
-    width: 90%;
+    width: 100%;
+    max-width: 350px;  
+    box-sizing: border-box; 
+    margin: 10px 0;        
     padding: 10px 40px 10px 15px;
     border: 1px solid #ddd;
     border-radius: 50px;
     font-size: 1rem;
     transition: all 0.3s ease;
     background-color: #fff; 
-    color: #333; 
+    color: #333;
+    display: block; 
 }
 
 .search-input:focus {
