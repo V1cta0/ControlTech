@@ -400,12 +400,6 @@ body.dark-theme .theme-toggle-btn .fa-moon { opacity: 1; transform: translateY(0
 body.dark-theme .lang-toggle-btn { background-color: #0061c0; }
 body.dark-theme .lang-toggle-btn:hover { background-color: #004b8d; }
 
-
-/* =========================================================
-   AJUSTES FINOS PARA TELEMÓVEIS (Abaixo de 450px)
-========================================================= */
-
-/* Substitua a parte responsiva no final do arquivo por isto: */
 @media (max-width: 768px) {
     .dashboard-container {
         flex-direction: column;
@@ -414,16 +408,16 @@ body.dark-theme .lang-toggle-btn:hover { background-color: #004b8d; }
     .sidebar {
         position: fixed;
         top: 0;
-        left: -260px; /* Esconde completamente */
-        width: 250px; /* Largura padronizada */
+        left: -300px;
+        width: 250px;
         height: 100vh;
-        z-index: 2000; /* Fica acima do conteúdo */
+        z-index: 2000; 
         box-shadow: 2px 0 5px rgba(0,0,0,0.5);
         transition: left 0.3s ease-in-out;
     }
 
     .sidebar.active {
-        left: 0; /* Mostra o menu */
+        left: 0; 
     }
 
     .sidebar-header {
@@ -435,7 +429,7 @@ body.dark-theme .lang-toggle-btn:hover { background-color: #004b8d; }
     }
 
     .user-profile {
-        display: none; /* Oculta perfil no mobile para dar espaço */
+        display: none; 
     }
 
     .main-content {
