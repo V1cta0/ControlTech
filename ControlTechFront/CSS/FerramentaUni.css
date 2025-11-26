@@ -5,14 +5,11 @@ body {
     padding: 0;
     min-height: 100vh;
     color: #333;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    /* Fundo com gradiente */
+    
+    /* Fundo com gradiente e padrão */
     background: linear-gradient(135deg, #f0f2f5 0%, #e6edf5 50%, #d9e7f7 100%);
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden; /* Correção para rolagem horizontal */
     transition: background-color 0.3s, color 0.3s;
 }
 body::before {
@@ -27,16 +24,16 @@ body::before {
     z-index: 0;
 }
 
-/* Container do Dashboard (Para a integração da sidebar) */
+/* Container do Dashboard (Estrutura principal para sidebar + conteúdo) */
 .dashboard-container {
     display: flex;
     min-height: 100vh;
     width: 100%;
     position: relative;
-    z-index: 1; /* Garante que fique acima do padrão */
+    z-index: 1; 
 }
 
-/* Barra Lateral (Copiada do Ferramenta.css/Historico.css) */
+/* Barra Lateral (Sidebar) */
 .sidebar {
     width: 250px;
     background-color: #004b8d;
@@ -46,7 +43,7 @@ body::before {
     flex-direction: column;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
     transition: left 0.3s ease-in-out, background-color 0.3s, box-shadow 0.3s;
-    position: relative;
+    position: relative; /* Volta a ser relative no desktop */
 }
 
 .sidebar-header {
@@ -101,11 +98,11 @@ body::before {
 
 /* Estilos para o botão do hambúrguer */
 .hamburger-btn {
-    display: none;
+    display: none; /* ESCONDIDO POR PADRÃO (PC) */
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 101;
+    z-index: 2001; /* Z-index alto para mobile */
     background: #004b8d;
     color: white;
     border: none;
@@ -116,13 +113,13 @@ body::before {
     transition: background-color 0.3s;
 }
 
-/* Conteúdo Principal */
+/* Conteúdo Principal (Desktop) - Centraliza o Box da Ferramenta */
 .main-content {
     flex-grow: 1;
     padding: 2rem;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: center; /* Centraliza horizontalmente o .container */
+    align-items: center;   /* Centraliza verticalmente o .container */
     transition: background-color 0.3s;
 }
 
@@ -139,6 +136,8 @@ body::before {
     text-align: center;
     animation: fadeIn 0.6s ease-in-out;
     transition: background-color 0.3s, box-shadow 0.3s;
+    /* Adiciona margem lateral para que não encoste nas bordas do main-content */
+    margin: 1rem; 
 }
 
 /* Título */
@@ -324,9 +323,31 @@ body::before {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- POPUP DE CONFIGURAÇÕES (Tema/Idioma) (Copiado de Ferramenta.css) --- */
-.theme-popup { position: fixed; bottom: 20px; left: 20px; background-color: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); width: 280px; padding: 1rem; z-index: 99; opacity: 0; visibility: hidden; transform: translateY(20px); transition: transform 0.3s ease-out, opacity 0.3s ease-out, background-color 0.3s, visibility 0s 0.3s; text-align: center; }
-.theme-popup.visible { opacity: 1; visibility: visible; transform: translateY(0); transition-delay: 0s; }
+/* --- POPUP DE CONFIGURAÇÕES (Tema/Idioma) --- */
+.theme-popup { 
+    position: fixed; 
+    bottom: 20px; 
+    left: 20%; /* Ajustado para 20% */
+    background-color: #fff; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+    width: 280px; 
+    padding: 1rem; 
+    z-index: 99; 
+    opacity: 0; 
+    visibility: hidden; 
+    
+    transform: translateX(-50%) translateY(20px); 
+    
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out, background-color 0.3s, visibility 0s 0.3s; 
+    text-align: center; 
+}
+.theme-popup.visible { 
+    opacity: 1; 
+    visibility: visible; 
+    transform: translateX(-50%) translateY(0); 
+    transition-delay: 0s; 
+}
 .theme-popup.hidden { display: none; }
 .popup-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; margin-bottom: 1rem; transition: border-color 0.3s; }
 .popup-header h4 { margin: 0; color: #004b8d; transition: color 0.3s; }
@@ -345,7 +366,7 @@ body::before {
 .lang-toggle-btn:hover { background-color: #004b8d; }
 
 
-/* --- RESPONSIVIDADE (Copiado de Ferramenta.css) --- */
+/* --- RESPONSIVIDADE --- */
 @media (max-width: 768px) {
     .dashboard-container {
         flex-direction: column;
@@ -354,9 +375,10 @@ body::before {
     .sidebar {
         position: fixed;
         top: 0;
-        left: -250px;
+        left: -260px; /* Corrigido para garantir que suma completamente */
+        width: 250px;
         height: 100vh;
-        z-index: 100;
+        z-index: 2000; /* Alto z-index */
         box-shadow: 2px 0 5px rgba(0,0,0,0.5);
     }
     .sidebar.active {
@@ -368,16 +390,19 @@ body::before {
     .user-profile {
         display: none;
     }
+    
     .main-content {
-        padding: 4rem 1rem 1rem 1rem;
+        padding: 5.5rem 1rem 1rem 1rem; /* Padding ajustado para o hamburger */
         margin-left: 0;
     }
-    .hamburger-btn {
-        display: block;
-    }
+    
     .container {
         padding: 1.5rem;
+        /* Ocupa a largura total da tela, com as margens laterais do main-content */
+        width: 100%; 
+        margin: 0; /* Remove a margem horizontal do desktop */
     }
+
     .botoes-container {
         flex-direction: column;
     }
@@ -386,10 +411,29 @@ body::before {
         width: 100%;
         box-sizing: border-box;
     }
+
+    /* Botão Hamburger (Garante que apareça e fique no topo) */
+    .hamburger-btn {
+        display: block !important;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 2001;
+    }
+
+    /* Popup de Configurações: Centralizado no Mobile */
+    .theme-popup {
+        left: 50%; 
+        right: auto;
+        transform: translateX(-50%) translateY(20px); 
+    }
+    .theme-popup.visible {
+        transform: translateX(-50%) translateY(0);
+    }
 }
 
 
-/* === ESTILOS DO TEMA ESCURO (Copiado de Ferramenta.css e adaptado) === */
+/* === ESTILOS DO TEMA ESCURO === */
 body.dark-theme {
     background: #2c2c2c;
     color: #f0f2f5;
@@ -499,7 +543,7 @@ body.dark-theme .popup-content button:hover {
     background: #004b8d;
 }
 
-/* Tema escuro para o cronômetro (adicionado ao final do bloco body.dark-theme) */
+/* Tema escuro para o cronômetro */
 body.dark-theme .time-info {
     background-color: #3a3f44;
     border-color: #555;
