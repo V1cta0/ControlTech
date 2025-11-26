@@ -238,7 +238,7 @@ btnLerQrUpload?.addEventListener('click', () => {
         if (statusMsgLogin) statusMsgLogin.textContent = "Login bem-sucedido!";
         if (infoAluno) infoAluno.style.display = "block";
 
-        setTimeout(() => { window.location.href = '/HTML/LandingPage'; }, 500);
+        setTimeout(() => { window.location.href = '/HTML/LandingPage.html'; }, 500);
 
     }, (err) => {
         // 2. AQUI ESTAVA O PROBLEMA DO ALERT FEIO
