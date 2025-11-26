@@ -413,37 +413,50 @@ body {
 }
 
 /* Responsividade */
+/* Responsividade - Padronização para Mobile */
 @media (max-width: 768px) {
     .dashboard-container {
         flex-direction: column;
     }
 
+    /* Ajuste da Sidebar para garantir que ela suma completamente */
     .sidebar {
         position: fixed;
         top: 0;
-        /* MANTIDO: Left mais agressivo para não mostrar sombra */
-        left: -300px;
+        left: -260px; /* Esconde um pouco mais que a largura para garantir */
+        width: 250px; /* Largura fixa igual em todas as páginas */
         height: 100vh;
-        z-index: 100;
+        z-index: 2000; /* Z-Index ALTO para ficar acima de tudo */
         box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+        transition: left 0.3s ease-in-out;
     }
+
+    /* Classe ativa para mostrar o menu */
     .sidebar.active {
         left: 0;
     }
-    .sidebar-header {
-        text-align: left;
-    }
-    .sidebar-nav {
-        display: flex; /* Garante visibilidade */
-    }
-    .user-profile { /* Esconde perfil em mobile */
-        display: none;
-    }
 
-    .main-content {
-        padding: 4rem 1rem 1rem 1rem; /* Adiciona padding superior para não sobrepor header fixo */
-        margin-left: 0; /* Remove margem quando sidebar está fechada */
+    /* Garante que o botão hambúrguer sempre apareça e fique no topo */
+    .hamburger-btn {
+        display: block !important; /* O !important garante que nada sobrescreva */
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 2001; /* Z-Index MAIOR que a sidebar para nunca ser coberto */
+        background-color: #004b8d;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        border-radius: 5px;
     }
+    
+    /* Ajuste do conteúdo para não ficar escondido atrás do botão */
+    .main-content {
+        padding-top: 5rem; 
+    }
+}
 
     .main-header {
         padding: 1rem;
@@ -613,19 +626,4 @@ body.dark-theme .select-btn:disabled {
 }
 .dark-theme .lang-toggle-btn:hover {
     background-color: #004b8d;
-}
-@media (max-width: 768px) {
-
-    .main-header {
-        flex-direction: column;
-        align-items: stretch; 
-    }
-    .search-container {
-        width: 100%; 
-    }
-
-    .search-input {
-        width: 100%; 
-        box-sizing: border-box; /* Impede que o padding quebre o layout */
-    }
 }
