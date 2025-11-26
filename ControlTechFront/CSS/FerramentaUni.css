@@ -3,12 +3,9 @@ body {
     font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    /* ESSENCIAL: Garante que o body ocupe a altura mínima total */
-    min-height: 100vh; 
+    /* REMOVIDO: min-height: 100vh do body, ele será controlado pelo .dashboard-container */
     color: #333;
-    /* REMOVIDO: display: flex, justify-content: center, align-items: center; 
-       Isso permite que a página role e a sidebar se estique. */
-
+    
     /* Fundo com gradiente */
     background: linear-gradient(135deg, #f0f2f5 0%, #e6edf5 50%, #d9e7f7 100%);
     position: relative;
@@ -27,14 +24,17 @@ body::before {
     z-index: 0;
 }
 
+/* Container do Dashboard - Define o layout da Sidebar e garante altura mínima */
 .dashboard-container {
     display: flex;
+    /* GARANTE ALTURA TOTAL: O conteúdo principal estica se for maior, e o container se adapta */
     min-height: 100vh; 
     width: 100%;
     position: relative;
     z-index: 1; 
 }
 
+/* Barra Lateral (Sidebar) - Estica por ser um Flex Item de um container full-height */
 .sidebar {
     width: 250px;
     background-color: #004b8d;
@@ -43,7 +43,9 @@ body::before {
     display: flex;
     flex-direction: column;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    transition: left 0.3s ease-in-out, background-color 0.3s, box-shadow 0.3s; 
+    transition: left 0.3s ease-in-out, background-color 0.3s, box-shadow 0.3s;
+    position: relative;
+    flex-shrink: 0;
 }
 
 .sidebar-header {
@@ -56,7 +58,7 @@ body::before {
 .sidebar-nav {
     display: flex;
     flex-direction: column;
-    flex-grow: 1; /* Faz a navegação ocupar espaço disponível */
+    flex-grow: 1;
 }
 
 .sidebar-nav a {
@@ -80,6 +82,7 @@ body::before {
     font-size: 1.5rem;
     margin-right: 15px;
 }
+
 /* Estilos do perfil do usuário */
 .user-profile { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; margin-bottom: 1.5rem; border-radius: 8px; background-color: rgba(255, 255, 255, 0.1); box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); transition: background-color 0.3s; }
 .user-profile i { font-size: 2.5rem; color: #b3cde0; transition: color 0.3s; }
@@ -97,11 +100,11 @@ body::before {
 
 /* Estilos para o botão do hambúrguer */
 .hamburger-btn {
-    display: none;
+    display: none; 
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 2001;
+    z-index: 2001; 
     background: #004b8d;
     color: white;
     border: none;
@@ -112,13 +115,13 @@ body::before {
     transition: background-color 0.3s;
 }
 
-/* Conteúdo Principal - Centraliza o Box da Ferramenta no PC */
+/* Conteúdo Principal - Garante o respiro do padding e controla a centralização */
 .main-content {
     flex-grow: 1;
     padding: 2rem;
     display: flex;
-    justify-content: center; /* Centraliza horizontalmente o .container */
-    align-items: center;   /* Centraliza verticalmente o .container no PC */
+    justify-content: center; 
+    align-items: center; 
     transition: background-color 0.3s;
 }
 
@@ -265,7 +268,7 @@ body::before {
     transform: translateY(-2px);
 }
 
-/* Pop-up (Confirmação) - GARANTE CENTRALIZAÇÃO E VISIBILIDADE ACIMA DE TUDO */
+/* Pop-up (Confirmação) */
 .popup-overlay {
     display: none;
     position: fixed;
@@ -274,7 +277,6 @@ body::before {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
-    /* Centraliza o conteúdo (o pop-up) */
     justify-content: center;
     align-items: center;
     z-index: 2002; 
@@ -322,11 +324,10 @@ body::before {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- POPUP DE CONFIGURAÇÕES (Tema/Idioma) --- */
+/* --- POPUP DE CONFIGURAÇÕES (Tema/Idioma) - CENTRALIZADO --- */
 .theme-popup { 
     position: fixed; 
     bottom: 20px; 
-    /* Centraliza horizontalmente no desktop */
     left: 50%; 
     background-color: #fff; 
     border-radius: 12px; 
@@ -375,12 +376,11 @@ body::before {
     .sidebar {
         position: fixed;
         top: 0;
-        left: -300px; /* Corrigido para garantir que suma */
+        left: -260px; 
         width: 250px;
         height: 100vh;
-        z-index: 2000;
+        z-index: 2000; 
         box-shadow: 2px 0 5px rgba(0,0,0,0.5);
-        transition: left 0.3s ease-in-out;
     }
     .sidebar.active {
         left: 0;
@@ -388,38 +388,32 @@ body::before {
     .sidebar-header {
         text-align: left;
     }
-    .sidebar-nav {
-        display: flex;
-    }
     .user-profile {
         display: none;
     }
-
+    
     .main-content {
-        padding: 5.5rem 1rem 1rem 1rem;
+        padding: 5.5rem 1rem 1rem 1rem; 
         margin-left: 0;
+        align-items: flex-start; 
+    }
+    
+    .container {
+        padding: 1.5rem;
+        width: 100%; 
+        margin: 0; 
     }
 
-    .main-header {
-        padding: 1rem;
+    .botoes-container {
         flex-direction: column;
-        align-items: stretch;
+    }
+    .btn-principal,
+    .btn-voltar {
+        width: 100%;
+        box-sizing: border-box;
     }
 
-    .search-container {
-        width: 100%; 
-        max-width: none; /* NOVO: Permite que o container cresça para 100% no mobile */
-    }
-
-    .search-input {
-        width: 100%; 
-        box-sizing: border-box; 
-    }
-
-    .tool-grid {
-        gap: 1rem;
-    }
-
+    /* Botão Hamburger */
     .hamburger-btn {
         display: block !important;
         position: fixed;
@@ -428,11 +422,17 @@ body::before {
         z-index: 2001;
     }
 
+    /* Popup de Configurações: Centralizado no Mobile */
     .theme-popup {
-        left: auto;
-        right: 40px;
-    }   
+        left: 50%; 
+        right: auto;
+        transform: translateX(-50%) translateY(20px); 
+    }
+    .theme-popup.visible {
+        transform: translateX(-50%) translateY(0);
+    }
 }
+
 
 /* === ESTILOS DO TEMA ESCURO === */
 body.dark-theme {
