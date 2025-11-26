@@ -265,7 +265,7 @@ body {
         position: fixed;
         top: 0;
         /* Corrigido para garantir que suma completamente */
-        left: -260px;
+        left: -300px;
         width: 250px;
         height: 100vh;
         z-index: 2000; /* Alto z-index */
@@ -304,7 +304,7 @@ body {
     }
     .theme-popup {
         left: auto; 
-        right: 20px;
+        right: 10px;
         z-index: 2000;
     }   
 }
