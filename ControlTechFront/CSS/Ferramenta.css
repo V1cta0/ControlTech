@@ -149,24 +149,22 @@ body {
     transition: color 0.3s; 
 }
 
-/* Estilos para a barra de pesquisa */
 .search-container {
     position: relative;
+    max-width: 350px; 
 }
 
 .search-input {
-    width: 100%;
-    max-width: 350px;  
+    width: 100%; 
+    margin: 10px 0; 
     box-sizing: border-box; 
-    margin: 10px 0;        
     padding: 10px 40px 10px 15px;
     border: 1px solid #ddd;
     border-radius: 50px;
     font-size: 1rem;
     transition: all 0.3s ease;
     background-color: #fff; 
-    color: #333;
-    display: block; 
+    color: #333; 
 }
 
 .search-input:focus {
@@ -174,7 +172,6 @@ body {
     border-color: #0061c0;
     box-shadow: 0 0 5px rgba(0, 97, 192, 0.5);
 }
-
 .search-input::placeholder { 
     color: #aaa;
     transition: color 0.3s;
