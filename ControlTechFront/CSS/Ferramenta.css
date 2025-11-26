@@ -155,7 +155,7 @@ body {
 }
 
 .search-input {
-    width: 300px;
+    width: 90%;
     padding: 10px 40px 10px 15px;
     border: 1px solid #ddd;
     border-radius: 50px;
