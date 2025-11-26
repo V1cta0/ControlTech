@@ -6,7 +6,6 @@ body {
     background-color: #f0f2f5;
     color: #333;
     transition: background-color 0.3s, color 0.3s; 
-    /* CORREÇÃO MANTIDA: Impede que o conteúdo posicionado à esquerda (como a sidebar) crie rolagem horizontal. */
     overflow-x: hidden; 
 }
 
@@ -421,7 +420,7 @@ body {
         position: fixed;
         top: 0;
         left: -260px;
-        width: 250px;
+        width: 230px;
         height: 100vh;
         z-index: 2000;
         box-shadow: 2px 0 5px rgba(0,0,0,0.5);
