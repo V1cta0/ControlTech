@@ -869,3 +869,6 @@ body.dark-theme .cta-standalone-container {
         justify-content: center;
     }
 }
+.perfis {
+    text-decoration: none;
+}
