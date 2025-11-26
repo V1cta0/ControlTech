@@ -405,27 +405,66 @@ body.dark-theme .lang-toggle-btn:hover { background-color: #004b8d; }
    AJUSTES FINOS PARA TELEMÓVEIS (Abaixo de 450px)
 ========================================================= */
 
-@media (max-width: 450px) {
-    .main-content {
-        /* Ajusta o padding para menos espaço nas laterais */
-        padding: 1rem 1rem;
-        padding-top: 5.5rem; /* Mantém o espaço do hamburger */
+/* Substitua a parte responsiva no final do arquivo por isto: */
+@media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column;
     }
 
-    .saida-box {
-        /* Reduz o padding interno do card */
-        padding: 2rem 1.25rem;
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -260px; /* Esconde completamente */
+        width: 250px; /* Largura padronizada */
+        height: 100vh;
+        z-index: 2000; /* Fica acima do conteúdo */
+        box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+        transition: left 0.3s ease-in-out;
+    }
+
+    .sidebar.active {
+        left: 0; /* Mostra o menu */
+    }
+
+    .sidebar-header {
+        text-align: left;
     }
     
-    .saida-box h2 {
-        font-size: 1.6rem; 
+    .sidebar-nav {
+        display: flex;
     }
 
-    .btn-primary {
+    .user-profile {
+        display: none; /* Oculta perfil no mobile para dar espaço */
+    }
+
+    .main-content {
+        padding: 5rem 1rem 1rem 1rem; /* Espaço para o botão no topo */
+        margin-left: 0;
         width: 100%;
-        max-width: none;
-        font-size: 1rem;
     }
 
-    /* O popup de config já está à direita por causa da regra de 768px */
+    .main-header {
+        padding: 1rem;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-container, .search-input {
+        width: 100%;
+    }
+
+    /* Botão Hambúrguer sempre no topo */
+    .hamburger-btn {
+        display: block !important;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 2001; /* Maior que a sidebar (2000) para não sumir */
+    }
+
+    .theme-popup {
+        left: auto;
+        right: 20px;
+    }
 }

@@ -412,50 +412,65 @@ body {
     background-color: #004b8d;
 }
 
-/* Responsividade */
-/* Responsividade - Padronização para Mobile */
 @media (max-width: 768px) {
     .dashboard-container {
         flex-direction: column;
     }
 
-    /* Ajuste da Sidebar para garantir que ela suma completamente */
     .sidebar {
         position: fixed;
         top: 0;
-        left: -260px; /* Esconde um pouco mais que a largura para garantir */
-        width: 250px; /* Largura fixa igual em todas as páginas */
+        left: -260px;
+        width: 250px;
         height: 100vh;
-        z-index: 2000; /* Z-Index ALTO para ficar acima de tudo */
+        z-index: 2000;
         box-shadow: 2px 0 5px rgba(0,0,0,0.5);
         transition: left 0.3s ease-in-out;
     }
-
-    /* Classe ativa para mostrar o menu */
     .sidebar.active {
         left: 0;
     }
+    .sidebar-header {
+        text-align: left;
+    }
+    .sidebar-nav {
+        display: flex;
+    }
+    .user-profile {
+        display: none;
+    }
 
-    /* Garante que o botão hambúrguer sempre apareça e fique no topo */
+    .main-content {
+        padding: 5.5rem 1rem 1rem 1rem;
+        margin-left: 0;
+    }
+
+    .main-header {
+        padding: 1rem;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-container, .search-input {
+        width: 100%; 
+    }
+
+    .tool-grid {
+        gap: 1rem;
+    }
+
     .hamburger-btn {
-        display: block !important; /* O !important garante que nada sobrescreva */
+        display: block !important;
         position: fixed;
         top: 15px;
         left: 15px;
-        z-index: 2001; /* Z-Index MAIOR que a sidebar para nunca ser coberto */
-        background-color: #004b8d;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        font-size: 1.5rem;
-        cursor: pointer;
-        border-radius: 5px;
+        z-index: 2001;
     }
-    
-    /* Ajuste do conteúdo para não ficar escondido atrás do botão */
-    .main-content {
-        padding-top: 5rem; 
-    }
+
+    .theme-popup {
+        left: auto;
+        right: 20px;
+    }   
 }
 
     .main-header {

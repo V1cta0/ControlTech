@@ -86,76 +86,70 @@ body {
 }
 
 /* Responsividade - Padronização para Mobile */
+/* Substitua a parte responsiva no final do arquivo por isto: */
 @media (max-width: 768px) {
     .dashboard-container {
-        flex-direction: column;
+        display: block; /* Remove flexbox em mobile para evitar quebra */
     }
 
-    /* Ajuste da Sidebar para garantir que ela suma completamente */
     .sidebar {
         position: fixed;
         top: 0;
-        left: -260px; /* Esconde um pouco mais que a largura para garantir */
-        width: 250px; /* Largura fixa igual em todas as páginas */
+        left: -260px; /* Garante que saia da tela */
+        width: 250px; /* Largura corrigida */
         height: 100vh;
-        z-index: 2000; /* Z-Index ALTO para ficar acima de tudo */
+        z-index: 2000;
         box-shadow: 2px 0 5px rgba(0,0,0,0.5);
         transition: left 0.3s ease-in-out;
     }
 
-    /* Classe ativa para mostrar o menu */
     .sidebar.active {
         left: 0;
     }
 
-    /* Garante que o botão hambúrguer sempre apareça e fique no topo */
-    .hamburger-btn {
-        display: block !important; /* O !important garante que nada sobrescreva */
-        position: fixed;
-        top: 15px;
-        left: 15px;
-        z-index: 2001; /* Z-Index MAIOR que a sidebar para nunca ser coberto */
-        background-color: #004b8d;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        font-size: 1.5rem;
-        cursor: pointer;
-        border-radius: 5px;
+    .sidebar-header {
+        text-align: left;
+    }
+
+    .sidebar-nav {
+        display: flex;
+        flex-direction: column;
     }
     
-    /* Ajuste do conteúdo para não ficar escondido atrás do botão */
-    .main-content {
-        padding-top: 5rem; 
-    }
-
-    /* Ajusta a caixa principal em mobile */
-    .devolucao-box {
-        padding: 1.5rem;
-        max-width: 100%; /* Ocupa a largura total */
-        margin: 0 auto; /* Centraliza se a largura for menor que 100% */
-    }
-
-    .devolucao-box h1 {
-        font-size: 1.5rem;
-    }
-
-    /* Mostra o botão hamburger */
-    .hamburger-btn {
-        display: block;
-        top: 15px;
-        left: 15px;
-    }
-    
-    /* Esconde o perfil de usuário na sidebar em mobile */
     .user-profile {
         display: none;
     }
 
-    /* CORREÇÃO: Força o grid a mostrar apenas 1 card por linha */
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 1rem;
+        padding-top: 5.5rem; /* Espaço para o botão */
+    }
+
+    .devolucao-box {
+        padding: 1.5rem;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .hamburger-btn {
+        display: block !important;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 2001; /* Sempre visível */
+    }
+
+    /* Ajuste do grid para 1 coluna */
     #listaFerramentas {
-        grid-template-columns: 1fr; 
+        grid-template-columns: 1fr;
         gap: 1rem;
+    }
+
+    .theme-popup {
+        left: auto;
+        right: 20px;
     }
 }
 
