@@ -27,17 +27,14 @@ body::before {
     z-index: 0;
 }
 
-/* Container do Dashboard (Estrutura principal para sidebar + conteúdo) */
 .dashboard-container {
     display: flex;
-    /* GARANTE QUE O CONTAINER ESTIQUE PARA COMPREENDER TODO O CONTEÚDO */
     min-height: 100vh; 
     width: 100%;
     position: relative;
     z-index: 1; 
 }
 
-/* Barra Lateral (Sidebar) */
 .sidebar {
     width: 250px;
     background-color: #004b8d;
@@ -46,9 +43,7 @@ body::before {
     display: flex;
     flex-direction: column;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    transition: left 0.3s ease-in-out, background-color 0.3s, box-shadow 0.3s;
-    position: relative;
-    /* A Sidebar agora se estica automaticamente por ser um Flex Item de um container full-height */
+    transition: left 0.3s ease-in-out, background-color 0.3s, box-shadow 0.3s; 
 }
 
 .sidebar-header {
@@ -61,7 +56,7 @@ body::before {
 .sidebar-nav {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    flex-grow: 1; /* Faz a navegação ocupar espaço disponível */
 }
 
 .sidebar-nav a {
@@ -85,7 +80,6 @@ body::before {
     font-size: 1.5rem;
     margin-right: 15px;
 }
-
 /* Estilos do perfil do usuário */
 .user-profile { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; margin-bottom: 1.5rem; border-radius: 8px; background-color: rgba(255, 255, 255, 0.1); box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); transition: background-color 0.3s; }
 .user-profile i { font-size: 2.5rem; color: #b3cde0; transition: color 0.3s; }
@@ -381,11 +375,12 @@ body::before {
     .sidebar {
         position: fixed;
         top: 0;
-        left: -260px; 
+        left: -300px; /* Corrigido para garantir que suma */
         width: 250px;
         height: 100vh;
-        z-index: 2000; 
+        z-index: 2000;
         box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+        transition: left 0.3s ease-in-out;
     }
     .sidebar.active {
         left: 0;
@@ -393,33 +388,38 @@ body::before {
     .sidebar-header {
         text-align: left;
     }
+    .sidebar-nav {
+        display: flex;
+    }
     .user-profile {
         display: none;
     }
-    
+
     .main-content {
-        padding: 5.5rem 1rem 1rem 1rem; 
+        padding: 5.5rem 1rem 1rem 1rem;
         margin-left: 0;
-        /* Alinha o conteúdo ao topo para permitir rolagem no mobile */
-        align-items: flex-start; 
-    }
-    
-    .container {
-        padding: 1.5rem;
-        width: 100%; 
-        margin: 0; 
     }
 
-    .botoes-container {
+    .main-header {
+        padding: 1rem;
         flex-direction: column;
-    }
-    .btn-principal,
-    .btn-voltar {
-        width: 100%;
-        box-sizing: border-box;
+        align-items: stretch;
     }
 
-    /* Botão Hamburger */
+    .search-container {
+        width: 100%; 
+        max-width: none; /* NOVO: Permite que o container cresça para 100% no mobile */
+    }
+
+    .search-input {
+        width: 100%; 
+        box-sizing: border-box; 
+    }
+
+    .tool-grid {
+        gap: 1rem;
+    }
+
     .hamburger-btn {
         display: block !important;
         position: fixed;
@@ -428,17 +428,11 @@ body::before {
         z-index: 2001;
     }
 
-    /* Popup de Configurações: Centralizado no Mobile */
     .theme-popup {
-        left: 50%; 
-        right: auto;
-        transform: translateX(-50%) translateY(20px); 
-    }
-    .theme-popup.visible {
-        transform: translateX(-50%) translateY(0);
-    }
+        left: auto;
+        right: 40px;
+    }   
 }
-
 
 /* === ESTILOS DO TEMA ESCURO === */
 body.dark-theme {
