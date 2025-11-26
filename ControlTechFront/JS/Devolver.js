@@ -2,11 +2,13 @@ import { API_BASE_URL } from './apiConfig.js';
 
 const translations = {
     'pt': {
-        'pageTitle': 'Devolução de Itens - SENAI',
+        'pageTitle': 'Ajuda - SENAI ControlTech',
+        'sidebarAbout': 'Início', 
         'sidebarTools': 'Ferramentas',
         'sidebarReturn': 'Devolver',
         'sidebarHelp': 'Ajuda',
         'sidebarHistory': 'Histórico',
+        'sidebarChatBot': 'ChatBot', 
         'sidebarExit': 'Sair',
         'sidebarSettings': 'Configurações',
         'formTitle': 'Devolução de Itens',
@@ -36,11 +38,13 @@ const translations = {
         'welcomeMessage': 'Olá,'
     },
     'en': {
-        'pageTitle': 'Item Return - SENAI',
+        'pageTitle': 'Help - SENAI ControlTech',
+        'sidebarAbout': 'Home', 
         'sidebarTools': 'Tools',
         'sidebarReturn': 'Return',
         'sidebarHelp': 'Help',
         'sidebarHistory': 'History',
+        'sidebarChatBot': 'ChatBot', 
         'sidebarExit': 'Exit',
         'sidebarSettings': 'Settings',
         'formTitle': 'Item Return',

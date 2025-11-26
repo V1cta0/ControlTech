@@ -3,11 +3,13 @@ import { API_BASE_URL } from './apiConfig.js';
 // --- CONFIGURAÇÃO DE TRADUÇÕES ---
 const translations = {
     'pt': {
-        'pageTitle': 'Histórico - ControlTech',
+        'pageTitle': 'Ajuda - SENAI ControlTech',
+        'sidebarAbout': 'Início', 
         'sidebarTools': 'Ferramentas',
         'sidebarReturn': 'Devolver',
         'sidebarHelp': 'Ajuda',
         'sidebarHistory': 'Histórico',
+        'sidebarChatBot': 'ChatBot', 
         'sidebarExit': 'Sair',
         'sidebarSettings': 'Configurações',
         'headerTitle': 'Histórico de Devoluções',
@@ -29,11 +31,13 @@ const translations = {
         'welcomeMessage': 'Olá,'
     },
     'en': {
-        'pageTitle': 'History - ControlTech',
+        'pageTitle': 'Help - SENAI ControlTech',
+        'sidebarAbout': 'Home', 
         'sidebarTools': 'Tools',
         'sidebarReturn': 'Return',
         'sidebarHelp': 'Help',
         'sidebarHistory': 'History',
+        'sidebarChatBot': 'ChatBot', 
         'sidebarExit': 'Exit',
         'sidebarSettings': 'Settings',
         'headerTitle': 'Return History',

@@ -193,14 +193,11 @@ function handleLoginSuccess(qrCodeContent) {
             return res.json();
         })
         .then(usuario => {
-            salvarUsuarioLogado({ usuario: usuario });
-            if (loginControls) loginControls.style.display = 'none';
-            exibirUsuario({ usuario: usuario }); 
+        if (statusMsgLogin) statusMsgLogin.textContent = "Sucesso! Redirecionando...";
+        if (infoAluno) infoAluno.style.display = "block";
 
-            if (statusMsgLogin) statusMsgLogin.textContent = "Sucesso! Redirecionando...";
-            if (infoAluno) infoAluno.style.display = "block";
 
-            setTimeout(() => { window.location.href = '/HTML/Ferramentas.html'; }, 500); 
+        setTimeout(() => { window.location.href = '/HTML/LandingPage.html'; }, 500); 
         })
         .catch(err => {
             console.error(err);
@@ -231,19 +228,12 @@ btnLerQrUpload?.addEventListener('click', () => {
     const loginControls = document.getElementById('loginControls');
 
     lerQrViaUpload(file, (usuario) => {
-        btnLerQrUpload.classList.remove('loading');
-        btnLerQrUpload.innerHTML = '<i class="fas fa-qrcode"></i> Ler QR Code por Arquivo';
-
-        if (loginControls) loginControls.style.display = 'none';
-        exibirUsuario(usuario);
-        salvarUsuarioLogado(usuario);
 
         if (statusMsgLogin) statusMsgLogin.textContent = "Login bem-sucedido!";
         if (infoAluno) infoAluno.style.display = "block";
 
-        setTimeout(() => { window.location.href = '/HTML/Ferramentas.html'; }, 500);
-
-    }, (err) => {
+        setTimeout(() => { window.location.href = '/HTML/LandingPage.html'; }, 500); // AGORA REDIRECIONA PARA INÍCIO
+        }, (err) => {
         // 2. AQUI ESTAVA O PROBLEMA DO ALERT FEIO
         btnLerQrUpload.classList.remove('loading');
         btnLerQrUpload.innerHTML = '<i class="fas fa-qrcode"></i> Ler QR Code por Arquivo';
