@@ -147,16 +147,19 @@ function showAlert(titulo, mensagem) {
     const titleEl = document.getElementById('alertTitle');
     const msgEl = document.getElementById('alertMessage');
     const btnOk = document.getElementById('btnAlertOk');
-    const btnClose = document.getElementById('closeAlertBtn'); 
 
     if (modal && titleEl && msgEl) {
         titleEl.textContent = titulo;
         msgEl.textContent = mensagem;
-        modal.classList.remove('hidden');
+        modal.classList.remove('hidden'); 
+        
         const fechar = () => modal.classList.add('hidden');
+        x
         if (btnOk) btnOk.onclick = fechar;
-        if (btnClose) btnClose.onclick = fechar;
-        modal.onclick = (e) => { if (e.target === modal) fechar(); };
+    
+        modal.onclick = (e) => { 
+             if (e.target === modal) fechar(); 
+        };
     } else {
         alert(`${titulo}\n\n${mensagem}`);
     }
