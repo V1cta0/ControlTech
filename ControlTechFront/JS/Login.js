@@ -228,12 +228,19 @@ btnLerQrUpload?.addEventListener('click', () => {
     const loginControls = document.getElementById('loginControls');
 
     lerQrViaUpload(file, (usuario) => {
+        btnLerQrUpload.classList.remove('loading');
+        btnLerQrUpload.innerHTML = '<i class="fas fa-qrcode"></i> Ler QR Code por Arquivo';
+
+        if (loginControls) loginControls.style.display = 'none';
+        exibirUsuario(usuario);
+        salvarUsuarioLogado(usuario);
 
         if (statusMsgLogin) statusMsgLogin.textContent = "Login bem-sucedido!";
         if (infoAluno) infoAluno.style.display = "block";
 
-        setTimeout(() => { window.location.href = '/HTML/LandingPage.html'; }, 500); // AGORA REDIRECIONA PARA INÍCIO
-        }, (err) => {
+        setTimeout(() => { window.location.href = '/HTML/LandingPage'; }, 500);
+
+    }, (err) => {
         // 2. AQUI ESTAVA O PROBLEMA DO ALERT FEIO
         btnLerQrUpload.classList.remove('loading');
         btnLerQrUpload.innerHTML = '<i class="fas fa-qrcode"></i> Ler QR Code por Arquivo';
