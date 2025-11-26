@@ -304,9 +304,9 @@ body {
     }
 
     .theme-popup { 
+    position: fixed; 
     bottom: 20px; 
-    left: -30%; 
-    transform: translateX(-50%) translateY(20px); 
+    left: 20%; 
     background-color: #fff; 
     border-radius: 12px; 
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
@@ -315,17 +315,18 @@ body {
     z-index: 2000; 
     opacity: 0; 
     visibility: hidden; 
+    transform: translateX(-50%) translateY(20px); 
     
     transition: transform 0.3s ease-out, opacity 0.3s ease-out, background-color 0.3s, visibility 0s 0.3s; 
     text-align: center; 
-    }
+}
 
-    .theme-popup.visible { 
-        opacity: 1; 
-        visibility: visible; 
-        transform: translateX(-50%) translateY(0); 
-        transition-delay: 0s; 
-    }
+.theme-popup.visible { 
+    opacity: 1; 
+    visibility: visible; 
+    transform: translateX(-50%) translateY(0); 
+    transition-delay: 0s; 
+}
 }
 
 /* Estilos de Perfil e Popup para Desktop */
