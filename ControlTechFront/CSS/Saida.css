@@ -303,8 +303,6 @@ body {
         z-index: 2001; /* Z-Index mais alto para não sumir */
     }
     .theme-popup {
-        left: auto; 
-        right: 0px;
         z-index: 2000;
     }   
 }
