@@ -254,6 +254,29 @@ body {
 .notification.error {
     background-color: #dc3545;
 }
+.theme-popup {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 280px;
+    padding: 1rem;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out, background-color 0.3s, visibility 0s 0.3s;
+    text-align: center;
+}
+.theme-popup.visible { 
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition-delay: 0s; 
+}
+.theme-popup.hidden { display: none; }
 
 /* Responsividade (Mobile) */
 @media (max-width: 768px) {
@@ -303,30 +326,10 @@ body {
         z-index: 2001; 
     }
 
-    .theme-popup { 
-    position: fixed; 
-    bottom: 20px; 
-    left: 20%; 
-    background-color: #fff; 
-    border-radius: 12px; 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
-    width: 240px; 
-    padding: 1rem; 
-    z-index: 2000; 
-    opacity: 0; 
-    visibility: hidden; 
-    transform: translateX(-50%) translateY(20px); 
-    
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out, background-color 0.3s, visibility 0s 0.3s; 
-    text-align: center; 
-}
-
-.theme-popup.visible { 
-    opacity: 1; 
-    visibility: visible; 
-    transform: translateX(-50%) translateY(0); 
-    transition-delay: 0s; 
-}
+    .theme-popup {
+        left: auto;
+        right: 20px;
+    }   
 }
 
 /* Estilos de Perfil e Popup para Desktop */
@@ -340,10 +343,6 @@ body {
 .settings-btn {background-color: rgba(0, 0, 0, 0.2); }
 .settings-btn:hover { background-color: #0061c0 !important; }
 
-/* Popup de Configurações */
-.theme-popup { position: fixed; bottom: 20px; left: 125px; background-color: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); width: 240px; padding: 1rem; z-index: 2000; opacity: 0; visibility: hidden; transform: translateY(20px); transition: transform 0.3s ease-out, opacity 0.3s ease-out, background-color 0.3s, visibility 0s 0.3s; text-align: center; }
-.theme-popup.visible { opacity: 1; visibility: visible; transform: translateY(0); transition-delay: 0s; }
-.theme-popup.hidden { display: none; }
 .popup-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; margin-bottom: 1rem; transition: border-color 0.3s; }
 .popup-header h4 { margin: 0; color: #004b8d; transition: color 0.3s; }
 .popup-header .close-btn { background: none; border: none; font-size: 1.5rem; color: #888; cursor: pointer; transition: color 0.3s; }
