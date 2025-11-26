@@ -303,9 +303,8 @@ body {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
-    transition-delay: 0s; /* Garante que a visibilidade mude imediatamente ao mostrar */
+    transition-delay: 0s; 
 }
-/* A classe .hidden pode ser usada como fallback se necessário, mas .visible controla a exibição */
 .theme-popup.hidden {
    display: none;
 }
@@ -478,7 +477,7 @@ body {
 
     .theme-popup {
         left: auto;
-        right: 20px;
+        right: 30px;
     }   
 }
 

@@ -303,7 +303,7 @@ body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     width: 280px;
     padding: 1rem;
-    z-index: 101;
+    z-index: 2000;
     opacity: 0;
     visibility: hidden;
     transform: translateY(20px);
@@ -380,7 +380,7 @@ body {
     
     .theme-popup {
         left: auto; 
-        right: 20px;
+        right: 30px;
     }
 }
 /* === ESTILOS DO TEMA ESCURO === */
