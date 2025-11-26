@@ -544,7 +544,7 @@ textarea:focus {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     width: 280px;
     padding: 1rem;
-    z-index: 101;
+    z-index: 2000;
     opacity: 0;
     visibility: hidden;
     transform: translateY(20px);
