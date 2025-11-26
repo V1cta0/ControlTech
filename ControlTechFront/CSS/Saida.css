@@ -96,7 +96,7 @@ body {
     border-radius: 16px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     text-align: center;
-    width: 90%;
+    width: calc(100% - 4rem); 
     max-width: 450px;
     overflow: hidden;   
     transition: box-shadow 0.3s ease;
@@ -300,11 +300,33 @@ body {
         position: fixed;
         top: 15px;
         left: 15px;
-        z-index: 2001; /* Z-Index mais alto para não sumir */
+        z-index: 2001; 
     }
-    .theme-popup {
-        z-index: 2000;
-    }   
+    .theme-popup { 
+    position: fixed; 
+    bottom: 20px; 
+    left: 50%; 
+    transform: translateX(-50%) translateY(20px); 
+    
+    background-color: #fff; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+    width: 240px; 
+    padding: 1rem; 
+    z-index: 2000; 
+    opacity: 0; 
+    visibility: hidden; 
+    
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out, background-color 0.3s, visibility 0s 0.3s; 
+    text-align: center; 
+    }
+
+    .theme-popup.visible { 
+        opacity: 1; 
+        visibility: visible; 
+        transform: translateX(-50%) translateY(0); 
+        transition-delay: 0s; 
+    }
 }
 
 /* Estilos de Perfil e Popup para Desktop */
