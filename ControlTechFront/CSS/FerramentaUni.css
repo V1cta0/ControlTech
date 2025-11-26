@@ -1,27 +1,13 @@
-/* Estilos Gerais */
+
 body {
     font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    /* REMOVIDO: min-height: 100vh do body, ele será controlado pelo .dashboard-container */
     color: #333;
-    
-    /* Fundo com gradiente */
     background: linear-gradient(135deg, #f0f2f5 0%, #e6edf5 50%, #d9e7f7 100%);
     position: relative;
     overflow-x: hidden; 
     transition: background-color 0.3s, color 0.3s;
-}
-body::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background-image: radial-gradient(rgba(0, 75, 141, 0.05) 1px, transparent 1px);
-    background-size: 40px 40px;
-    z-index: 0;
 }
 
 /* Container do Dashboard - Define o layout da Sidebar e garante altura mínima */
