@@ -69,7 +69,7 @@ body {
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 2001;
+    z-index: 2001; 
     background: #004b8d;
     color: white;
     border: none;
@@ -471,39 +471,6 @@ body {
         left: auto;
         right: 20px;
     }   
-}
-
-    .main-header {
-        padding: 1rem;
-        flex-direction: column;
-        align-items: stretch; /* Faz input ocupar largura */
-    }
-
-    /* CORREÇÃO APLICADA: Força o search-container a ocupar 100% da largura do main-header */
-    .search-container {
-        width: 100%; 
-    }
-
-    .search-input {
-        width: 100%; /* Ocupa toda largura */
-    }
-
-    .tool-grid {
-        gap: 1rem;
-    }
-    .tool-card {
-        padding: 1rem;
-    }
-
-    .hamburger-btn {
-        display: block; /* Mostra o botão */
-    }
-    .theme-popup {
-        left: 90px; 
-       
-    }   
-
-
 
 /* === ESTILOS DO TEMA ESCURO === */
 body.dark-theme {
