@@ -780,11 +780,9 @@ body.dark-theme .cta-standalone-container {
 .delay-300 { transition-delay: 0.3s; }
 .delay-400 { transition-delay: 0.4s; }
 
-/* 2. Estado Final: Totalmente visível e na posição correta */
 .animate-visible {
     opacity: 1;
-    visibility: visible;
-    transform: translate(0, 0); /* Volta para a posição original */
+    transform: translateX(0);
 }
 
 /* ======================================= */
@@ -927,4 +925,15 @@ transform: translateY(-15px); /* Salto maior */
 body.dark-theme .scroll-indicator {
  color: #ff9800;
  opacity: 1;
+}
+.team-section.dark-bg .section-title,
+.team-section.dark-bg .section-subtitle {
+    color: inherit; /* Deve herdar a cor branca/clara do .dark-bg */
+    opacity: 1;    /* Garante visibilidade, desfazendo possíveis opacidades de animação */
+}
+
+/* Garante que, no Tema Escuro, as cores permaneçam */
+body.dark-theme .team-section.dark-bg .section-title,
+body.dark-theme .team-section.dark-bg .section-subtitle {
+    color: #f0f2f5; 
 }
