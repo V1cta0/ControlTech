@@ -501,7 +501,6 @@ body.dark-theme .hover-border-glow {
     border-top: 5px solid #0056a0;
 }
 body.dark-theme .hover-border-glow:hover {
-     box-shadow: 0 10px 40px rgba(0, 97, 192, 0.6); 
      border-top: 5px solid #ff9800;
 }
 
@@ -648,25 +647,18 @@ body.dark-theme .cta-standalone-container {
     /* RESPONSIVO: Tamanho Mínimo: 0.85rem | Ideal: 1.1vw | Máximo: 1rem */
     font-size: clamp(0.85rem, 1.1vw, 1rem); 
 }
-.shadow-pop {
-    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
-}
+
 
 /* Efeito Destaque da Borda no Hover */
 .hover-border-glow {
     position: relative;
     overflow: hidden;
-    /* CORREÇÃO: Borda superior mais grossa para mais destaque */
     border-top: 8px solid #0061c0; 
 }
 .hover-border-glow:hover {
-    border-top: 8px solid #ff9800; /* Muda a cor da borda ao passar o mouse */
-    
-    /* NOVO/GOOFY: Efeito de "POP" exagerado (sobe, aumenta e gira ao contrário) */
+    border-top: 8px solid #ff9800; 
     transform: translateY(-10px) scale(1.05) rotate(-0.5deg);
-    
-    /* Sombra mais intensa para o "pop" */
-    box-shadow: 0 15px 40px rgba(0, 75, 141, 0.35); 
+    transition: 1.5s;
 }
 
 .team-section {
