@@ -5,11 +5,7 @@
 }
 
 /*
-  CORREÇÃO APLICADA AQUI:
-  Removemos 'display: flex' e as propriedades
-  relacionadas ('flex-direction', 'justify-content', 'align-items')
-  para deixar o 'margin: auto' do .login-box fazer todo
-  o trabalho de centralização.
+  ESTILOS DO BODY (MANTIDOS)
 */
 body, html {
     height: 100%;
@@ -22,7 +18,7 @@ body, html {
     position: relative;
     min-height: 100vh;
 }
-
+/* ... (Resto do CSS de fundo e container) ... */
 body::before {
     content: "";
     position: fixed;
@@ -60,7 +56,6 @@ body::after {
     position: relative;
     z-index: 1;
     
-    /* Este padding é o que empurra o card para baixo */
     padding: 5rem 3em 3em 3em; 
     
     flex: 0; 
@@ -75,7 +70,6 @@ body::after {
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 58, 117, 0.2);
     
-    /* Esta é a combinação correta para centralizar */
     width: 90%; 
     max-width: 450px; 
     margin-left: auto;
@@ -250,16 +244,19 @@ footer {
 .slide-container {
     position: relative;
     width: 100%;
-    display: flex;
-    flex-direction: row;
+    /* REMOVIDO: display: flex. A animação agora usa position: absolute nos filhos. */
+    height: 100%; /* Garante que o container tenha altura para os filhos absolutos */
 }
 
 /* Login e Cadastro sobrepostos */
 #loginContainer, .cadastro-box {
-    position: relative;
-    padding-bottom: 4rem;
+    position: absolute; /* FIX: Posicionamento Absoluto para sobrepor elementos */
+    top: 0;
+    left: 0;
     width: 100%;
-    transform: none;
+    padding-bottom: 4rem;
+    
+    transform: translateX(0);
     opacity: 1;
     transition: transform 0.5s ease, opacity 0.5s ease;
     z-index: 2;
@@ -282,13 +279,15 @@ footer {
     padding: 1rem;
     margin-top: 0; 
     text-align: center;
+    /* CORREÇÃO: Começa fora da tela, à direita (100%) */
     transform: translateX(100%);
     opacity: 0;
     z-index: 1;
 }
 
 .cadastro-box.active {
-    transform: translateX(-100%); 
+    /* CORREÇÃO: Desliza para o centro da tela (0%) */
+    transform: translateX(0); 
     opacity: 1;
     z-index: 3;
 }
@@ -471,12 +470,6 @@ footer {
     .login-box {
         padding: 2rem 1.25rem; 
         
-        /* Esta é a regra principal: 
-           O 'width: 90%' global e o 'margin: auto' 
-           já estão cuidando da centralização.
-           Não precisamos de 'width: 100%' aqui.
-        */
-        
         max-width: 450px; 
         min-height: auto;
         border-radius: 12px; 
@@ -540,17 +533,4 @@ footer {
     border: 3px solid rgba(255, 0, 0, 0.7); 
     box-shadow: 0 0 0 999px rgba(0, 0, 0, 0.5); 
     border-radius: 8px;
-}
-.bounce-in {
-    animation: bounceIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-@keyframes bounceIn {
-    0% { transform: scale(0.8); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-/* Ajuste para garantir que o texto do modal não fique colado */
-.modal-body p {
-    line-height: 1.5;
 }

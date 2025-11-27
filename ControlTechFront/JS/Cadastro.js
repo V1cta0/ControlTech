@@ -6,7 +6,7 @@ import { startCamera, stopCamera } from './Login.js';
 const btnToggleCameraCadastro = document.getElementById('btnToggleCameraCadastro');
 const btnCadastrar = document.getElementById('btnCadastrar');
 const nomeCadastroInput = document.getElementById('nomeCadastro');
-const turmaCadastroInput = document.getElementById('turmaCadastro'); // <-- CORREÇÃO: Busca a ID 'turmaCadastro'
+const turmaCadastroInput = document.getElementById('turmaCadastro'); // <-- CORRIGIDO: Busca a ID 'turmaCadastro'
 const statusMsgCadastro = document.getElementById('statusMsgCadastro');
 const popupCadastro = document.getElementById('popupCadastro');
 const popupNomeCadastro = document.getElementById('popupNomeCadastro');
@@ -98,7 +98,7 @@ btnCadastrar?.addEventListener('click', async (e) => {
         return;
     }
 
-    // Leitura dos valores (o operador '?' não é necessário, pois há a verificação acima)
+    // Leitura dos valores
     // @ts-ignore
     const nome = nomeCadastroInput.value.trim();
     // @ts-ignore

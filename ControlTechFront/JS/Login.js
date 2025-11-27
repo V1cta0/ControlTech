@@ -12,7 +12,7 @@ if (container) {
     let innerHTML = '';
     for (let i = 0; i < 15; i++) {
         innerHTML += '<div class="row">';
-        for (let j = 0; j++) {
+        for (let j = 0; j < 20; j++) {
             innerHTML += '<div class="hexagon"></div>';
         }
         innerHTML += '</div>';
