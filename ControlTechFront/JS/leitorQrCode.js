@@ -76,7 +76,8 @@ export function exibirUsuario(respostaJson) {
 
   setText('idAluno', usuario.id);
   setText('nomeAluno', usuario.nome);
-  setText('perfilAluno', usuario.perfil);
+  // CORREÇÃO CRÍTICA: Usa a ID do elemento 'turmaAluno' e a propriedade 'perfil' do objeto JSON.
+  setText('turmaAluno', usuario.perfil); 
   setText('qrCodeAluno', usuario.qrCode);
   
   const dataEl = document.getElementById('dataAtual');

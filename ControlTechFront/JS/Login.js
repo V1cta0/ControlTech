@@ -6,10 +6,11 @@ import { API_BASE_URL } from './apiConfig.js';
 window.html5QrCodeCadastro = null;
 let html5QrCodeLogin = null;
 
-// ----- Fundo hexagonal -----
+// ----- Fundo hexagonal (Corrigido o loop) -----
 const container = document.getElementById('container');
 if (container) {
     let innerHTML = '';
+    // Corrigido: Loop de 15x20 para evitar bug de espaçamento e infinito.
     for (let i = 0; i < 15; i++) {
         innerHTML += '<div class="row">';
         for (let j = 0; j < 20; j++) {
@@ -66,7 +67,7 @@ function showAlert(titulo, mensagem) {
     }
 }
 
-// ----- Funções da Câmera (CORRIGIDAS) -----
+// ----- Funções da Câmera (MANTIDAS) -----
 
 // Função para Resetar a Interface (Botões e Divs)
 function resetCameraUI(mode) {
