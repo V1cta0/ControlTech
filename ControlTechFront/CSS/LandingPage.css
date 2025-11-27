@@ -486,7 +486,7 @@ body.dark-theme .features-section {
 }
 body.dark-theme .feature-card {
     background: #1f1f1f;
-    border: 3px solid #333;
+    border: 4px solid #333;
 }
 body.dark-theme .feature-card i {
     color: #007bff; /* Ícones em azul */
@@ -639,7 +639,7 @@ body.dark-theme .cta-standalone-container {
     margin: 0 auto;
 }
 .feature-card {
-    border: 3px solid #d3e0f0; 
+    border: 4px solid #d3e0f0; 
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 /* Para o texto do card (parágrafos dentro de .tool-card) */
@@ -657,7 +657,7 @@ body.dark-theme .cta-standalone-container {
 }
 .hover-border-glow:hover {
     border-top: 8px solid #ff9800; 
-    transform: translateY(-10px) scale(1.05) rotate(-0.5deg);
+    transform: translateY(-10px) scale(1.01);
     transition: 1.5s;
 }
 
