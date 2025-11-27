@@ -1,4 +1,4 @@
-// --- Dicionário de traduções (CORRIGIDO) ---
+// --- Dicionário de traduções (MANTIDO) ---
 const translations = {
     'pt': {
         'pageTitle': 'ChatBot - SENAI ControlTech',
@@ -60,7 +60,7 @@ const translations = {
             'helpCenterInfo': "The **Help Center** is your resource for quickly resolving questions.\n\nIt contains:\n\n1. A **Frequently Asked Questions (FAQ)** section, covering the return and exit processes.\n2. A **Contact Form** ('Report your problem') to send specific requests directly to the support email.",
             'toolsInfo': "The **'Tools'** tab is the heart of the system, where you find the **complete catalog** of available items. To **check out** a tool:\n\n1. Select the desired item from the catalog.\n2. Register the loan, and it will be associated with your name.\n\nThe process is fast and ensures tracking.",
             'returnInfo': "The return procedure is straightforward:\n\n1. Access the **'Return'** section in the side menu.\n2. **Search for or identify the tool by its name** or code.\n3. The system will make the **automatic registration** of the return, including the **date and time**.\n\nRemember: Immediate return and verification of the tool's condition are crucial for inventory control.",
-            'historyInfo': "The **'History'** tab offers **full traceability and transparency**.\n\nYou can consult your **movement records** (loans and returns) and the **current status** of any tool. The system stores the student's name, tool identification, and the exact date/time of each action.", // CORRIGIDO
+            'historyInfo': "The **'History'** tab offers **full traceability and transparency**.\n\nYou can consult your **movement records** (loans and returns) and the **current status** of any tool. The system stores the student's name, tool identification, and the exact date/time of each action.", 
             'teamInfo': "ControlTech is an **innovative development project** carried out by five SENAI students: **Eduardo Rodriges, Eliezer Beltrame, Felipe Rossi, Guilherme Augusto, and Victor Hugo.**. They conceived and implemented the entire **robust and secure architecture** of the tool management system.",
             'accessibilityInfo': "Accessibility is a fundamental priority! ControlTech integrates the **Government Accessibility feature (VLibras)**, available on all pages. Just locate the specific icon to use the translation into Libras.",
             'navInfo': "The main navigation of the system is clear and accessible through the side bar, containing the main functions: **Tools** (for checkout), **Return**, **Help**, **ChatBot**, **History**, and **Exit**. The **active** tab is always highlighted for your orientation.",
@@ -71,7 +71,7 @@ const translations = {
 };
 
 // --- FUNÇÕES DE UTILIDADE PARA TRADUÇÃO ---
-// (Mantidas)
+
 function setText(id, key, trans) {
     const element = document.getElementById(id);
     if (element) element.textContent = trans[key] || '';
@@ -83,7 +83,6 @@ function setSpanText(id, key, trans) {
 }
 
 // --- FUNÇÕES GLOBAIS DE TEMA E IDIOMA ---
-// (Mantidas)
 function updateTranslations(lang) {
     const currentLang = translations[lang] ? lang : 'pt';
     const trans = translations[currentLang];
@@ -115,7 +114,6 @@ function saveTheme(theme) {
     localStorage.setItem('theme', theme);
     const currentLang = localStorage.getItem('lang') || 'pt';
     
-    // CORREÇÃO: Garante que a classe 'dark-theme' é aplicada centralmente.
     document.body.classList.toggle('dark-theme', theme === 'dark'); 
 
     updateThemeStatusText(theme, currentLang);
@@ -194,7 +192,7 @@ function displayUserName(lang) {
 }
 
 
-// --- FUNÇÕES DE PERSISTÊNCIA E CHAT ---
+// --- FUNÇÕES DE PERSISTÊNCIA E CHAT (CORRIGIDAS) ---
 const CHAT_STORAGE_KEY = 'chatbotHistory';
 
 /**
@@ -206,6 +204,7 @@ function saveChatHistory() {
 
     const messages = Array.from(chatBody.children).map(child => {
         const sender = child.classList.contains('user-message') ? 'user' : 'bot';
+        // CORRIGIDO: Garante que o texto formatado (com <br>) é salvo.
         const text = child.querySelector('p')?.innerHTML || ''; 
         return { text, sender };
     });
@@ -233,6 +232,7 @@ function loadChatHistory() {
                 messageContainer.classList.add(`${msg.sender}-message`);
                 
                 const messageParagraph = document.createElement('p');
+                // CORRIGIDO: Usa innerHTML para re-inserir o texto formatado.
                 messageParagraph.innerHTML = msg.text; 
                 
                 messageContainer.appendChild(messageParagraph);
@@ -242,6 +242,7 @@ function loadChatHistory() {
             return true;
         }
     } catch (e) {
+        // Se houver falha na leitura, remove o histórico quebrado para evitar travamentos.
         console.error("Erro ao carregar histórico do chat:", e);
         localStorage.removeItem(CHAT_STORAGE_KEY); 
     }
@@ -260,6 +261,7 @@ function appendMessage(text, sender) {
     messageContainer.classList.add(`${sender}-message`);
     
     const messageParagraph = document.createElement('p');
+    // CORRIGIDO: Usa innerHTML para quebras de linha (<br>).
     messageParagraph.innerHTML = text; 
     
     messageContainer.appendChild(messageParagraph);
@@ -283,42 +285,32 @@ function formatBotResponse(text) {
 }
 
 
-// --- LÓGICA DO BOT CORRIGIDA PARA IDIOMA ---
-
+// --- LÓGICA DO BOT (MANTIDA) ---
 function getBotResponse(input, lang) {
     const lowerInput = input.toLowerCase().trim();
-    // Tenta usar o idioma atual, ou volta para português se a chave não existir
     const msgs = translations[lang]?.botMsgs || translations['pt'].botMsgs; 
     if (!msgs) return "Error: Translations not loaded."; 
     
-    // 0. Respostas para Agradecimentos/Confirmação
     if (/(^ok$|^tá$|obrigad[oa]|valeu|certo|sim|beleza|blz|fechado|thank\s*you|ok|correct|yes|thanks)/.test(lowerInput)) {
         return formatBotResponse(msgs.helpHappy);
     }
     
-    // 1. Respostas sobre Identificação/Login/Logout 🔑
     if (/(login|entrar|acessar|autenticar|começo|qr\s*code|crachá|badge|start|access)/.test(lowerInput)) {
         return formatBotResponse(msgs.loginInfo);
     }
     
-    // Resposta de Logout
     if (/(sair|logout|deslogar|encerrar\s*sessão|finalizar|end\s*session|exit|leave)/.test(lowerInput)) {
         return formatBotResponse(msgs.logoutInfo);
     }
 
-    // Resposta sobre Landing Page (Início)
     if (/(início|inicio|pagina\s*inicial|home|bem\s*vindo|landing\s*page|welcome)/.test(lowerInput)) {
         return formatBotResponse(msgs.homeInfo);
     }
 
-    // Resposta sobre Ajuda
     if (/(ajuda|faq|suporte|contato|problema|problemas|perguntas\s*frequentes|help|support|contact)/.test(lowerInput)) {
         return formatBotResponse(msgs.helpCenterInfo);
     }
 
-    // --- REGRAS CRÍTICAS DE TRANSAÇÃO ---
-    
-    // 2A. Respostas sobre **Retirada/Pegar Ferramentas** 🛠️ 
     const retiradaRegex = /(ferramenta[s]?|item|catálogo|preciso|emprestimo|pegar|retirar|capturar|usar|quero|tool|tools|item|catalog|loan|check\s*out)/;
     if (retiradaRegex.test(lowerInput)) {
         if (!/(devolver|devolução|entrega|devolvo|return|returning|give\s*back)/.test(lowerInput)) {
@@ -326,39 +318,32 @@ function getBotResponse(input, lang) {
         }
     }
     
-    // 2B. Respostas sobre **Devolução/Entrega** 📦
     if (/(devolver|devolução|entrego|entrega|devolvo|return|returning|give\s*back|deliver|delivery)/.test(lowerInput)) {
         return formatBotResponse(msgs.returnInfo);
     }
 
-    // 2C. Respostas sobre **Rastreabilidade/Histórico** 🔍
     if (/(registro|quem\s*pegou|rastrear|monitoramento|historico|histórico|ver\s*quem\s*pegou|quem\s*está\s*com|history|log|trace|track)/.test(lowerInput)) {
         return formatBotResponse(msgs.historyInfo);
     }
 
-    // 3. Respostas sobre Desenvolvimento e Acessibilidade 🧑‍💻
     if (/(quem\s*fez|desenvolvedores|criadores|equipe|idealizadores|cria|alunos|fundadores|arquitetos|criou|pessoas|criaram|fundou|desenvolveu|arquitetou|fizeram|team|developer|developers|who\s*made|created)/.test(lowerInput)) {
         return formatBotResponse(msgs.teamInfo);
     }
-    // Acessibilidade
+    
     if (/(acessibilidade|vlibras|inclusão|surdo|como\s*foi\s*feito|Vlibras|accessibility|inclusive)/.test(lowerInput)) {
         return formatBotResponse(msgs.accessibilityInfo);
     }
-    // Navegação geral
+    
     if (/(navegação|onde\s*está|menus|abas|mexer|navegar|funções|navigation|menu|tabs|functions)/.test(lowerInput)) {
         return formatBotResponse(msgs.navInfo);
     }
 
-    // 4. Respostas Genéricas e Boas-vindas 👋
-    // Ajustado para dar prioridade a saudações em inglês se o idioma for 'en'
     if (lang === 'en' && /(hello|hi|good\s*day|greetings)/.test(lowerInput)) {
          return formatBotResponse(msgs.greeting);
     } else if (lang === 'pt' && /(olá|oi|tudo\s*bem|saudação|bom\s*dia|boa\s*tarde)/.test(lowerInput)) {
          return formatBotResponse(msgs.greeting);
     }
 
-
-    // 5. Resposta Padrão (Fallback) ❓
     return formatBotResponse(msgs.fallback);
 }
 
@@ -380,7 +365,9 @@ function handleSendMessage() {
     if (input === "") return;
 
     // A mensagem do usuário é exibida sem formatação
-    appendMessage(input, 'user');
+    // Usa formatBotResponse para garantir que o texto salvo tenha <br> para quebras de linha, mantendo o histórico consistente.
+    const formattedInput = formatBotResponse(input); 
+    appendMessage(formattedInput, 'user');
     // @ts-ignore
     chatInput.value = ''; // Limpa o campo após o envio
     
@@ -390,95 +377,6 @@ function handleSendMessage() {
         const botResponse = getBotResponse(input, lang); // Passa o idioma para a função
         appendMessage(botResponse, 'bot');
     }, 500);
-}
-
-
-// --- FUNÇÕES DE PERSISTÊNCIA E INICIALIZAÇÃO (MANTIDAS) ---
-const CHAT_STORAGE_KEY = 'chatbotHistory';
-
-/**
- * Salva o histórico de mensagens no localStorage.
- */
-function saveChatHistory() {
-    const chatBody = document.getElementById('chatbot-body');
-    if (!chatBody) return;
-
-    const messages = Array.from(chatBody.children).map(child => {
-        const sender = child.classList.contains('user-message') ? 'user' : 'bot';
-        const text = child.querySelector('p')?.innerHTML || ''; 
-        return { text, sender };
-    });
-
-    localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages));
-}
-
-/**
- * Carrega e exibe o histórico de mensagens do localStorage.
- */
-function loadChatHistory() {
-    const chatBody = document.getElementById('chatbot-body');
-    if (!chatBody) return false;
-
-    const historyJson = localStorage.getItem(CHAT_STORAGE_KEY);
-    if (!historyJson) return false;
-
-    try {
-        const history = JSON.parse(historyJson);
-        if (Array.isArray(history) && history.length > 0) {
-            chatBody.innerHTML = ''; 
-            history.forEach(msg => {
-                const messageContainer = document.createElement('div');
-                messageContainer.classList.add('message');
-                messageContainer.classList.add(`${msg.sender}-message`);
-                
-                const messageParagraph = document.createElement('p');
-                messageParagraph.innerHTML = msg.text; 
-                
-                messageContainer.appendChild(messageParagraph);
-                chatBody.appendChild(messageContainer);
-            });
-            chatBody.scrollTop = chatBody.scrollHeight;
-            return true;
-        }
-    } catch (e) {
-        console.error("Erro ao carregar histórico do chat:", e);
-        localStorage.removeItem(CHAT_STORAGE_KEY); 
-    }
-    return false;
-}
-
-/**
- * Adiciona uma mensagem ao corpo do chat e salva o histórico.
- */
-function appendMessage(text, sender) {
-    const chatBody = document.getElementById('chatbot-body');
-    if (!chatBody) return; 
-
-    const messageContainer = document.createElement('div');
-    messageContainer.classList.add('message');
-    messageContainer.classList.add(`${sender}-message`);
-    
-    const messageParagraph = document.createElement('p');
-    messageParagraph.innerHTML = text; 
-    
-    messageContainer.appendChild(messageParagraph);
-    chatBody.appendChild(messageContainer);
-
-    chatBody.scrollTop = chatBody.scrollHeight;
-    saveChatHistory(); 
-}
-
-/**
- * Função utilitária para formatar a resposta do bot.
- */
-function formatBotResponse(text) {
-    // 1. Substitui **texto** por <b>texto</b>
-    let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-
-    // 2. Converte quebras de linha para HTML para exibição
-    formattedText = formattedText.replace(/\n/g, '<br>');
-
-    return formattedText;
 }
 
 
@@ -516,7 +414,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Evento Hamburger (NavBar)
     hamburgerBtn?.addEventListener('click', () => sidebar?.classList.toggle('active'));
 
-    // Eventos Popup Configurações (CORRIGIDOS)
+    // Eventos Popup Configurações
     settingsBtn?.addEventListener('click', (e) => {
         e.preventDefault();
         
