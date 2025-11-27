@@ -98,10 +98,12 @@ btnCadastrar?.addEventListener('click', async (e) => {
         return;
     }
 
+    // CORREÇÃO CRÍTICA: O operador '?' garante que .value só será lido se o elemento não for null/undefined.
+    // Embora a verificação acima já capture isso, esta linha é a fonte do erro original.
     // @ts-ignore
-    const nome = nomeCadastroInput.value.trim();
+    const nome = nomeCadastroInput.value?.trim();
     // @ts-ignore
-    const turma = turmaCadastroInput.value.trim(); // Linha 96 no seu código original
+    const turma = turmaCadastroInput.value?.trim(); 
     
     if (!nome || !turma || !qrCodeLido) { 
         // @ts-ignore
