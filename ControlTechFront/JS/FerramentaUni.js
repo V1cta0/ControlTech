@@ -79,7 +79,24 @@ function formatarTempo(totalSeconds) {
 function iniciarCronometro(timestampAssociacao) {
     const chronometerDisplay = document.getElementById('chronometer-display');
     const timeElapsedContainer = document.getElementById('time-elapsed');
-    const dataAssociacao = new Date(timestampAssociacao);
+    
+    // CORREÇÃO: Trata a string para garantir que new Date a interprete como UTC (adiciona 'Z')
+    let dateString = timestampAssociacao;
+    if (typeof dateString === 'string' && dateString.slice(-1) !== 'Z' && dateString.indexOf('+') === -1) {
+        dateString += 'Z'; 
+    }
+
+    const dataAssociacao = new Date(dateString);
+
+    // VERIFICAÇÃO DE VALIDADE DA DATA
+    if (isNaN(dataAssociacao.getTime())) {
+        console.error("Data de associação inválida após correção:", timestampAssociacao);
+        if (timeElapsedContainer && chronometerDisplay) {
+            timeElapsedContainer.classList.remove('hidden');
+            chronometerDisplay.textContent = 'ERRO DE DATA';
+        }
+        return; 
+    }
 
     if (!chronometerDisplay || !timeElapsedContainer) return;
 
@@ -89,7 +106,13 @@ function iniciarCronometro(timestampAssociacao) {
         const now = new Date();
         const diffMs = now.getTime() - dataAssociacao.getTime();
         const diffSeconds = Math.floor(diffMs / 1000);
-        if (diffSeconds < 0) return; 
+        
+        if (diffSeconds < 0) {
+            // Se for negativo (relógio do servidor fora de sincronia), mostra 00:00:00
+            chronometerDisplay.textContent = '00:00:00'; 
+            return; 
+        } 
+        
         chronometerDisplay.textContent = formatarTempo(diffSeconds);
     }
 
