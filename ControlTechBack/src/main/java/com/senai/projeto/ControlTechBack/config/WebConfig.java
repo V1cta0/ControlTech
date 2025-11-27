@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@EnableWebMvc
+@EnableWebMvc // Certifique-se de que esta anotação está presente para habilitar o WebMvcConfigurer
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
@@ -18,7 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
                         // ORIGENS PERMITIDAS
                         "http://localhost:3000",
                         "http://localhost:8080",
-                        "https://control-tech-six.vercel.app" // SUA URL DO FRONT-END AQUI
+                        "https://control-tech-six.vercel.app" // Esta é a origem correta.
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*"); // Permite todos os cabeçalhos
