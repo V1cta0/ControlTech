@@ -1,5 +1,4 @@
 // --- Dicionário de traduções (MANTIDO) ---
-// @ts-ignore
 const translations = {
     'pt': {
         'pageTitle': 'ChatBot - SENAI ControlTech',
@@ -39,99 +38,132 @@ const translations = {
     }
 };
 
-// --- FUNÇÕES GLOBAIS DE TEMA E IDIOMA (MANTIDAS) ---
+// --- FUNÇÕES DE UTILIDADE PARA TRADUÇÃO (Novas definições globais) ---
 
-// @ts-ignore
-const updateTranslations = (lang) => {
-    // @ts-ignore
+/**
+ * Define o texto de um elemento com base na chave de tradução.
+ * @param {string} id ID do elemento HTML.
+ * @param {string} key Chave do dicionário de tradução.
+ * @param {object} trans Dicionário de tradução.
+ */
+function setText(id, key, trans) {
+    const element = document.getElementById(id);
+    if (element) element.textContent = trans[key] || '';
+}
+
+/**
+ * Define o texto de um span dentro de um elemento com base na chave de tradução.
+ * Usado primariamente para itens da barra lateral.
+ * @param {string} id ID do elemento pai.
+ * @param {string} key Chave do dicionário de tradução.
+ * @param {object} trans Dicionário de tradução.
+ */
+function setSpanText(id, key, trans) {
+    const element = document.getElementById(id)?.querySelector('span');
+    if (element) element.textContent = trans[key] || '';
+}
+
+
+// --- FUNÇÕES GLOBAIS DE TEMA E IDIOMA (MANTIDAS/AJUSTADAS) ---
+
+/**
+ * Atualiza todas as traduções na página.
+ * @param {string} lang Idioma atual ('pt' ou 'en').
+ */
+function updateTranslations(lang) {
     const currentLang = translations[lang] ? lang : 'pt';
-    // @ts-ignore
     const trans = translations[currentLang];
     if (!trans) return console.error("Traduções não encontradas:", currentLang);
 
     document.documentElement.lang = currentLang === 'pt' ? 'pt-BR' : 'en';
     document.title = trans.pageTitle || 'ChatBot - SENAI';
 
-    // @ts-ignore
-    const setText = (id, key) => {
-        const element = document.getElementById(id);
-        if (element) element.textContent = trans[key] || '';
-    };
-    // @ts-ignore
-    const setSpanText = (id, key) => {
-        const element = document.getElementById(id)?.querySelector('span');
-        if (element) element.textContent = trans[key] || '';
-    };
-
     // Barra lateral
-    setSpanText('nav-tools', 'sidebarTools');
-    setSpanText('nav-return', 'sidebarReturn');
-    setSpanText('nav-help', 'sidebarHelp');
-    setSpanText('nav-chatbot', 'sidebarChatBot'); 
-    setSpanText('nav-history', 'sidebarHistory');
-    setSpanText('nav-exit', 'sidebarExit');
-    setSpanText('settings-btn', 'sidebarSettings');
+    setSpanText('nav-tools', 'sidebarTools', trans);
+    setSpanText('nav-return', 'sidebarReturn', trans);
+    setSpanText('nav-help', 'sidebarHelp', trans);
+    setSpanText('nav-chatbot', 'sidebarChatBot', trans); 
+    setSpanText('nav-history', 'sidebarHistory', trans);
+    setSpanText('nav-exit', 'sidebarExit', trans);
+    setSpanText('settings-btn', 'sidebarSettings', trans);
 
     // Popup Configurações
-    setText('settings-popup-title', 'settingsPopupTitle');
-    setText('theme-label', 'themeLabel');
-    setText('lang-label', 'langLabel');
+    setText('settings-popup-title', 'settingsPopupTitle', trans);
+    setText('theme-label', 'themeLabel', trans);
+    setText('lang-label', 'langLabel', trans);
 
     // Atualiza textos de status
     updateThemeStatusText(document.body.classList.contains('dark-theme') ? 'dark' : 'light', currentLang);
     updateLanguageStatusText(currentLang);
-    displayUserName(currentLang);
+    displayUserName(currentLang); // Atualiza o nome do usuário na tela
 };
 
-// @ts-ignore
-const saveTheme = (theme) => {
+/**
+ * Salva o tema no localStorage e atualiza o UI.
+ * @param {'light'|'dark'} theme 
+ */
+function saveTheme(theme) {
     localStorage.setItem('theme', theme);
     const currentLang = localStorage.getItem('lang') || 'pt';
     updateThemeStatusText(theme, currentLang);
     updateThemeToggleButtonVisuals(theme);
 };
-const loadTheme = () => {
+
+function loadTheme() {
     const savedTheme = localStorage.getItem('theme') || 'light';
     const currentLang = localStorage.getItem('lang') || 'pt';
     document.body.classList.toggle('dark-theme', savedTheme === 'dark');
     updateThemeStatusText(savedTheme, currentLang);
     updateThemeToggleButtonVisuals(savedTheme);
 };
-// @ts-ignore
-const updateThemeStatusText = (activeTheme, lang) => {
+
+/**
+ * Atualiza o texto de status do tema.
+ * @param {'light'|'dark'} activeTheme 
+ * @param {string} lang 
+ */
+function updateThemeStatusText(activeTheme, lang) {
     const themeStatusEl = document.getElementById('theme-status');
-    // @ts-ignore
     const trans = translations[lang];
     if (themeStatusEl && trans) {
         themeStatusEl.textContent = activeTheme === 'dark' ? (trans.themeStatusDark || 'Tema Escuro') : (trans.themeStatusLight || 'Tema Claro');
     }
 };
-// @ts-ignore
-const updateThemeToggleButtonVisuals = (activeTheme) => {
+
+/**
+ * Atualiza a visualização do botão de alternar tema.
+ * @param {'light'|'dark'} activeTheme 
+ */
+function updateThemeToggleButtonVisuals(activeTheme) {
     const sunIcon = document.querySelector('#theme-toggle-btn .fa-sun');
     const moonIcon = document.querySelector('#theme-toggle-btn .fa-moon');
     if (sunIcon && moonIcon) {
-        // @ts-ignore
         sunIcon.style.opacity = activeTheme === 'dark' ? '0' : '1';
-        // @ts-ignore
         sunIcon.style.transform = activeTheme === 'dark' ? 'translateY(-10px)' : 'translateY(0)';
-        // @ts-ignore
         moonIcon.style.opacity = activeTheme === 'dark' ? '1' : '0';
-        // @ts-ignore
         moonIcon.style.transform = activeTheme === 'dark' ? 'translateY(0)' : 'translateY(10px)';
     }
 };
-// @ts-ignore
-const saveLanguage = (lang) => {
+
+/**
+ * Salva o idioma no localStorage e atualiza a UI.
+ * @param {'pt'|'en'} lang 
+ */
+function saveLanguage(lang) {
     localStorage.setItem('lang', lang);
     updateTranslations(lang);
 };
-const loadLanguage = () => {
+
+function loadLanguage() {
     const savedLang = localStorage.getItem('lang') || 'pt';
     updateTranslations(savedLang);
 };
-// @ts-ignore
-const updateLanguageStatusText = (activeLang) => {
+
+/**
+ * Atualiza o texto de status do idioma.
+ * @param {string} activeLang 
+ */
+function updateLanguageStatusText(activeLang) {
     const langToggleBtnSpan = document.getElementById('lang-toggle-btn')?.querySelector('span');
     const langStatusEl = document.getElementById('lang-status');
     if (langToggleBtnSpan) langToggleBtnSpan.textContent = activeLang.toUpperCase();
@@ -143,11 +175,15 @@ const updateLanguageStatusText = (activeLang) => {
         }
     }
 };
-// @ts-ignore
+
+/**
+ * Exibe o nome do usuário logado na interface.
+ * Esta função depende da correta execução do login para funcionar.
+ * @param {string} lang 
+ */
 function displayUserName(lang) {
     const welcomeMessage = document.getElementById('welcome-message');
     const userNameElement = document.getElementById('user-name');
-    // @ts-ignore
     const trans = translations[lang];
     let userInfo = null;
     try {
@@ -167,8 +203,9 @@ function displayUserName(lang) {
 
 /**
  * Adiciona uma mensagem ao corpo do chat.
+ * @param {string} text 
+ * @param {'user'|'bot'} sender 
  */
-// @ts-ignore
 function appendMessage(text, sender) {
     const chatBody = document.getElementById('chatbot-body');
     if (!chatBody) return; 
@@ -190,8 +227,6 @@ function appendMessage(text, sender) {
 
 /**
  * Função utilitária para formatar a resposta do bot.
- * 1. Converte negrito de Markdown (**) para tags <b> (HTML).
- * 2. Converte quebras de linha (\n) para tags <br> (HTML).
  * @param {string} text O texto da resposta do bot.
  * @returns {string} O texto formatado em HTML.
  */
@@ -208,9 +243,9 @@ function formatBotResponse(text) {
 
 /**
  * Fornece a resposta simulada do bot com base no contexto da ControlTech.
- * Usa Expressões Regulares mais flexíveis para maior tolerância à variação.
+ * @param {string} input 
+ * @returns {string}
  */
-// @ts-ignore
 function getBotResponse(input) {
     // 1. Pré-processamento e formatação de entrada
     const lowerInput = input.toLowerCase().trim();
@@ -233,29 +268,24 @@ function getBotResponse(input) {
     // --- REGRAS CRÍTICAS DE TRANSAÇÃO (PEGAR/DEVOLVER/HISTÓRICO) ---
     
     // 2A. Respostas sobre **Retirada/Pegar Ferramentas** 🛠️ (Prioridade)
-    // Gatilhos: ferramentas, itens, catálogo OU (pegar, retirar, empréstimo, preciso)
     const retiradaRegex = /(ferramentas|itens|catálogo|item|preciso|empréstimo|pegar|retirar|capturar|usar|quero)\b.*(ferramentas|item|pegar|retirar|empréstimo)/;
     if (retiradaRegex.test(lowerInput)) {
-        // Exclui palavras-chave de devolução para evitar confusão.
         if (!/(devolver|devolução|entrega|devolvo)/.test(lowerInput)) {
-             return formatBotResponse("A aba **'Ferramentas'** é o coração do sistema, onde você encontra o **catálogo completo** de itens disponíveis. Lá, você seleciona o item desejado e registra o empréstimo, finalizando a retirada com o seu QR Code pessoal.");
+              return formatBotResponse("A aba **'Ferramentas'** é o coração do sistema, onde você encontra o **catálogo completo** de itens disponíveis. Lá, você seleciona o item desejado e registra o empréstimo, finalizando a retirada com o seu QR Code pessoal.");
         }
     }
     
     // 2B. Respostas sobre **Devolução/Entrega** 📦
-    // Gatilhos: devolver, devolução, entrego, entrega, devolvo
     if (/(devolver|devolução|entrego|entrega|devolvo)/.test(lowerInput)) {
         return formatBotResponse("O procedimento de devolução é direto:\n\n1. Acesse a seção **'Devolver'** no menu lateral.\n2. **Busque ou identifique a ferramenta pelo seu nome** ou código.\n3. O sistema fará o **registro automático** da devolução, incluindo a **data e horário**.\n\nLembre-se: A devolução imediata e a verificação do estado da ferramenta são cruciais para o controle de inventário.");
     }
 
     // 2C. Respostas sobre **Rastreabilidade/Histórico** 🔍
-    // Gatilhos: registro, quem pegou, rastrear, monitoramento, historico, ver quem pegou
     if (/(registro|quem\s*pegou|rastrear|monitoramento|historico|ver\s*quem\s*pegou|quem\s*está\s*com)/.test(lowerInput)) {
         return formatBotResponse("Nosso sistema ControlTech é focado em **rastreabilidade total e transparência**. A cada empréstimo e devolução, as seguintes informações são registradas de forma indelével:\n\n* O **Nome do Aluno** (quem realizou a movimentação).\n* A **Identificação da Ferramenta** (Nome, ID e status).\n* A **Data e Horário** precisos da ação.\n\nVocê pode consultar seus registros e o status dos itens na seção **'Histórico'**.");
     }
 
     // 3. Respostas sobre Desenvolvimento e Acessibilidade 🧑‍💻
-    // Gatilhos: quem fez, desenvolvedores, criadores, etc.
     if (/(quem\s*fez|desenvolvedores|criadores|equipe|idealizadores|cria|alunos|fundadores|arquitetos|criou|pessoas|criaram|fundou|desenvolveu|arquitetou|fizeram)/.test(lowerInput)) {
         return formatBotResponse("O ControlTech é um projeto de **desenvolvimento inovador** realizado por cinco alunos do SENAI: **Felipe Rossi, Victor Hugo, Eliezer, Eduardo e Guilherme**. Eles conceberam e implementaram toda a **arquitetura robusta e segura** do sistema para gestão de ferramentas.");
     }
@@ -350,12 +380,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     themeToggleBtn?.addEventListener('click', () => {
         const isDark = document.body.classList.contains('dark-theme');
-        saveTheme(isDark ? 'light' : 'dark');
-        document.body.classList.toggle('dark-theme');
+        const newTheme = isDark ? 'light' : 'dark';
+        document.body.classList.toggle('dark-theme', !isDark); // Garante que a classe é alternada corretamente
+        saveTheme(newTheme);
     });
     langToggleBtn?.addEventListener('click', () => {
         const currentLang = localStorage.getItem('lang') || 'pt';
-        saveLanguage(currentLang === 'pt' ? 'en' : 'pt');
+        const newLang = currentLang === 'pt' ? 'en' : 'pt';
+        saveLanguage(newLang);
     });
     
     // --- Lógica de Envio de Mensagem ---
@@ -370,12 +402,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // 2. Enviar mensagem ao pressionar ENTER no input
     if (chatInput) {
         chatInput.addEventListener('keypress', (e) => {
+            // @ts-ignore
             if (e.key === 'Enter') {
                 e.preventDefault(); 
                 handleSendMessage();
             }
         });
     } else {
-         console.error("Erro: Input de chat (chatbot-input) não encontrado.");
+          console.error("Erro: Input de chat (chatbot-input) não encontrado.");
     }
 });
