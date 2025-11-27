@@ -250,28 +250,32 @@ function getBotResponse(input) {
     // 1. Pré-processamento e formatação de entrada
     const lowerInput = input.toLowerCase().trim();
 
-    // --- Definição das Respostas (Usando Regex com melhorias) ---
+    // --- Definição das Respostas (Com Regex e Lógica Corrigida) ---
     
     // 0. Respostas para Agradecimentos/Confirmação
     if (/(^ok$|^tá$|obrigad[oa]|valeu|certo|sim|beleza|blz|fechado)/.test(lowerInput)) {
         return formatBotResponse("Fico feliz em ajudar com a sua gestão de ferramentas! Se precisar de mais detalhes ou tiver novas dúvidas sobre o ControlTech, estou à disposição.");
     }
     
-    // 1. Respostas sobre Identificação/Login/Logout 🔑
+    // 1. Respostas sobre Identificação/Login 🔑
     if (/(login|entrar|acessar|autenticar|começo|qr\s*code|crachá)/.test(lowerInput)) {
-        return formatBotResponse("O processo de **autenticação** no ControlTech é totalmente seguro e simples. Para iniciar sua sessão e utilizar o sistema, por favor, utilize o **QR Code do seu crachá SENAI**. Este é o método padrão de **login** e garante a rastreabilidade do usuário.");
+        return formatBotResponse("O processo de **autenticação** no ControlTech é totalmente seguro e simples. Para iniciar sua sessão e utilizar o sistema, por favor, utilize o **QR Code do seu crachá SENAI** na página de Login. Este é o método padrão de **login** e garante a rastreabilidade do usuário.");
     }
+    
+    // CORREÇÃO: Resposta de Logout
     if (/(sair|logout|deslogar|encerrar\s*sessão|finalizar)/.test(lowerInput)) {
-        return formatBotResponse("Para encerrar sua sessão com segurança e garantir o registro correto de todas as suas movimentações, é essencial que você escaneie novamente o **QR Code do seu crachá** na aba **Sair**. Este procedimento valida o seu **desligamento** do sistema e confirma que não há empréstimos pendentes.");
+        return formatBotResponse("Para encerrar sua sessão, vá para a aba **'Saída'** no menu lateral.\n\nLá, basta pressionar o botão de **'Sair'** (ou **'Encerrar Sessão'**) para confirmar o seu desligamento do sistema. Não é necessário escanear o crachá novamente. Este processo garante a finalização segura de sua sessão.");
     }
 
     // --- REGRAS CRÍTICAS DE TRANSAÇÃO (PEGAR/DEVOLVER/HISTÓRICO) ---
     
-    // 2A. Respostas sobre **Retirada/Pegar Ferramentas** 🛠️ (Prioridade)
-    const retiradaRegex = /(ferramentas|itens|catálogo|item|preciso|empréstimo|pegar|retirar|capturar|usar|quero)\b.*(ferramentas|item|pegar|retirar|empréstimo)/;
+    // CORREÇÃO: 2A. Respostas sobre **Retirada/Pegar Ferramentas** 🛠️ 
+    // Gatilhos mais simples e robustos para cobrir "pegar ferramenta" e "fazer empréstimo".
+    const retiradaRegex = /(ferramenta[s]?|item|catálogo|preciso|emprestimo|pegar|retirar|capturar|usar|quero)/;
     if (retiradaRegex.test(lowerInput)) {
+        // Exclui palavras-chave de devolução para evitar confusão.
         if (!/(devolver|devolução|entrega|devolvo)/.test(lowerInput)) {
-              return formatBotResponse("A aba **'Ferramentas'** é o coração do sistema, onde você encontra o **catálogo completo** de itens disponíveis. Lá, você seleciona o item desejado e registra o empréstimo, finalizando a retirada com o seu QR Code pessoal.");
+              return formatBotResponse("A aba **'Ferramentas'** é o coração do sistema, onde você encontra o **catálogo completo** de itens disponíveis. Para **retirar** uma ferramenta:\n\n1. Selecione o item desejado no catálogo.\n2. Registre o empréstimo, finalizando com o **QR Code do seu crachá**.\n\nO processo é rápido e garante o rastreamento.");
         }
     }
     
@@ -306,7 +310,6 @@ function getBotResponse(input) {
     // 5. Resposta Padrão (Fallback) ❓
     return formatBotResponse("Não consegui encontrar uma correspondência exata para sua consulta. Por favor, tente reformular sua pergunta ou utilize termos mais específicos. Posso fornecer detalhes sobre:\n\n* **Devolução e Empréstimos**\n* **Login/Logout** (via QR Code)\n* **Rastreabilidade** (Histórico)\n* **A Equipe de Desenvolvimento** da ControlTech");
 }
-
 
 /**
  * Processa o envio da mensagem do usuário.
