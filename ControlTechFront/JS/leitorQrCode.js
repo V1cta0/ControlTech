@@ -31,8 +31,9 @@ export function lerQrViaUpload(file, callbackSucesso, callbackErro) {
   // --- ALTERAÇÃO DE ENDPOINT: de /ler para /decode ---
   fetch(`${API_BASE_URL}/api/qrcode/decode`, { 
     method: "POST",
-    body: formData
-  })
+    body: formData,
+    mode: 'cors' 
+})
   .then(res => res.ok ? res.json() : Promise.reject(`Erro ${res.status} ao ler QR Code`))
   .then(usuario => {
     // Sucesso silencioso ou pode adicionar popup aqui se quiser
