@@ -485,8 +485,7 @@ body.dark-theme .features-section {
 }
 body.dark-theme .feature-card {
     background: #1f1f1f;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    border: 1px solid #333;
+    border: 2px solid #333;
 }
 body.dark-theme .feature-card i {
     color: #007bff; /* Ícones em azul */
@@ -535,18 +534,13 @@ body.dark-theme .footer-bottom {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-
-/* ======================================= */
-/* 8. Estilos e Efeitos da Landing Page    */
-/* ======================================= */
-
 .landing-page-container {
     overflow-x: hidden;
     background-color: #f0f2f5;
     transition: background-color 0.3s;
 }
 
-/* --- 8.1. Seção Hero (Fundo Animado e Fontes Responsivas) --- */
+
 .hero-section {
     position: relative;
     height: 80vh; 
@@ -645,8 +639,7 @@ body.dark-theme .cta-standalone-container {
     margin: 0 auto;
 }
 .feature-card {
-    /* CORREÇÃO: Adiciona borda sutil para definir o box no light theme */
-    border: 1px solid #e0e0e0;
+    border: 2px solid #e0e0e0;
     transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s, border-color 0.3s, border-top-color 0.4s;
 }
 /* Para o texto do card (parágrafos dentro de .tool-card) */
