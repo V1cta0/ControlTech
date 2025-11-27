@@ -1,4 +1,3 @@
-
 // Login.js
 import { lerQrViaUpload, exibirUsuario } from './leitorQrCode.js';
 import { API_BASE_URL } from './apiConfig.js'; 
@@ -234,11 +233,11 @@ btnLerQrUpload?.addEventListener('click', () => {
         const qrCodeContent = qrResponse.qrCode;
 
         if (!qrCodeContent) {
-             btnLerQrUpload.classList.remove('loading');
-             btnLerQrUpload.innerHTML = '<i class="fas fa-qrcode"></i> Ler QR Code por Arquivo';
-             showAlert("Erro de Leitura", "O QR Code não pôde ser decodificado.");
-             if (infoAluno) infoAluno.style.display = "none";
-             return;
+            btnLerQrUpload.classList.remove('loading');
+            btnLerQrUpload.innerHTML = '<i class="fas fa-qrcode"></i> Ler QR Code por Arquivo';
+            showAlert("Erro de Leitura", "O QR Code não pôde ser decodificado.");
+            if (infoAluno) infoAluno.style.display = "none";
+            return;
         }
 
         // 2. BUSCA O USUÁRIO COMPLETO USANDO O CÓDIGO DO QR
@@ -296,7 +295,7 @@ function salvarUsuarioLogado(usuario) {
     const usuarioFormatado = {
         id: idUsuario,
         nome: dadosReais.nome || "Usuário", 
-        perfil: dadosReais.perfil,
+        turma: dadosReais.perfil, // <-- MUDANÇA: A chave no localStorage agora é 'turma'
         qrCode: dadosReais.qrCode
     };
     localStorage.setItem("usuarioLogado", JSON.stringify(usuarioFormatado));

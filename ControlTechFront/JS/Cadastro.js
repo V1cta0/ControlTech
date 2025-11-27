@@ -6,14 +6,14 @@ import { startCamera, stopCamera } from './Login.js';
 const btnToggleCameraCadastro = document.getElementById('btnToggleCameraCadastro');
 const btnCadastrar = document.getElementById('btnCadastrar');
 const nomeCadastroInput = document.getElementById('nomeCadastro');
-const perfilCadastroInput = document.getElementById('perfilCadastro');
+const turmaCadastroInput = document.getElementById('perfilCadastro'); 
 const statusMsgCadastro = document.getElementById('statusMsgCadastro');
 const popupCadastro = document.getElementById('popupCadastro');
 const popupNomeCadastro = document.getElementById('popupNomeCadastro');
-const cadastroQrInput = document.getElementById('cadastroQrInput'); // Necessário para upload
-const cadastroFileNameDisplay = document.getElementById('cadastroFileNameDisplay'); // Necessário para upload
+const cadastroQrInput = document.getElementById('cadastroQrInput'); 
+const cadastroFileNameDisplay = document.getElementById('cadastroFileNameDisplay'); 
 
-let qrCodeLido = null; // Variável para armazenar o QR Code lido pela câmera ou upload
+let qrCodeLido = null; 
 
 // ----------------- LÓGICA DA CÂMERA DE CADASTRO -----------------
 
@@ -32,27 +32,27 @@ btnToggleCameraCadastro?.addEventListener('click', () => {
     });
 });
 
-// ----------------- LÓGICA DE UPLOAD DE CADASTRO (CORRIGIDA) -----------------
+// ----------------- LÓGICA DE UPLOAD DE CADASTRO -----------------
 
 cadastroQrInput?.addEventListener('change', () => {
     // @ts-ignore
     const file = cadastroQrInput.files[0];
     if (!file) return;
 
-    stopCamera('cadastro'); // Garante que a câmera pare
-    qrCodeLido = null; // Reseta QR Code lido pela câmera
+    stopCamera('cadastro'); 
+    qrCodeLido = null; 
 
     const formData = new FormData();
     formData.append("file", file);
 
     if (statusMsgCadastro) statusMsgCadastro.textContent = "Processando QR Code do arquivo...";
 
-    // CORRIGIDO: Usa o novo endpoint /api/qrcode/decode
+    // Usa o endpoint /api/qrcode/decode
     fetch(`${API_BASE_URL}/api/qrcode/decode`, { 
         method: "POST",
         body: formData
     })
-    // CORRIGIDO: Novo tratamento para verificar a resposta e extrair 'qrCode'
+    // Tratamento para verificar a resposta e extrair 'qrCode'
     .then(res => {
         if (!res.ok) {
             return res.text().then(text => Promise.reject(text || "Erro desconhecido ao ler QR Code."));
@@ -60,14 +60,13 @@ cadastroQrInput?.addEventListener('change', () => {
         return res.json();
     })
     .then(data => {
-        // O back-end agora retorna { "qrCode": "..." }
-        const qrCodeTexto = data.qrCode; // Acessa a propriedade 'qrCode'
+        const qrCodeTexto = data.qrCode; 
         if (qrCodeTexto) {
             qrCodeLido = qrCodeTexto;
             // @ts-ignore
             if (statusMsgCadastro) statusMsgCadastro.textContent = `QR Code do arquivo lido: ${qrCodeTexto}. Prossiga com o cadastro.`;
         } else {
-             throw new Error("QR Code não pôde ser extraído ou está vazio.");
+            throw new Error("QR Code não pôde ser extraído ou está vazio.");
         }
     })
     .catch(err => {
@@ -77,7 +76,7 @@ cadastroQrInput?.addEventListener('change', () => {
         if (statusMsgCadastro) statusMsgCadastro.textContent = "Erro ao ler QR Code do arquivo: " + (typeof err === 'string' ? err : err.message || 'Falha na comunicação.');
     });
 
-    // Código para exibir o nome do arquivo no CADASTRO (mantido)
+    // Código para exibir o nome do arquivo no CADASTRO
     // @ts-ignore
     if (cadastroFileNameDisplay) {
         // @ts-ignore
@@ -87,21 +86,16 @@ cadastroQrInput?.addEventListener('change', () => {
 
 
 // ----------------- LÓGICA DE CADASTRO (POST) -----------------
-// ... (O restante da lógica de cadastro POST foi mantido, pois estava correto) ...
-// ... (Importações e código da câmera permanecem iguais) ...
 
-// ----------------- LÓGICA DE CADASTRO (POST) -----------------
-
-// 1. Adicione 'e' (evento) nos parênteses
 btnCadastrar?.addEventListener('click', async (e) => {
-    e.preventDefault(); // <--- 2. ESSA LINHA CORRIGE O ERRO DE FETCH (Impede refresh)
+    e.preventDefault(); 
 
     // @ts-ignore
     const nome = nomeCadastroInput.value.trim();
     // @ts-ignore
-    const perfil = perfilCadastroInput.value.trim();
-
-    if (!nome || !perfil || !qrCodeLido) {
+    const turma = turmaCadastroInput.value.trim(); // <-- Usa 'turma'
+    
+    if (!nome || !turma || !qrCodeLido) { 
         // @ts-ignore
         if (statusMsgCadastro) statusMsgCadastro.textContent = "Preencha todos os campos e leia o crachá/QR Code!";
         return;
@@ -112,7 +106,7 @@ btnCadastrar?.addEventListener('click', async (e) => {
 
     const usuarioData = {
         nome: nome,
-        perfil: perfil,
+        perfil: turma, // <-- CHAVE MANTIDA como 'perfil' para o backend
         qrCode: qrCodeLido
     };
 
@@ -128,8 +122,8 @@ btnCadastrar?.addEventListener('click', async (e) => {
         });
 
         if (!response.ok) {
-             const errorText = await response.text();
-             throw new Error(errorText || `Falha no cadastro: ${response.status}`);
+            const errorText = await response.text();
+            throw new Error(errorText || `Falha no cadastro: ${response.status}`);
         }
 
         const usuarioCadastrado = await response.json();
@@ -144,7 +138,7 @@ btnCadastrar?.addEventListener('click', async (e) => {
         // @ts-ignore
         if (nomeCadastroInput) nomeCadastroInput.value = '';
         // @ts-ignore
-        if (perfilCadastroInput) perfilCadastroInput.value = '';
+        if (turmaCadastroInput) turmaCadastroInput.value = ''; 
         // @ts-ignore
         if (cadastroQrInput) cadastroQrInput.value = '';
         qrCodeLido = null;
