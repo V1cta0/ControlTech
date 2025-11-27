@@ -50,7 +50,7 @@ function setSpanText(id, key, trans) {
     if (element) element.textContent = trans[key] || '';
 }
 
-// --- FUNÇÕES GLOBAIS DE TEMA E IDIOMA (MANTIDAS/AJUSTADAS) ---
+// --- FUNÇÕES GLOBAIS DE TEMA E IDIOMA ---
 
 function updateTranslations(lang) {
     const currentLang = translations[lang] ? lang : 'pt';
@@ -82,9 +82,13 @@ function updateTranslations(lang) {
 function saveTheme(theme) {
     localStorage.setItem('theme', theme);
     const currentLang = localStorage.getItem('lang') || 'pt';
+    
+    // CORREÇÃO: Garante que a classe 'dark-theme' é aplicada centralmente.
+    document.body.classList.toggle('dark-theme', theme === 'dark'); 
+
     updateThemeStatusText(theme, currentLang);
     updateThemeToggleButtonVisuals(theme);
-};
+}
 
 function loadTheme() {
     const savedTheme = localStorage.getItem('theme') || 'light';
@@ -160,7 +164,6 @@ const CHAT_STORAGE_KEY = 'chatbotHistory';
 
 /**
  * Salva o histórico de mensagens no localStorage.
- * Cada mensagem é salva como um objeto {text: string, sender: 'user'|'bot'}.
  */
 function saveChatHistory() {
     const chatBody = document.getElementById('chatbot-body');
@@ -168,7 +171,6 @@ function saveChatHistory() {
 
     const messages = Array.from(chatBody.children).map(child => {
         const sender = child.classList.contains('user-message') ? 'user' : 'bot';
-        // Acessamos o innerHTML do parágrafo, não do container, para salvar a formatação HTML
         const text = child.querySelector('p')?.innerHTML || ''; 
         return { text, sender };
     });
@@ -178,7 +180,6 @@ function saveChatHistory() {
 
 /**
  * Carrega e exibe o histórico de mensagens do localStorage.
- * @returns {boolean} true se o histórico foi carregado, false caso contrário.
  */
 function loadChatHistory() {
     const chatBody = document.getElementById('chatbot-body');
@@ -190,9 +191,8 @@ function loadChatHistory() {
     try {
         const history = JSON.parse(historyJson);
         if (Array.isArray(history) && history.length > 0) {
-            chatBody.innerHTML = ''; // Limpa a tela antes de carregar
+            chatBody.innerHTML = ''; 
             history.forEach(msg => {
-                // A função appendMessage não é usada aqui para evitar recursão infinita de salvar.
                 const messageContainer = document.createElement('div');
                 messageContainer.classList.add('message');
                 messageContainer.classList.add(`${msg.sender}-message`);
@@ -208,15 +208,13 @@ function loadChatHistory() {
         }
     } catch (e) {
         console.error("Erro ao carregar histórico do chat:", e);
-        localStorage.removeItem(CHAT_STORAGE_KEY); // Limpa histórico corrompido
+        localStorage.removeItem(CHAT_STORAGE_KEY); 
     }
     return false;
 }
 
 /**
  * Adiciona uma mensagem ao corpo do chat e salva o histórico.
- * @param {string} text 
- * @param {'user'|'bot'} sender 
  */
 function appendMessage(text, sender) {
     const chatBody = document.getElementById('chatbot-body');
@@ -232,10 +230,7 @@ function appendMessage(text, sender) {
     messageContainer.appendChild(messageParagraph);
     chatBody.appendChild(messageContainer);
 
-    // Rola para o final da conversa
     chatBody.scrollTop = chatBody.scrollHeight;
-    
-    // Salva a conversa após cada nova mensagem
     saveChatHistory(); 
 }
 
@@ -273,12 +268,12 @@ function getBotResponse(input) {
         return formatBotResponse("Para encerrar sua sessão, vá para a aba **'Saída'** no menu lateral.\n\nLá, basta pressionar o botão de **'Sair'** (ou **'Encerrar Sessão'**) para confirmar o seu desligamento do sistema. Não é necessário escanear o crachá novamente. Este processo garante a finalização segura de sua sessão.");
     }
 
-    // ✅ NOVO: Resposta sobre Landing Page (Início)
+    // Resposta sobre Landing Page (Início)
     if (/(início|inicio|pagina\s*inicial|home|bem\s*vindo|landing\s*page)/.test(lowerInput)) {
         return formatBotResponse("A página **'Início'** (ou Landing Page) serve como o painel de boas-vindas do sistema. Ela confirma seu login, exibe o seu nome e é o ponto central para acessar todas as funções, como Ferramentas, Devolver e Histórico, através da barra lateral.");
     }
 
-    // ✅ NOVO: Resposta sobre Ajuda
+    // Resposta sobre Ajuda
     if (/(ajuda|faq|suporte|contato|problema|problemas|perguntas\s*frequentes)/.test(lowerInput)) {
         return formatBotResponse("A **Central de Ajuda** é o seu recurso para resolver dúvidas rápidas.\n\nEla contém:\n\n1. Uma seção de **Perguntas Frequentes (FAQ)**, cobrindo os processos de devolução e saída do sistema.\n2. Um **Formulário de Contato** ('Relate seu problema') para enviar solicitações específicas diretamente para o e-mail de suporte.");
     }
@@ -365,6 +360,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const themeToggleBtn = document.getElementById('theme-toggle-btn');
     const langToggleBtn = document.getElementById('lang-toggle-btn');
     
+    
     // Referências ChatBot
     const sendBtn = document.getElementById('send-btn');
     const chatInput = document.getElementById('chatbot-input');
@@ -373,7 +369,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadTheme();
     loadLanguage(); 
     
-    // CORREÇÃO: Carrega o histórico de mensagens
+    // Carrega o histórico de mensagens
     const historyLoaded = loadChatHistory();
     
     // Mensagem inicial do bot (só se o histórico estiver vazio)
@@ -385,22 +381,27 @@ document.addEventListener("DOMContentLoaded", () => {
     // Evento Hamburger (NavBar)
     hamburgerBtn?.addEventListener('click', () => sidebar?.classList.toggle('active'));
 
-    // Eventos Popup Configurações
+    // Eventos Popup Configurações (CORRIGIDOS)
     settingsBtn?.addEventListener('click', (e) => {
         e.preventDefault();
+        // CORREÇÃO: Apenas alterna a classe 'visible' e garante que 'hidden' é removida.
         themePopup?.classList.toggle('visible');
-        themePopup?.classList.toggle('hidden', !themePopup.classList.contains('visible'));
+        themePopup?.classList.remove('hidden'); 
     });
+    
     closePopupBtn?.addEventListener('click', () => {
+        // CORREÇÃO: Apenas remove a classe 'visible' para iniciar o fade-out suave.
         themePopup?.classList.remove('visible');
-        themePopup?.classList.add('hidden');
     });
+    
     themeToggleBtn?.addEventListener('click', () => {
         const isDark = document.body.classList.contains('dark-theme');
         const newTheme = isDark ? 'light' : 'dark';
-        document.body.classList.toggle('dark-theme', !isDark); 
+        
+        // CORREÇÃO: saveTheme agora aplica a classe no body.
         saveTheme(newTheme);
     });
+    
     langToggleBtn?.addEventListener('click', () => {
         const currentLang = localStorage.getItem('lang') || 'pt';
         const newLang = currentLang === 'pt' ? 'en' : 'pt';

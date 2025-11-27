@@ -215,7 +215,7 @@ body {
     padding: 1rem;
     z-index: 99;
     opacity: 0;
-    visibility: hidden;
+    visibility: hidden; 
     transform: translateY(20px);
     transition: transform 0.3s ease-out, opacity 0.3s ease-out, background-color 0.3s, visibility 0s 0.3s;
     text-align: center;
