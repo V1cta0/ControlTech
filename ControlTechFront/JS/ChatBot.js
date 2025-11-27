@@ -354,8 +354,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Referências NavBar
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const sidebar = document.getElementById('sidebar');
-    const settingsBtn = document.getElementById('settings-btn');
     const themePopup = document.getElementById('theme-popup');
+    const settingsBtn = document.getElementById('settings-btn');
     const closePopupBtn = document.getElementById('close-popup-btn');
     const themeToggleBtn = document.getElementById('theme-toggle-btn');
     const langToggleBtn = document.getElementById('lang-toggle-btn');
@@ -385,23 +385,17 @@ document.addEventListener("DOMContentLoaded", () => {
     settingsBtn?.addEventListener('click', (e) => {
         e.preventDefault();
         
-        // 1. Remove a classe 'hidden' do HTML para não conflitar com a transição.
-        themePopup?.classList.remove('hidden'); 
-        
-        // 2. Alterna a classe principal de visibilidade para iniciar/terminar a transição.
-        themePopup?.classList.toggle('visible');
+        themePopup?.classList.toggle('visible')
     });
     
     closePopupBtn?.addEventListener('click', () => {
-        // 3. Apenas remove a classe 'visible' para iniciar o fade-out suave.
+        // 2. Apenas remove a classe 'visible' para iniciar o fade-out suave.
         themePopup?.classList.remove('visible');
     });
     
     themeToggleBtn?.addEventListener('click', () => {
         const isDark = document.body.classList.contains('dark-theme');
         const newTheme = isDark ? 'light' : 'dark';
-        
-        // 4. Chama saveTheme, que agora aplica a classe no body.
         saveTheme(newTheme);
     });
     
