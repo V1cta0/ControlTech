@@ -1,3 +1,5 @@
+// ControlTechBack/src/main/java/com/senai/projeto/ControlTechBack/config/WebConfig.java
+
 package com.senai.projeto.ControlTechBack.config;
 
 import org.springframework.context.annotation.Configuration;
@@ -11,13 +13,14 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**") // Aplica a todos os endpoints da API
+        registry.addMapping("/**") // Aplica a TODOS os endpoints da sua API
                 .allowedOrigins(
-                        "http://localhost:3000",        // Para seu ambiente de desenvolvimento
-                        "http://localhost:8080",        // Para seu ambiente de teste local
-                        "https://control-tech-six.vercel.app" // ESSA É A CHAVE: Permite o Front-End da Vercel
+                        // ORIGENS PERMITIDAS
+                        "http://localhost:3000",
+                        "http://localhost:8080",
+                        "https://control-tech-six.vercel.app" // SUA URL DO FRONT-END AQUI
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowCredentials(true); // Se você usa cookies ou sessões
+                .allowedHeaders("*"); // Permite todos os cabeçalhos
     }
 }

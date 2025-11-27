@@ -17,7 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/qrcode")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {"https://control-tech-six.vercel.app", "http://localhost:8080"})
 public class QrCodeController {
 
     @Autowired
