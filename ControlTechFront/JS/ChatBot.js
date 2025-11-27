@@ -17,6 +17,12 @@ const translations = {
         'langStatusPT': 'Português',
         'langStatusEN': 'Inglês',
         'welcomeMessage': 'Olá,',
+        // NOVAS STRINGS PARA O MODAL
+        'clearModalTitle': 'Confirmar Exclusão',
+        'clearModalMessage': 'Tem certeza que deseja limpar o histórico do chat? Esta ação não pode ser desfeita.',
+        'clearConfirmBtn': 'Sim, Limpar',
+        'clearCancelBtn': 'Cancelar',
+        // FIM NOVAS STRINGS
         'botInitialMessage': 'Olá! Sou o Assistente Virtual do ControlTech. Sou especialista nas regras e no funcionamento do sistema. Em que posso te ajudar hoje?',
         'botMsgs': {
             'helpHappy': "Fico feliz em ajudar com a sua gestão de ferramentas! Se precisar de mais detalhes ou tiver novas dúvidas sobre o ControlTech, estou à disposição.",
@@ -51,6 +57,12 @@ const translations = {
         'langStatusPT': 'Portuguese',
         'langStatusEN': 'English',
         'welcomeMessage': 'Hello,',
+        // NOVAS STRINGS PARA O MODAL
+        'clearModalTitle': 'Confirm Deletion',
+        'clearModalMessage': 'Are you sure you want to clear the chat history? This action cannot be undone.',
+        'clearConfirmBtn': 'Yes, Clear',
+        'clearCancelBtn': 'Cancel',
+        // FIM NOVAS STRINGS
         'botInitialMessage': 'Hello! I am the ControlTech Virtual Assistant. I specialize in the rules and functionality of the system. How can I help you today?',
         'botMsgs': {
             'helpHappy': "I'm happy to help with your tool management! If you need more details or have new questions about ControlTech, I am available.",
@@ -104,6 +116,18 @@ function updateTranslations(lang) {
     setText('settings-popup-title', 'settingsPopupTitle', trans);
     setText('theme-label', 'themeLabel', trans);
     setText('lang-label', 'langLabel', trans);
+    
+    // NOVO: Atualiza textos do Modal
+    const titleEl = document.getElementById('clear-modal-title');
+    const msgEl = document.getElementById('clear-modal-message');
+    const confirmBtn = document.getElementById('clearConfirmBtn');
+    const cancelBtn = document.getElementById('clearCancelBtn');
+
+    if (titleEl) titleEl.textContent = trans.clearModalTitle;
+    if (msgEl) msgEl.textContent = trans.clearModalMessage;
+    if (confirmBtn) confirmBtn.textContent = trans.clearConfirmBtn;
+    if (cancelBtn) cancelBtn.textContent = trans.clearCancelBtn;
+
 
     updateThemeStatusText(document.body.classList.contains('dark-theme') ? 'dark' : 'light', currentLang);
     updateLanguageStatusText(currentLang);
@@ -249,13 +273,25 @@ function loadChatHistory() {
     return false;
 }
 
-// NOVO: Função para limpar o histórico
-function clearChatHistory() {
+// NOVO: Função para exibir o popup
+function showClearConfirmModal() {
+    const modal = document.getElementById('clearConfirmModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        // Fecha o modal ao clicar no overlay escuro
+        modal.onclick = (e) => {
+            if (e.target === modal) modal.classList.add('hidden');
+        };
+    }
+}
+
+// NOVO: Função para limpar o histórico (chamada ao clicar em Sim no popup)
+function performClearChatHistory() {
     const chatBody = document.getElementById('chatbot-body');
     const currentLang = localStorage.getItem('lang') || 'pt';
     const trans = translations[currentLang] || translations['pt'];
 
-    if (chatBody && confirm(currentLang === 'pt' ? 'Tem certeza que deseja limpar o histórico do chat?' : 'Are you sure you want to clear the chat history?')) {
+    if (chatBody) {
         localStorage.removeItem(CHAT_STORAGE_KEY);
         chatBody.innerHTML = '';
         
@@ -263,6 +299,14 @@ function clearChatHistory() {
         const initialMessage = trans.botInitialMessage; 
         appendMessage(initialMessage, 'bot');
     }
+    // Fecha o modal após a ação
+    const modal = document.getElementById('clearConfirmModal');
+    if (modal) modal.classList.add('hidden');
+}
+
+// ATUALIZADO: Função chamada pelo botão de Limpar Histórico
+function clearChatHistory() {
+    showClearConfirmModal(); // Mostra o novo popup de confirmação
 }
 
 
@@ -412,9 +456,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Referências ChatBot
     const sendBtn = document.getElementById('send-btn');
     const chatInput = document.getElementById('chatbot-input');
-    // NOVO: Referência ao botão de limpar
     const clearHistoryBtn = document.getElementById('clear-history-btn'); 
     
+    // Referências do Novo Popup
+    const clearConfirmBtn = document.getElementById('clearConfirmBtn');
+    const clearCancelBtn = document.getElementById('clearCancelBtn');
+    const clearConfirmModal = document.getElementById('clearConfirmModal');
+
+
     // Inicializa Tema e Idioma
     loadTheme();
     loadLanguage(); 
@@ -472,8 +521,19 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     } 
 
-    // NOVO: Listener para o botão de limpar histórico
+    // Listener para o botão de limpar histórico (Abre o modal)
     if (clearHistoryBtn) {
         clearHistoryBtn.addEventListener('click', clearChatHistory);
+    }
+
+    // Listeners para o Modal de Confirmação
+    if (clearConfirmBtn) {
+        clearConfirmBtn.addEventListener('click', performClearChatHistory);
+    }
+
+    if (clearCancelBtn) {
+        clearCancelBtn.addEventListener('click', () => {
+            clearConfirmModal?.classList.add('hidden');
+        });
     }
 });

@@ -97,7 +97,9 @@
             </div>
         </main>
         
-    </div> <div class="theme-popup" id="theme-popup"> 
+    </div> 
+    
+    <div class="theme-popup" id="theme-popup"> 
         <div class="popup-header">
             <h4 id="settings-popup-title">Configurações</h4> 
             <button class="close-btn" id="close-popup-btn">&times;</button>
@@ -122,6 +124,16 @@
         </div>
     </div>
     
+    <div class="confirm-modal-overlay hidden" id="clearConfirmModal">
+        <div class="confirm-modal-content">
+            <h4 id="clear-modal-title">Confirmar Exclusão</h4>
+            <p id="clear-modal-message">Tem certeza que deseja limpar o histórico do chat? Esta ação não pode ser desfeita.</p>
+            <div class="modal-buttons">
+                <button class="modal-btn-cancel" id="clearCancelBtn">Cancelar</button>
+                <button class="modal-btn-confirm" id="clearConfirmBtn">Sim, Limpar</button>
+            </div>
+        </div>
+    </div>
     <div vw class="enabled">
         <div vw-access-button class="active"></div>
         <div vw-plugin-wrapper>
@@ -134,4 +146,4 @@
     </script>
     
 </body>
-</html>
+</html> 
