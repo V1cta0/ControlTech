@@ -274,7 +274,7 @@ function getBotResponse(input) {
     }
 
     // ✅ NOVO: Resposta sobre Landing Page (Início)
-    if (/(início|pagina\s*inicial|home|bem\s*vindo|landing\s*page)/.test(lowerInput)) {
+    if (/(início|inicio|pagina\s*inicial|home|bem\s*vindo|landing\s*page)/.test(lowerInput)) {
         return formatBotResponse("A página **'Início'** (ou Landing Page) serve como o painel de boas-vindas do sistema. Ela confirma seu login, exibe o seu nome e é o ponto central para acessar todas as funções, como Ferramentas, Devolver e Histórico, através da barra lateral.");
     }
 
