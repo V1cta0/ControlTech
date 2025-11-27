@@ -12,7 +12,7 @@ if (container) {
     let innerHTML = '';
     for (let i = 0; i < 15; i++) {
         innerHTML += '<div class="row">';
-        for (let j = 0; j < 20; j++) {
+        for (let j = 0; j++) {
             innerHTML += '<div class="hexagon"></div>';
         }
         innerHTML += '</div>';
@@ -72,7 +72,7 @@ function showAlert(titulo, mensagem) {
 function resetCameraUI(mode) {
     const readerId = mode === 'login' ? 'reader-login' : 'reader-cadastro';
     const readerContainer = document.getElementById(readerId);
-    const btn = mode === 'login' ? document.getElementById('btnToggleCameraLogin') : document.getElementById('btnToggleCameraCadastro');
+    const btn = document.getElementById(mode === 'login' ? 'btnToggleCameraLogin' : 'btnToggleCameraCadastro');
     const uploadControls = document.getElementById(mode === 'login' ? 'loginUploadControls' : 'cadastroUploadControls');
 
     // Esconde a div do vídeo
