@@ -688,6 +688,20 @@ body.dark-theme .cta-standalone-container {
     color: #004b8d;
     margin-bottom: 0.5rem;
 }
+.team-member-link {
+    text-decoration: none; 
+    color: inherit; 
+}
+
+.team-member-link:hover .team-member {
+    cursor: pointer;
+}
+
+.team-member-link .perfis {
+    text-decoration: none;
+    color: inherit; 
+    font-weight: bold;
+}
 .float-effect {
     animation: float 4s ease-in-out infinite;
 }
