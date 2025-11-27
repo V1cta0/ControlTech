@@ -38,38 +38,20 @@ const translations = {
     }
 };
 
-// --- FUNÇÕES DE UTILIDADE PARA TRADUÇÃO (Novas definições globais) ---
+// --- FUNÇÕES DE UTILIDADE PARA TRADUÇÃO ---
 
-/**
- * Define o texto de um elemento com base na chave de tradução.
- * @param {string} id ID do elemento HTML.
- * @param {string} key Chave do dicionário de tradução.
- * @param {object} trans Dicionário de tradução.
- */
 function setText(id, key, trans) {
     const element = document.getElementById(id);
     if (element) element.textContent = trans[key] || '';
 }
 
-/**
- * Define o texto de um span dentro de um elemento com base na chave de tradução.
- * Usado primariamente para itens da barra lateral.
- * @param {string} id ID do elemento pai.
- * @param {string} key Chave do dicionário de tradução.
- * @param {object} trans Dicionário de tradução.
- */
 function setSpanText(id, key, trans) {
     const element = document.getElementById(id)?.querySelector('span');
     if (element) element.textContent = trans[key] || '';
 }
 
-
 // --- FUNÇÕES GLOBAIS DE TEMA E IDIOMA (MANTIDAS/AJUSTADAS) ---
 
-/**
- * Atualiza todas as traduções na página.
- * @param {string} lang Idioma atual ('pt' ou 'en').
- */
 function updateTranslations(lang) {
     const currentLang = translations[lang] ? lang : 'pt';
     const trans = translations[currentLang];
@@ -92,16 +74,11 @@ function updateTranslations(lang) {
     setText('theme-label', 'themeLabel', trans);
     setText('lang-label', 'langLabel', trans);
 
-    // Atualiza textos de status
     updateThemeStatusText(document.body.classList.contains('dark-theme') ? 'dark' : 'light', currentLang);
     updateLanguageStatusText(currentLang);
-    displayUserName(currentLang); // Atualiza o nome do usuário na tela
+    displayUserName(currentLang);
 };
 
-/**
- * Salva o tema no localStorage e atualiza o UI.
- * @param {'light'|'dark'} theme 
- */
 function saveTheme(theme) {
     localStorage.setItem('theme', theme);
     const currentLang = localStorage.getItem('lang') || 'pt';
@@ -117,11 +94,6 @@ function loadTheme() {
     updateThemeToggleButtonVisuals(savedTheme);
 };
 
-/**
- * Atualiza o texto de status do tema.
- * @param {'light'|'dark'} activeTheme 
- * @param {string} lang 
- */
 function updateThemeStatusText(activeTheme, lang) {
     const themeStatusEl = document.getElementById('theme-status');
     const trans = translations[lang];
@@ -130,10 +102,6 @@ function updateThemeStatusText(activeTheme, lang) {
     }
 };
 
-/**
- * Atualiza a visualização do botão de alternar tema.
- * @param {'light'|'dark'} activeTheme 
- */
 function updateThemeToggleButtonVisuals(activeTheme) {
     const sunIcon = document.querySelector('#theme-toggle-btn .fa-sun');
     const moonIcon = document.querySelector('#theme-toggle-btn .fa-moon');
@@ -145,10 +113,6 @@ function updateThemeToggleButtonVisuals(activeTheme) {
     }
 };
 
-/**
- * Salva o idioma no localStorage e atualiza a UI.
- * @param {'pt'|'en'} lang 
- */
 function saveLanguage(lang) {
     localStorage.setItem('lang', lang);
     updateTranslations(lang);
@@ -159,10 +123,6 @@ function loadLanguage() {
     updateTranslations(savedLang);
 };
 
-/**
- * Atualiza o texto de status do idioma.
- * @param {string} activeLang 
- */
 function updateLanguageStatusText(activeLang) {
     const langToggleBtnSpan = document.getElementById('lang-toggle-btn')?.querySelector('span');
     const langStatusEl = document.getElementById('lang-status');
@@ -176,11 +136,6 @@ function updateLanguageStatusText(activeLang) {
     }
 };
 
-/**
- * Exibe o nome do usuário logado na interface.
- * Esta função depende da correta execução do login para funcionar.
- * @param {string} lang 
- */
 function displayUserName(lang) {
     const welcomeMessage = document.getElementById('welcome-message');
     const userNameElement = document.getElementById('user-name');
@@ -199,10 +154,67 @@ function displayUserName(lang) {
 }
 
 
-// --- Lógica do ChatBot com Vocabulário Aprimorado ---
+// --- FUNÇÕES DE PERSISTÊNCIA E CHAT ---
+
+const CHAT_STORAGE_KEY = 'chatbotHistory';
 
 /**
- * Adiciona uma mensagem ao corpo do chat.
+ * Salva o histórico de mensagens no localStorage.
+ * Cada mensagem é salva como um objeto {text: string, sender: 'user'|'bot'}.
+ */
+function saveChatHistory() {
+    const chatBody = document.getElementById('chatbot-body');
+    if (!chatBody) return;
+
+    const messages = Array.from(chatBody.children).map(child => {
+        const sender = child.classList.contains('user-message') ? 'user' : 'bot';
+        // Acessamos o innerHTML do parágrafo, não do container, para salvar a formatação HTML
+        const text = child.querySelector('p')?.innerHTML || ''; 
+        return { text, sender };
+    });
+
+    localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages));
+}
+
+/**
+ * Carrega e exibe o histórico de mensagens do localStorage.
+ * @returns {boolean} true se o histórico foi carregado, false caso contrário.
+ */
+function loadChatHistory() {
+    const chatBody = document.getElementById('chatbot-body');
+    if (!chatBody) return false;
+
+    const historyJson = localStorage.getItem(CHAT_STORAGE_KEY);
+    if (!historyJson) return false;
+
+    try {
+        const history = JSON.parse(historyJson);
+        if (Array.isArray(history) && history.length > 0) {
+            chatBody.innerHTML = ''; // Limpa a tela antes de carregar
+            history.forEach(msg => {
+                // A função appendMessage não é usada aqui para evitar recursão infinita de salvar.
+                const messageContainer = document.createElement('div');
+                messageContainer.classList.add('message');
+                messageContainer.classList.add(`${msg.sender}-message`);
+                
+                const messageParagraph = document.createElement('p');
+                messageParagraph.innerHTML = msg.text; 
+                
+                messageContainer.appendChild(messageParagraph);
+                chatBody.appendChild(messageContainer);
+            });
+            chatBody.scrollTop = chatBody.scrollHeight;
+            return true;
+        }
+    } catch (e) {
+        console.error("Erro ao carregar histórico do chat:", e);
+        localStorage.removeItem(CHAT_STORAGE_KEY); // Limpa histórico corrompido
+    }
+    return false;
+}
+
+/**
+ * Adiciona uma mensagem ao corpo do chat e salva o histórico.
  * @param {string} text 
  * @param {'user'|'bot'} sender 
  */
@@ -214,7 +226,6 @@ function appendMessage(text, sender) {
     messageContainer.classList.add('message');
     messageContainer.classList.add(`${sender}-message`);
     
-    // O innerHTML é usado para renderizar o negrito (<b>) e quebras de linha (<br>)
     const messageParagraph = document.createElement('p');
     messageParagraph.innerHTML = text; 
     
@@ -223,12 +234,13 @@ function appendMessage(text, sender) {
 
     // Rola para o final da conversa
     chatBody.scrollTop = chatBody.scrollHeight;
+    
+    // Salva a conversa após cada nova mensagem
+    saveChatHistory(); 
 }
 
 /**
  * Função utilitária para formatar a resposta do bot.
- * @param {string} text O texto da resposta do bot.
- * @returns {string} O texto formatado em HTML.
  */
 function formatBotResponse(text) {
     // 1. Substitui **texto** por <b>texto</b>
@@ -241,23 +253,17 @@ function formatBotResponse(text) {
 }
 
 
-/**
- * Fornece a resposta simulada do bot com base no contexto da ControlTech.
- * @param {string} input 
- * @returns {string}
- */
-function getBotResponse(input) {
-    // 1. Pré-processamento e formatação de entrada
-    const lowerInput = input.toLowerCase().trim();
+// --- LÓGICA DO BOT ---
 
-    // --- Definição das Respostas (Com Regex e Lógica Corrigida) ---
+function getBotResponse(input) {
+    const lowerInput = input.toLowerCase().trim();
     
     // 0. Respostas para Agradecimentos/Confirmação
     if (/(^ok$|^tá$|obrigad[oa]|valeu|certo|sim|beleza|blz|fechado)/.test(lowerInput)) {
         return formatBotResponse("Fico feliz em ajudar com a sua gestão de ferramentas! Se precisar de mais detalhes ou tiver novas dúvidas sobre o ControlTech, estou à disposição.");
     }
     
-    // 1. Respostas sobre Identificação/Login 🔑
+    // 1. Respostas sobre Identificação/Login/Logout 🔑
     if (/(login|entrar|acessar|autenticar|começo|qr\s*code|crachá)/.test(lowerInput)) {
         return formatBotResponse("O processo de **autenticação** no ControlTech é totalmente seguro e simples. Para iniciar sua sessão e utilizar o sistema, por favor, utilize o **QR Code do seu crachá SENAI** na página de Login. Este é o método padrão de **login** e garante a rastreabilidade do usuário.");
     }
@@ -270,12 +276,12 @@ function getBotResponse(input) {
     // --- REGRAS CRÍTICAS DE TRANSAÇÃO (PEGAR/DEVOLVER/HISTÓRICO) ---
     
     // CORREÇÃO: 2A. Respostas sobre **Retirada/Pegar Ferramentas** 🛠️ 
-    // Gatilhos mais simples e robustos para cobrir "pegar ferramenta" e "fazer empréstimo".
+    // Gatilhos para cobrir "pegar ferramenta" e "fazer empréstimo".
     const retiradaRegex = /(ferramenta[s]?|item|catálogo|preciso|emprestimo|pegar|retirar|capturar|usar|quero)/;
     if (retiradaRegex.test(lowerInput)) {
         // Exclui palavras-chave de devolução para evitar confusão.
         if (!/(devolver|devolução|entrega|devolvo)/.test(lowerInput)) {
-              return formatBotResponse("A aba **'Ferramentas'** é o coração do sistema, onde você encontra o **catálogo completo** de itens disponíveis. Para **retirar** uma ferramenta:\n\n1. Selecione o item desejado no catálogo.\n2. Registre o empréstimo, finalizando com o **QR Code do seu crachá**.\n\nO processo é rápido e garante o rastreamento.");
+              return formatBotResponse("A aba **'Ferramentas'** é o coração do sistema, onde você encontra o **catálogo completo** de itens disponíveis. Para **retirar** uma ferramenta:\n\n1. Selecione o item desejado no catálogo.\n2. Registre o empréstimo, e ela ficará associada ao seu nome.\n\nO processo é rápido e garante o rastreamento.");
         }
     }
     
@@ -284,9 +290,9 @@ function getBotResponse(input) {
         return formatBotResponse("O procedimento de devolução é direto:\n\n1. Acesse a seção **'Devolver'** no menu lateral.\n2. **Busque ou identifique a ferramenta pelo seu nome** ou código.\n3. O sistema fará o **registro automático** da devolução, incluindo a **data e horário**.\n\nLembre-se: A devolução imediata e a verificação do estado da ferramenta são cruciais para o controle de inventário.");
     }
 
-    // 2C. Respostas sobre **Rastreabilidade/Histórico** 🔍
-    if (/(registro|quem\s*pegou|rastrear|monitoramento|historico|ver\s*quem\s*pegou|quem\s*está\s*com)/.test(lowerInput)) {
-        return formatBotResponse("Nosso sistema ControlTech é focado em **rastreabilidade total e transparência**. A cada empréstimo e devolução, as seguintes informações são registradas de forma indelével:\n\n* O **Nome do Aluno** (quem realizou a movimentação).\n* A **Identificação da Ferramenta** (Nome, ID e status).\n* A **Data e Horário** precisos da ação.\n\nVocê pode consultar seus registros e o status dos itens na seção **'Histórico'**.");
+    // CORREÇÃO: 2C. Respostas sobre **Rastreabilidade/Histórico** 🔍 (Texto mais direto)
+    if (/(registro|quem\s*pegou|rastrear|monitoramento|historico|histórico|ver\s*quem\s*pegou|quem\s*está\s*com)/.test(lowerInput)) {
+        return formatBotResponse("A aba **'Histórico'** oferece **rastreabilidade total e transparência**.\n\nVocê pode consultar seus **registros de movimentação** (empréstimos e devoluções) e o **status atual** de qualquer ferramenta. O sistema armazena o nome do aluno, a identificação da ferramenta e a data/horário exato de cada ação.");
     }
 
     // 3. Respostas sobre Desenvolvimento e Acessibilidade 🧑‍💻
@@ -311,6 +317,7 @@ function getBotResponse(input) {
     return formatBotResponse("Não consegui encontrar uma correspondência exata para sua consulta. Por favor, tente reformular sua pergunta ou utilize termos mais específicos. Posso fornecer detalhes sobre:\n\n* **Devolução e Empréstimos**\n* **Login/Logout** (via QR Code)\n* **Rastreabilidade** (Histórico)\n* **A Equipe de Desenvolvimento** da ControlTech");
 }
 
+
 /**
  * Processa o envio da mensagem do usuário.
  */
@@ -334,7 +341,6 @@ function handleSendMessage() {
 
     setTimeout(() => {
         const botResponse = getBotResponse(input);
-        // getBotResponse já retorna o HTML formatado
         appendMessage(botResponse, 'bot');
     }, 500);
 }
@@ -355,17 +361,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const sendBtn = document.getElementById('send-btn');
     const chatInput = document.getElementById('chatbot-input');
     
-    let conversationInitialized = false;
-
     // Inicializa Tema e Idioma
     loadTheme();
     loadLanguage(); 
     
-    // Mensagem inicial do bot
-    if (!conversationInitialized) {
+    // CORREÇÃO: Carrega o histórico de mensagens
+    const historyLoaded = loadChatHistory();
+    
+    // Mensagem inicial do bot (só se o histórico estiver vazio)
+    if (!historyLoaded) {
         const initialMessage = "Olá! Sou o Assistente Virtual do ControlTech. Sou especialista nas regras e no funcionamento do sistema. Em que posso te ajudar hoje?";
         appendMessage(initialMessage, 'bot');
-        conversationInitialized = true;
     }
 
     // Evento Hamburger (NavBar)
@@ -384,7 +390,7 @@ document.addEventListener("DOMContentLoaded", () => {
     themeToggleBtn?.addEventListener('click', () => {
         const isDark = document.body.classList.contains('dark-theme');
         const newTheme = isDark ? 'light' : 'dark';
-        document.body.classList.toggle('dark-theme', !isDark); // Garante que a classe é alternada corretamente
+        document.body.classList.toggle('dark-theme', !isDark); 
         saveTheme(newTheme);
     });
     langToggleBtn?.addEventListener('click', () => {
@@ -395,14 +401,10 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // --- Lógica de Envio de Mensagem ---
     
-    // 1. Enviar mensagem ao clicar no botão
     if (sendBtn) {
         sendBtn.addEventListener('click', handleSendMessage);
-    } else {
-        console.error("Erro: Botão de envio (send-btn) não encontrado.");
-    }
+    } 
 
-    // 2. Enviar mensagem ao pressionar ENTER no input
     if (chatInput) {
         chatInput.addEventListener('keypress', (e) => {
             // @ts-ignore
@@ -411,7 +413,5 @@ document.addEventListener("DOMContentLoaded", () => {
                 handleSendMessage();
             }
         });
-    } else {
-          console.error("Erro: Input de chat (chatbot-input) não encontrado.");
-    }
+    } 
 });
