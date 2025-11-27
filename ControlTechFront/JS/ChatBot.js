@@ -1,34 +1,14 @@
-// Dicionário de traduções (MANTIDO)
+// --- Dicionário de traduções (MANTIDO) ---
 const translations = {
     'pt': {
-        'pageTitle': 'Ajuda - SENAI ControlTech',
-        'sidebarAbout': 'Início', 
+        'pageTitle': 'ChatBot - SENAI ControlTech',
         'sidebarTools': 'Ferramentas',
         'sidebarReturn': 'Devolver',
         'sidebarHelp': 'Ajuda',
-        'sidebarHistory': 'Histórico',
         'sidebarChatBot': 'ChatBot', 
+        'sidebarHistory': 'Histórico',
         'sidebarExit': 'Sair',
         'sidebarSettings': 'Configurações',
-        'headerTitle': 'Central de Ajuda',
-        'headerSubtitle': 'Encontre respostas para as perguntas mais frequentes abaixo:',
-        'faq1Title': 'Como faço para devolver uma ferramenta?',
-        'faq1Text': 'Para registrar a devolução de uma ferramenta, vá até a aba "Devolver" no menu lateral. Na página, você poderá selecionar a ferramenta na lista de itens que estão em seu nome e confirmar a devolução.',
-        'faq2Title': 'Como posso sair do sistema ao final do dia?',
-        'faq2Text': 'Para encerrar sua sessão com segurança, clique na opção "Sair", localizada no menu lateral. Esta ação garante que seus dados fiquem protegidos e finaliza seu acesso à plataforma.',
-        'faq3Title': 'Como posso entrar em contato com o suporte?',
-        'faq3Text': 'Se as perguntas frequentes não resolveram seu problema, você pode nos enviar uma mensagem através do formulário abaixo ou entrar em contato pelo e-mail suporteControlTech@gmail.com',
-        'formTitle': 'Relate seu problema',
-        'labelNome': 'Nome:',
-        'nomePlaceholder': 'Digite seu nome',
-        'labelEmail': 'E-mail:',
-        'emailPlaceholder': 'Digite seu e-mail',
-        'labelProblema': 'Descreva o problema:',
-        'problemaPlaceholder': 'Descreva seu problema aqui...',
-        'btnSubmitAjuda': 'Enviar',
-        'popupMsg': '✅ Obrigado, <strong>{nome}</strong>! Seu pedido de ajuda foi registrado. Entraremos em contato pelo e-mail <strong>{email}</strong> em breve.',
-        'popupBtnFechar': 'Fechar',
-        'popupAlertaPreenchimento': 'Por favor, preencha todos os campos do formulário.',
         'settingsPopupTitle': 'Configurações',
         'themeLabel': 'Alternar Tema:',
         'themeStatusLight': 'Tema Claro',
@@ -36,37 +16,17 @@ const translations = {
         'langLabel': 'Alternar Idioma:',
         'langStatusPT': 'Português',
         'langStatusEN': 'Inglês',
-        'welcomeMessage': 'Olá,'
+        'welcomeMessage': 'Olá,',
     },
     'en': {
-        'pageTitle': 'Help - SENAI ControlTech',
-        'sidebarAbout': 'Home', 
+        'pageTitle': 'ChatBot - SENAI ControlTech',
         'sidebarTools': 'Tools',
         'sidebarReturn': 'Return',
         'sidebarHelp': 'Help',
-        'sidebarHistory': 'History',
         'sidebarChatBot': 'ChatBot', 
+        'sidebarHistory': 'History',
         'sidebarExit': 'Exit',
         'sidebarSettings': 'Settings',
-        'headerTitle': 'Help Center',
-        'headerSubtitle': 'Find answers to frequently asked questions below:',
-        'faq1Title': 'How do I return a tool?',
-        'faq1Text': 'To register a tool return, go to the "Return" tab in the side menu. On the page, you can select the tool from the list of items under your name and confirm the return.',
-        'faq2Title': 'How can I log out?',
-        'faq2Text': 'To end your session securely, click the "Exit" option in the side menu. This action protects your data and ends your access.',
-        'faq3Title': 'How can I contact support?',
-        'faq3Text': 'If the FAQs did not solve your problem, send us a message using the form below or contact us at suporteControlTech@gmail.com',
-        'formTitle': 'Report your problem',
-        'labelNome': 'Name:',
-        'nomePlaceholder': 'Enter your name',
-        'labelEmail': 'E-mail:',
-        'emailPlaceholder': 'Enter your e-mail',
-        'labelProblema': 'Describe the problem:',
-        'problemaPlaceholder': 'Describe your problem here...',
-        'btnSubmitAjuda': 'Submit',
-        'popupMsg': '✅ Thank you, <strong>{nome}</strong>! Your help request is registered. We will contact you at <strong>{email}</strong> shortly.',
-        'popupBtnFechar': 'Close',
-        'popupAlertaPreenchimento': 'Please fill in all form fields.',
         'settingsPopupTitle': 'Settings',
         'themeLabel': 'Toggle Theme:',
         'themeStatusLight': 'Light Theme',
@@ -74,109 +34,75 @@ const translations = {
         'langLabel': 'Toggle Language:',
         'langStatusPT': 'Portuguese',
         'langStatusEN': 'English',
-        'welcomeMessage': 'Hello,'
+        'welcomeMessage': 'Hello,',
     }
 };
 
-// --- FUNÇÕES DE UTILIDADE PARA TRADUÇÃO (AGORA GLOBAIS) ---
-/** Define o texto de um elemento. */
-const setText = (id, key, trans) => {
+// --- FUNÇÕES DE UTILIDADE PARA TRADUÇÃO ---
+
+function setText(id, key, trans) {
     const element = document.getElementById(id);
     if (element) element.textContent = trans[key] || '';
-    else console.warn(`Elemento ID '${id}' não encontrado.`);
-};
+}
 
-/** Define o placeholder de um elemento. */
-const setPlaceholder = (id, key, trans) => {
-    const element = document.getElementById(id);
-    if (element) element.placeholder = trans[key] || '';
-    else console.warn(`Elemento ID '${id}' para placeholder não encontrado.`);
-};
-
-/** Define o texto de um span dentro de um elemento. */
-const setSpanText = (id, key, trans) => {
+function setSpanText(id, key, trans) {
     const element = document.getElementById(id)?.querySelector('span');
     if (element) element.textContent = trans[key] || '';
-    else console.warn(`Span dentro do ID '${id}' não encontrado.`);
-};
+}
 
+// --- FUNÇÕES GLOBAIS DE TEMA E IDIOMA (MANTIDAS/AJUSTADAS) ---
 
-// --- FUNÇÕES DE LÓGICA DE TEMA E IDIOMA ---
-
-const updateTranslations = (lang) => {
+function updateTranslations(lang) {
     const currentLang = translations[lang] ? lang : 'pt';
     const trans = translations[currentLang];
     if (!trans) return console.error("Traduções não encontradas:", currentLang);
 
     document.documentElement.lang = currentLang === 'pt' ? 'pt-BR' : 'en';
-    document.title = trans.pageTitle || 'Ajuda - SENAI';
+    document.title = trans.pageTitle || 'ChatBot - SENAI';
 
     // Barra lateral
-    setSpanText('nav-about', 'sidebarAbout', trans); 
     setSpanText('nav-tools', 'sidebarTools', trans);
     setSpanText('nav-return', 'sidebarReturn', trans);
     setSpanText('nav-help', 'sidebarHelp', trans);
+    setSpanText('nav-chatbot', 'sidebarChatBot', trans); 
     setSpanText('nav-history', 'sidebarHistory', trans);
-    setSpanText('nav-chatbot', 'sidebarChatBot', trans);
     setSpanText('nav-exit', 'sidebarExit', trans);
     setSpanText('settings-btn', 'sidebarSettings', trans);
-
-    // Conteúdo Principal
-    setText('header-title', 'headerTitle', trans);
-    setText('header-subtitle', 'headerSubtitle', trans);
-    setText('faq-1-title', 'faq1Title', trans);
-    setText('faq-1-text', 'faq1Text', trans);
-    setText('faq-2-title', 'faq2Title', trans);
-    setText('faq-2-text', 'faq2Text', trans);
-    setText('faq-3-title', 'faq3Title', trans);
-    setText('faq-3-text', 'faq3Text', trans);
-
-    // Formulário
-    setText('form-title', 'formTitle', trans);
-    setText('label-nome', 'labelNome', trans);
-    setPlaceholder('nome', 'nomePlaceholder', trans);
-    setText('label-email', 'labelEmail', trans);
-    setPlaceholder('email', 'emailPlaceholder', trans);
-    setText('label-problema', 'labelProblema', trans);
-    setPlaceholder('problema', 'problemaPlaceholder', trans);
-    setText('btn-submit-ajuda', 'btnSubmitAjuda', trans);
-
-    // Popup
-    setText('btn-fechar-popup', 'popupBtnFechar', trans);
 
     // Popup Configurações
     setText('settings-popup-title', 'settingsPopupTitle', trans);
     setText('theme-label', 'themeLabel', trans);
     setText('lang-label', 'langLabel', trans);
 
-    // Atualiza textos de status
     updateThemeStatusText(document.body.classList.contains('dark-theme') ? 'dark' : 'light', currentLang);
     updateLanguageStatusText(currentLang);
     displayUserName(currentLang);
 };
 
-// Funções de Tema e Usuário (Incluídas para completude)
-const saveTheme = (theme) => {
+function saveTheme(theme) {
     localStorage.setItem('theme', theme);
     const currentLang = localStorage.getItem('lang') || 'pt';
     updateThemeStatusText(theme, currentLang);
     updateThemeToggleButtonVisuals(theme);
 };
-const loadTheme = () => {
+
+function loadTheme() {
     const savedTheme = localStorage.getItem('theme') || 'light';
     const currentLang = localStorage.getItem('lang') || 'pt';
     document.body.classList.toggle('dark-theme', savedTheme === 'dark');
     updateThemeStatusText(savedTheme, currentLang);
     updateThemeToggleButtonVisuals(savedTheme);
 };
-const updateThemeStatusText = (activeTheme, lang) => {
+
+function updateThemeStatusText(activeTheme, lang) {
     const themeStatusEl = document.getElementById('theme-status');
     const trans = translations[lang];
     if (themeStatusEl && trans) {
         themeStatusEl.textContent = activeTheme === 'dark' ? (trans.themeStatusDark || 'Tema Escuro') : (trans.themeStatusLight || 'Tema Claro');
     }
 };
-const updateThemeToggleButtonVisuals = (activeTheme) => {
+
+function updateThemeToggleButtonVisuals(activeTheme) {
     const sunIcon = document.querySelector('#theme-toggle-btn .fa-sun');
     const moonIcon = document.querySelector('#theme-toggle-btn .fa-moon');
     if (sunIcon && moonIcon) {
@@ -186,15 +112,18 @@ const updateThemeToggleButtonVisuals = (activeTheme) => {
         moonIcon.style.transform = activeTheme === 'dark' ? 'translateY(0)' : 'translateY(10px)';
     }
 };
-const saveLanguage = (lang) => {
+
+function saveLanguage(lang) {
     localStorage.setItem('lang', lang);
     updateTranslations(lang);
 };
-const loadLanguage = () => {
+
+function loadLanguage() {
     const savedLang = localStorage.getItem('lang') || 'pt';
     updateTranslations(savedLang);
 };
-const updateLanguageStatusText = (activeLang) => {
+
+function updateLanguageStatusText(activeLang) {
     const langToggleBtnSpan = document.getElementById('lang-toggle-btn')?.querySelector('span');
     const langStatusEl = document.getElementById('lang-status');
     if (langToggleBtnSpan) langToggleBtnSpan.textContent = activeLang.toUpperCase();
@@ -206,6 +135,7 @@ const updateLanguageStatusText = (activeLang) => {
         }
     }
 };
+
 function displayUserName(lang) {
     const welcomeMessage = document.getElementById('welcome-message');
     const userNameElement = document.getElementById('user-name');
@@ -224,72 +154,228 @@ function displayUserName(lang) {
 }
 
 
-// --- LÓGICA ORIGINAL DA PÁGINA ---
+// --- FUNÇÕES DE PERSISTÊNCIA E CHAT ---
 
-// Função global original para fechar popup de ajuda
-function fecharPopup() {
-    const popup = document.getElementById('popupAjuda');
-    if(popup) popup.style.display = 'none';
+const CHAT_STORAGE_KEY = 'chatbotHistory';
+
+/**
+ * Salva o histórico de mensagens no localStorage.
+ * Cada mensagem é salva como um objeto {text: string, sender: 'user'|'bot'}.
+ */
+function saveChatHistory() {
+    const chatBody = document.getElementById('chatbot-body');
+    if (!chatBody) return;
+
+    const messages = Array.from(chatBody.children).map(child => {
+        const sender = child.classList.contains('user-message') ? 'user' : 'bot';
+        // Acessamos o innerHTML do parágrafo, não do container, para salvar a formatação HTML
+        const text = child.querySelector('p')?.innerHTML || ''; 
+        return { text, sender };
+    });
+
+    localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages));
 }
-window.fecharPopup = fecharPopup; // Torna acessível ao 'onclick'
 
-// Função interna para mostrar popup de ajuda
-function mostrarPopupAjuda(nome, email, lang) {
-    const popup = document.getElementById('popupAjuda');
-    const mensagemEl = document.getElementById('mensagemPopup');
-    const trans = translations[lang];
+/**
+ * Carrega e exibe o histórico de mensagens do localStorage.
+ * @returns {boolean} true se o histórico foi carregado, false caso contrário.
+ */
+function loadChatHistory() {
+    const chatBody = document.getElementById('chatbot-body');
+    if (!chatBody) return false;
 
-    if (popup && mensagemEl && trans) {
-        let msgFormatada = (trans.popupMsg || 'Erro')
-            .replace('{nome}', nome)
-            .replace('{email}', email);
-        mensagemEl.innerHTML = msgFormatada;
-        popup.style.display = 'flex';
-    } else {
-         console.error("Popup de ajuda ou elemento de mensagem não encontrado.")
+    const historyJson = localStorage.getItem(CHAT_STORAGE_KEY);
+    if (!historyJson) return false;
+
+    try {
+        const history = JSON.parse(historyJson);
+        if (Array.isArray(history) && history.length > 0) {
+            chatBody.innerHTML = ''; // Limpa a tela antes de carregar
+            history.forEach(msg => {
+                // A função appendMessage não é usada aqui para evitar recursão infinita de salvar.
+                const messageContainer = document.createElement('div');
+                messageContainer.classList.add('message');
+                messageContainer.classList.add(`${msg.sender}-message`);
+                
+                const messageParagraph = document.createElement('p');
+                messageParagraph.innerHTML = msg.text; 
+                
+                messageContainer.appendChild(messageParagraph);
+                chatBody.appendChild(messageContainer);
+            });
+            chatBody.scrollTop = chatBody.scrollHeight;
+            return true;
+        }
+    } catch (e) {
+        console.error("Erro ao carregar histórico do chat:", e);
+        localStorage.removeItem(CHAT_STORAGE_KEY); // Limpa histórico corrompido
     }
+    return false;
 }
+
+/**
+ * Adiciona uma mensagem ao corpo do chat e salva o histórico.
+ * @param {string} text 
+ * @param {'user'|'bot'} sender 
+ */
+function appendMessage(text, sender) {
+    const chatBody = document.getElementById('chatbot-body');
+    if (!chatBody) return; 
+
+    const messageContainer = document.createElement('div');
+    messageContainer.classList.add('message');
+    messageContainer.classList.add(`${sender}-message`);
+    
+    const messageParagraph = document.createElement('p');
+    messageParagraph.innerHTML = text; 
+    
+    messageContainer.appendChild(messageParagraph);
+    chatBody.appendChild(messageContainer);
+
+    // Rola para o final da conversa
+    chatBody.scrollTop = chatBody.scrollHeight;
+    
+    // Salva a conversa após cada nova mensagem
+    saveChatHistory(); 
+}
+
+/**
+ * Função utilitária para formatar a resposta do bot.
+ */
+function formatBotResponse(text) {
+    // 1. Substitui **texto** por <b>texto</b>
+    let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+
+    // 2. Converte quebras de linha para HTML para exibição
+    formattedText = formattedText.replace(/\n/g, '<br>');
+
+    return formattedText;
+}
+
+
+// --- LÓGICA DO BOT ---
+
+function getBotResponse(input) {
+    const lowerInput = input.toLowerCase().trim();
+    
+    // 0. Respostas para Agradecimentos/Confirmação
+    if (/(^ok$|^tá$|obrigad[oa]|valeu|certo|sim|beleza|blz|fechado)/.test(lowerInput)) {
+        return formatBotResponse("Fico feliz em ajudar com a sua gestão de ferramentas! Se precisar de mais detalhes ou tiver novas dúvidas sobre o ControlTech, estou à disposição.");
+    }
+    
+    // 1. Respostas sobre Identificação/Login/Logout 🔑
+    if (/(login|entrar|acessar|autenticar|começo|qr\s*code|crachá)/.test(lowerInput)) {
+        return formatBotResponse("O processo de **autenticação** no ControlTech é totalmente seguro e simples. Para iniciar sua sessão e utilizar o sistema, por favor, utilize o **QR Code do seu crachá SENAI** na página de Login. Este é o método padrão de **login** e garante a rastreabilidade do usuário.");
+    }
+    
+    // CORREÇÃO: Resposta de Logout
+    if (/(sair|logout|deslogar|encerrar\s*sessão|finalizar)/.test(lowerInput)) {
+        return formatBotResponse("Para encerrar sua sessão, vá para a aba **'Saída'** no menu lateral.\n\nLá, basta pressionar o botão de **'Sair'** (ou **'Encerrar Sessão'**) para confirmar o seu desligamento do sistema. Não é necessário escanear o crachá novamente. Este processo garante a finalização segura de sua sessão.");
+    }
+
+    // --- REGRAS CRÍTICAS DE TRANSAÇÃO (PEGAR/DEVOLVER/HISTÓRICO) ---
+    
+    // CORREÇÃO: 2A. Respostas sobre **Retirada/Pegar Ferramentas** 🛠️ 
+    // Gatilhos para cobrir "pegar ferramenta" e "fazer empréstimo".
+    const retiradaRegex = /(ferramenta[s]?|item|catálogo|preciso|emprestimo|pegar|retirar|capturar|usar|quero)/;
+    if (retiradaRegex.test(lowerInput)) {
+        // Exclui palavras-chave de devolução para evitar confusão.
+        if (!/(devolver|devolução|entrega|devolvo)/.test(lowerInput)) {
+              return formatBotResponse("A aba **'Ferramentas'** é o coração do sistema, onde você encontra o **catálogo completo** de itens disponíveis. Para **retirar** uma ferramenta:\n\n1. Selecione o item desejado no catálogo.\n2. Registre o empréstimo, e ela ficará associada ao seu nome.\n\nO processo é rápido e garante o rastreamento.");
+        }
+    }
+    
+    // 2B. Respostas sobre **Devolução/Entrega** 📦
+    if (/(devolver|devolução|entrego|entrega|devolvo)/.test(lowerInput)) {
+        return formatBotResponse("O procedimento de devolução é direto:\n\n1. Acesse a seção **'Devolver'** no menu lateral.\n2. **Busque ou identifique a ferramenta pelo seu nome** ou código.\n3. O sistema fará o **registro automático** da devolução, incluindo a **data e horário**.\n\nLembre-se: A devolução imediata e a verificação do estado da ferramenta são cruciais para o controle de inventário.");
+    }
+
+    // CORREÇÃO: 2C. Respostas sobre **Rastreabilidade/Histórico** 🔍 (Texto mais direto)
+    if (/(registro|quem\s*pegou|rastrear|monitoramento|historico|histórico|ver\s*quem\s*pegou|quem\s*está\s*com)/.test(lowerInput)) {
+        return formatBotResponse("A aba **'Histórico'** oferece **rastreabilidade total e transparência**.\n\nVocê pode consultar seus **registros de movimentação** (empréstimos e devoluções) e o **status atual** de qualquer ferramenta. O sistema armazena o nome do aluno, a identificação da ferramenta e a data/horário exato de cada ação.");
+    }
+
+    // 3. Respostas sobre Desenvolvimento e Acessibilidade 🧑‍💻
+    if (/(quem\s*fez|desenvolvedores|criadores|equipe|idealizadores|cria|alunos|fundadores|arquitetos|criou|pessoas|criaram|fundou|desenvolveu|arquitetou|fizeram)/.test(lowerInput)) {
+        return formatBotResponse("O ControlTech é um projeto de **desenvolvimento inovador** realizado por cinco alunos do SENAI: **Eduardo Rodriges, Eliezer Beltrame, Felipe Rossi, Guilherme Augusto e Victor Hugo.**. Eles conceberam e implementaram toda a **arquitetura robusta e segura** do sistema para gestão de ferramentas.");
+    }
+    // Acessibilidade
+    if (/(acessibilidade|vlibras|inclusão|surdo|como\s*foi\s*feito|Vlibras)/.test(lowerInput)) {
+        return formatBotResponse("Acessibilidade é uma prioridade fundamental! O ControlTech integra o recurso de **Acessibilidade do Governo (VLibras)**, disponível em todas as páginas. Basta localizar o ícone específico para utilizar a tradução em Libras.");
+    }
+    // Navegação geral
+    if (/(navegação|onde\s*está|menus|abas|mexer|navegar|funções)/.test(lowerInput)) {
+        return formatBotResponse("A navegação principal do sistema é clara e acessível através da barra lateral, contendo as principais funções: **Ferramentas** (para retirada), **Devolver**, **Ajuda**, **ChatBot**, **Histórico** e **Sair**. A aba **ativa** é sempre destacada para sua orientação.");
+    }
+
+    // 4. Respostas Genéricas e Boas-vindas 👋
+    if (/(olá|oi|tudo\s*bem|saudação|bom\s*dia|boa\s*tarde)/.test(lowerInput)) {
+        return formatBotResponse("Saudações! Eu sou o Assistente Virtual da ControlTech. Fui desenvolvido para te auxiliar com qualquer questão sobre o **uso, regulamentos e funcionamento** do nosso sistema de gerenciamento de ferramentas. Em que área posso te dar suporte hoje?");
+    }
+
+    // 5. Resposta Padrão (Fallback) ❓
+    return formatBotResponse("Não consegui encontrar uma correspondência exata para sua consulta. Por favor, tente reformular sua pergunta ou utilize termos mais específicos. Posso fornecer detalhes sobre:\n\n* **Devolução e Empréstimos**\n* **Login/Logout** (via QR Code)\n* **Rastreabilidade** (Histórico)\n* **A Equipe de Desenvolvimento** da ControlTech");
+}
+
+
+/**
+ * Processa o envio da mensagem do usuário.
+ */
+function handleSendMessage() {
+    const chatInput = document.getElementById('chatbot-input');
+    
+    if (!chatInput) {
+        console.error("Erro: Elemento 'chatbot-input' não encontrado.");
+        return;
+    }
+
+    // @ts-ignore
+    const input = chatInput.value.trim();
+    
+    if (input === "") return;
+
+    // A mensagem do usuário é exibida sem formatação
+    appendMessage(input, 'user');
+    // @ts-ignore
+    chatInput.value = ''; // Limpa o campo após o envio
+
+    setTimeout(() => {
+        const botResponse = getBotResponse(input);
+        appendMessage(botResponse, 'bot');
+    }, 500);
+}
+
 
 // --- INICIALIZAÇÃO E EVENT LISTENERS ---
 document.addEventListener("DOMContentLoaded", () => {
-    // Referências
+    // Referências NavBar
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const sidebar = document.getElementById('sidebar');
-    const form = document.getElementById('formAjuda');
     const settingsBtn = document.getElementById('settings-btn');
     const themePopup = document.getElementById('theme-popup');
     const closePopupBtn = document.getElementById('close-popup-btn');
     const themeToggleBtn = document.getElementById('theme-toggle-btn');
     const langToggleBtn = document.getElementById('lang-toggle-btn');
-
+    
+    // Referências ChatBot
+    const sendBtn = document.getElementById('send-btn');
+    const chatInput = document.getElementById('chatbot-input');
+    
     // Inicializa Tema e Idioma
     loadTheme();
-    loadLanguage(); // Chama updateTranslations > displayUserName
+    loadLanguage(); 
+    
+    // CORREÇÃO: Carrega o histórico de mensagens
+    const historyLoaded = loadChatHistory();
+    
+    // Mensagem inicial do bot (só se o histórico estiver vazio)
+    if (!historyLoaded) {
+        const initialMessage = "Olá! Sou o Assistente Virtual do ControlTech. Sou especialista nas regras e no funcionamento do sistema. Em que posso te ajudar hoje?";
+        appendMessage(initialMessage, 'bot');
+    }
 
-    // Evento Hamburger
+    // Evento Hamburger (NavBar)
     hamburgerBtn?.addEventListener('click', () => sidebar?.classList.toggle('active'));
-
-    // Evento Formulário de Ajuda
-    form?.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const currentLang = localStorage.getItem('lang') || 'pt';
-        const trans = translations[currentLang];
-
-        // @ts-ignore
-        const nome = form.nome?.value.trim();
-        // @ts-ignore
-        const email = form.email?.value.trim();
-        // @ts-ignore
-        const problema = form.problema?.value.trim();
-
-        if (!nome || !email || !problema) {
-            alert(trans?.popupAlertaPreenchimento || 'Preencha todos os campos.');
-            return;
-        }
-
-        mostrarPopupAjuda(nome, email, currentLang); // Chama popup com idioma
-        form.reset();
-    });
 
     // Eventos Popup Configurações
     settingsBtn?.addEventListener('click', (e) => {
@@ -304,7 +390,7 @@ document.addEventListener("DOMContentLoaded", () => {
     themeToggleBtn?.addEventListener('click', () => {
         const isDark = document.body.classList.contains('dark-theme');
         const newTheme = isDark ? 'light' : 'dark';
-        document.body.classList.toggle('dark-theme');
+        document.body.classList.toggle('dark-theme', !isDark); 
         saveTheme(newTheme);
     });
     langToggleBtn?.addEventListener('click', () => {
@@ -312,5 +398,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const newLang = currentLang === 'pt' ? 'en' : 'pt';
         saveLanguage(newLang);
     });
+    
+    // --- Lógica de Envio de Mensagem ---
+    
+    if (sendBtn) {
+        sendBtn.addEventListener('click', handleSendMessage);
+    } 
 
-}); // Fim do DOMContentLoaded
+    if (chatInput) {
+        chatInput.addEventListener('keypress', (e) => {
+            // @ts-ignore
+            if (e.key === 'Enter') {
+                e.preventDefault(); 
+                handleSendMessage();
+            }
+        });
+    } 
+});
