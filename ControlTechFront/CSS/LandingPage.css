@@ -640,15 +640,9 @@ body.dark-theme .cta-standalone-container {
     margin: 0 auto;
 }
 .feature-card {
-    /* CORREÇÃO ESTÉTICA: Borda mais visível e suave (d3e0f0 é um azul claro muito sutil) */
-    border: 1px solid #d3e0f0; 
-    
-    /* CORREÇÃO: Sombra mais nítida para o efeito "flutuante" */
+    border: 2px solid #d3e0f0; 
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    
-    /* NOVO/GOOFY: Leve inclinação padrão (cria interesse visual) */
-    transform: rotate(0.8deg);
-    
+    transform: rotate(0.5deg);
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 /* Para o texto do card (parágrafos dentro de .tool-card) */
