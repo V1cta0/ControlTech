@@ -385,11 +385,12 @@ document.addEventListener("DOMContentLoaded", () => {
     settingsBtn?.addEventListener('click', (e) => {
         e.preventDefault();
         
-        themePopup?.classList.toggle('visible')
+        // CORREÇÃO: Apenas alterna a classe 'visible', confiando que o HTML/CSS esconde por padrão.
+        themePopup?.classList.toggle('visible'); 
     });
     
     closePopupBtn?.addEventListener('click', () => {
-        // 2. Apenas remove a classe 'visible' para iniciar o fade-out suave.
+        // CORREÇÃO: Apenas remove a classe 'visible' para iniciar o fade-out suave.
         themePopup?.classList.remove('visible');
     });
     
