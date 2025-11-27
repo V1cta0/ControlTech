@@ -180,6 +180,7 @@ body {
 .header-logo-title {
     display: flex;
     align-items: center;
+    padding: 2em;
 }
 
 .main-header h1 {
@@ -485,7 +486,7 @@ body.dark-theme .features-section {
 }
 body.dark-theme .feature-card {
     background: #1f1f1f;
-    border: 2px solid #333;
+    border: 4px solid #333;
 }
 body.dark-theme .feature-card i {
     color: #007bff; /* Ícones em azul */
@@ -500,7 +501,6 @@ body.dark-theme .hover-border-glow {
     border-top: 5px solid #0056a0;
 }
 body.dark-theme .hover-border-glow:hover {
-     box-shadow: 0 10px 40px rgba(0, 97, 192, 0.6); 
      border-top: 5px solid #ff9800;
 }
 
@@ -639,43 +639,28 @@ body.dark-theme .cta-standalone-container {
     margin: 0 auto;
 }
 .feature-card {
-    /* CORREÇÃO ESTÉTICA: Borda mais visível e suave */
-    border: 1px solid #d3e0f0; 
-    /* CORREÇÃO ESTÉTICA: Sombra mais nítida para o efeito "flutuante" */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-    /* NOVO/GOOFY: Leve inclinação padrão (cria interesse visual) */
-    transform: rotate(0.8deg);
-    
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border: 4px solid #d3e0f0; 
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 /* Para o texto do card (parágrafos dentro de .tool-card) */
 .tool-card p {
     /* RESPONSIVO: Tamanho Mínimo: 0.85rem | Ideal: 1.1vw | Máximo: 1rem */
     font-size: clamp(0.85rem, 1.1vw, 1rem); 
 }
-.shadow-pop {
-    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
-}
+
 
 /* Efeito Destaque da Borda no Hover */
 .hover-border-glow {
     position: relative;
     overflow: hidden;
-    /* CORREÇÃO: Borda superior mais grossa para mais destaque */
     border-top: 8px solid #0061c0; 
 }
 .hover-border-glow:hover {
-    border-top: 8px solid #ff9800; /* Muda a cor da borda ao passar o mouse */
-    
-    /* NOVO/GOOFY: Efeito de "POP" exagerado (sobe, aumenta e gira ao contrário) */
-    transform: translateY(-10px) scale(1.05) rotate(-0.5deg);
-    
-    /* Sombra mais intensa para o "pop" */
-    box-shadow: 0 15px 40px rgba(0, 75, 141, 0.35); 
+    border-top: 8px solid #ff9800; 
+    transform: translateY(-10px) scale(1.01);
+    transition: 1.5s;
 }
 
-
-/* --- 8.3. Seção da Equipe (Team) - FLEX e CENTRALIZADA */
 .team-section {
     padding: 5rem 2rem;
     text-align: center;
@@ -697,8 +682,7 @@ body.dark-theme .cta-standalone-container {
     border-radius: 12px;
     /* CORREÇÃO ESTÉTICA: Borda mais visível e suave */
     border: 1px solid #d3e0f0; 
-    /* CORREÇÃO ESTÉTICA: Sombra mais nítida para o efeito "flutuante" */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     width: 150px;
     display: flex; 
     flex-direction: column;
@@ -809,81 +793,36 @@ body.dark-theme .cta-standalone-container {
     transform: translate(0, 0); /* Volta para a posição original */
 }
 
-/* --- 8.6. Scroll Indicator (Setas Animadas) --- */
-
-.scroll-indicator {
-    position: absolute;
-    bottom: 30px; /* Posição fixa no rodapé do hero */
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white; /* Cor visível no fundo azul do Hero */
-    z-index: 10; 
-    opacity: 0.9;
-}
-
-.scroll-indicator i {
-    font-size: 1.5rem;
-    margin-top: -8px; /* Para a segunda seta ficar ligeiramente sobreposta */
-    animation: bounce-scroll 2s infinite;
-}
-
-.scroll-indicator i:nth-child(2) {
-    animation-delay: 0.3s; /* Cria o efeito de setas "seguindo" a primeira */
-}
-
-@keyframes bounce-scroll {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-15px); /* Salto maior */
-    }
-    60% {
-        transform: translateY(-7px);
-    }
-}
-
-/* Dark Theme: Ajusta a cor para um amarelo que se destaca no fundo escuro */
-body.dark-theme .scroll-indicator {
-    color: #ff9800;
-    opacity: 1;
-}
 
 /* ======================================= */
 /* 9. Responsividade (Mobile) */
 /* ======================================= */
 
-/* NOVO BLOCO: Ajustes para Laptops/Tablets (max-width: 1024px) */
 @media (max-width: 1024px) {
     /* 2. Sidebar e Conteúdo */
     .sidebar {
-        /* Reduz a largura da sidebar para ganhar espaço horizontal */
+        /* Reduz a largura da sidebar de 250px para 220px */
         width: 220px; 
     }
 
     .main-content {
-        /* Ajusta a margem do conteúdo principal à nova largura da sidebar */
+        /* Ajusta a margem do conteúdo principal para a nova largura da sidebar */
         margin-left: 220px; 
+        /* Reduz o padding horizontal para aproveitar melhor o espaço */
+        padding: 0 1rem; 
     }
     
-    /* 3. Header */
-    .main-header {
-        /* Reduz o padding horizontal do header para aproveitar melhor a tela */
-        padding: 1rem 1.5rem;
-    }
-
     .hero-section {
-        /* Reduz a altura do Hero para caber em telas menores, como notebooks */
+        /* Reduz a altura do Hero para caber em telas menores */
         height: 70vh;
     }
-
-    /* Seção de Features/Equipe */
+    
+    /* Ajusta o padding nas seções de conteúdo */
     .features-section, .team-section {
-        padding: 4rem 1.5rem; /* Padding geral para centralização mais suave */
+        padding: 4rem 1.5rem; 
+    }
+    .main-footer {
+        padding: 3rem 1.5rem 1rem 1.5rem;
     }
 }
 
@@ -900,6 +839,7 @@ body.dark-theme .scroll-indicator {
         top: 0;
         left: -300px;
         height: 100vh;
+        width: 250px; /* Mantém a largura maior para o menu off-canvas */
         z-index: 100;
         box-shadow: 2px 0 5px rgba(0,0,0,0.5);
     }
