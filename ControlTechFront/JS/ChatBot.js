@@ -17,6 +17,22 @@ const translations = {
         'langStatusPT': 'Português',
         'langStatusEN': 'Inglês',
         'welcomeMessage': 'Olá,',
+        'botInitialMessage': 'Olá! Sou o Assistente Virtual do ControlTech. Sou especialista nas regras e no funcionamento do sistema. Em que posso te ajudar hoje?',
+        'botMsgs': {
+            'helpHappy': "Fico feliz em ajudar com a sua gestão de ferramentas! Se precisar de mais detalhes ou tiver novas dúvidas sobre o ControlTech, estou à disposição.",
+            'loginInfo': "O processo de **autenticação** no ControlTech é totalmente seguro e simples. Para iniciar sua sessão e utilizar o sistema, por favor, utilize o **QR Code do seu crachá SENAI** na página de Login. Este é o método padrão de **login** e garante a rastreabilidade do usuário.",
+            'logoutInfo': "Para encerrar sua sessão, vá para a aba **'Saída'** no menu lateral.\n\nLá, basta pressionar o botão de **'Sair'** (ou **'Encerrar Sessão'**) para confirmar o seu desligamento do sistema. Não é necessário escanear o crachá novamente. Este processo garante a finalização segura de sua sessão.",
+            'homeInfo': "A página **'Início'** (ou Landing Page) serve como o painel de boas-vindas do sistema. Ela confirma seu login, exibe o seu nome e é o ponto central para acessar todas as funções, como Ferramentas, Devolver e Histórico, através da barra lateral.",
+            'helpCenterInfo': "A **Central de Ajuda** é o seu recurso para resolver dúvidas rápidas.\n\nEla contém:\n\n1. Uma seção de **Perguntas Frequentes (FAQ)**, cobrindo os processos de devolução e saída do sistema.\n2. Um **Formulário de Contato** ('Relate seu problema') para enviar solicitações específicas diretamente para o e-mail de suporte.",
+            'toolsInfo': "A aba **'Ferramentas'** é o coração do sistema, onde você encontra o **catálogo completo** de itens disponíveis. Para **retirar** uma ferramenta:\n\n1. Selecione o item desejado no catálogo.\n2. Registre o empréstimo, e ela ficará associada ao seu nome.\n\nO processo é rápido e garante o rastreamento.",
+            'returnInfo': "O procedimento de devolução é direto:\n\n1. Acesse a seção **'Devolver'** no menu lateral.\n2. **Busque ou identifique a ferramenta pelo seu nome** ou código.\n3. O sistema fará o **registro automático** da devolução, incluindo a **data e horário**.\n\nLembre-se: A devolução imediata e a verificação do estado da ferramenta são cruciais para o controle de inventário.",
+            'historyInfo': "A aba **'Histórico'** oferece **rastreabilidade total e transparência**.\n\nYou can view your **movement records** (loans and returns) and the **current status** of any tool. The system stores the student's name, tool identification, and the exact date/time of each action.",
+            'teamInfo': "O ControlTech é um projeto de **desenvolvimento inovador** realizado por cinco alunos do SENAI: **Eduardo Rodriges, Eliezer Beltrame, Felipe Rossi, Guilherme Augusto e Victor Hugo.**. Eles conceberam e implementaram toda a **arquitetura robusta e segura** do sistema para gestão de ferramentas.",
+            'accessibilityInfo': "Acessibilidade é uma prioridade fundamental! O ControlTech integra o recurso de **Acessibilidade do Governo (VLibras)**, disponível em todas as páginas. Basta localizar o ícone específico para utilizar a tradução em Libras.",
+            'navInfo': "A navegação principal do sistema é clara e acessível através da barra lateral, contendo as principais funções: **Ferramentas** (para retirada), **Devolver**, **Ajuda**, **ChatBot**, **Histórico** e **Sair**. A aba **ativa** é sempre destacada para sua orientação.",
+            'greeting': "Saudações! Eu sou o Assistente Virtual da ControlTech. Fui desenvolvido para te auxiliar com qualquer questão sobre o **uso, regulamentos e funcionamento** do nosso sistema de gerenciamento de ferramentas. Em que área posso te dar suporte hoje?",
+            'fallback': "Não consegui encontrar uma correspondência exata para sua consulta. Por favor, tente reformular sua pergunta ou utilize termos mais específicos. Posso fornecer detalhes sobre:\n\n* **Devolução e Empréstimos**\n* **Login/Logout** (via QR Code)\n* **Rastreabilidade** (Histórico)\n\n* **A Equipe de Desenvolvimento** da ControlTech"
+        }
     },
     'en': {
         'pageTitle': 'ChatBot - SENAI ControlTech',
@@ -35,6 +51,22 @@ const translations = {
         'langStatusPT': 'Portuguese',
         'langStatusEN': 'English',
         'welcomeMessage': 'Hello,',
+        'botInitialMessage': 'Hello! I am the ControlTech Virtual Assistant. I specialize in the rules and functionality of the system. How can I help you today?',
+        'botMsgs': {
+            'helpHappy': "I'm happy to help with your tool management! If you need more details or have new questions about ControlTech, I am available.",
+            'loginInfo': "The **authentication** process in ControlTech is totally secure and simple. To start your session and use the system, please use the **QR Code on your SENAI badge** on the Login page. This is the standard method for **login** and guarantees user traceability.",
+            'logoutInfo': "To end your session, go to the **'Exit'** tab in the side menu.\n\nThere, just press the **'Exit'** (or **'End Session'**) button to confirm your departure from the system. It is not necessary to scan the badge again. This process ensures the secure finalization of your session.",
+            'homeInfo': "The **'Home'** page (or Landing Page) serves as the system's welcome dashboard. It confirms your login, displays your name, and is the central point for accessing all functions, such as Tools, Return, and History, through the side bar.",
+            'helpCenterInfo': "The **Help Center** is your resource for quickly resolving questions.\n\nIt contains:\n\n1. A **Frequently Asked Questions (FAQ)** section, covering the return and exit processes.\n2. A **Contact Form** ('Report your problem') to send specific requests directly to the support email.",
+            'toolsInfo': "The **'Tools'** tab is the heart of the system, where you find the **complete catalog** of available items. To **check out** a tool:\n\n1. Select the desired item from the catalog.\n2. Register the loan, and it will be associated with your name.\n\nThe process is fast and ensures tracking.",
+            'returnInfo': "The return procedure is straightforward:\n\n1. Access the **'Return'** section in the side menu.\n2. **Search for or identify the tool by its name** or code.\n3. The system will make the **automatic registration** of the return, including the **date and time**.\n\nRemember: Immediate return and verification of the tool's condition are crucial for inventory control.",
+            'historyInfo': "The **'History'** tab offers **full traceability and transparency**.\n\nYou can view your **movement records** (loans and returns) and the **current status** of any tool. The system stores the student's name, tool identification, and the exact date/time of each action.",
+            'teamInfo': "ControlTech is an **innovative development project** carried out by five SENAI students: **Eduardo Rodriges, Eliezer Beltrame, Felipe Rossi, Guilherme Augusto, and Victor Hugo.**. They conceived and implemented the entire **robust and secure architecture** of the tool management system.",
+            'accessibilityInfo': "Accessibility is a fundamental priority! ControlTech integrates the **Government Accessibility feature (VLibras)**, available on all pages. Just locate the specific icon to use the translation into Libras.",
+            'navInfo': "The main navigation of the system is clear and accessible through the side bar, containing the main functions: **Tools** (for checkout), **Return**, **Help**, **ChatBot**, **History**, and **Exit**. The **active** tab is always highlighted for your orientation.",
+            'greeting': "Greetings! I am the ControlTech Virtual Assistant. I was developed to assist you with any questions about the **use, regulations, and functioning** of our tool management system. In what area can I support you today?",
+            'fallback': "I could not find an exact match for your query. Please try rephrasing your question or use more specific terms. I can provide details on:\n\n* **Return and Loans**\n* **Login/Logout** (via QR Code)\n* **Traceability** (History)\n\n* **The ControlTech Development Team**"
+        }
     }
 };
 
@@ -51,7 +83,7 @@ function setSpanText(id, key, trans) {
 }
 
 // --- FUNÇÕES GLOBAIS DE TEMA E IDIOMA ---
-
+// (Mantidas)
 function updateTranslations(lang) {
     const currentLang = translations[lang] ? lang : 'pt';
     const trans = translations[currentLang];
@@ -110,9 +142,13 @@ function updateThemeToggleButtonVisuals(activeTheme) {
     const sunIcon = document.querySelector('#theme-toggle-btn .fa-sun');
     const moonIcon = document.querySelector('#theme-toggle-btn .fa-moon');
     if (sunIcon && moonIcon) {
+        // @ts-ignore
         sunIcon.style.opacity = activeTheme === 'dark' ? '0' : '1';
+        // @ts-ignore
         sunIcon.style.transform = activeTheme === 'dark' ? 'translateY(-10px)' : 'translateY(0)';
+        // @ts-ignore
         moonIcon.style.opacity = activeTheme === 'dark' ? '1' : '0';
+        // @ts-ignore
         moonIcon.style.transform = activeTheme === 'dark' ? 'translateY(0)' : 'translateY(10px)';
     }
 };
@@ -159,7 +195,7 @@ function displayUserName(lang) {
 
 
 // --- FUNÇÕES DE PERSISTÊNCIA E CHAT ---
-
+// (Mantidas)
 const CHAT_STORAGE_KEY = 'chatbotHistory';
 
 /**
@@ -248,76 +284,79 @@ function formatBotResponse(text) {
 }
 
 
-// --- LÓGICA DO BOT ---
+// --- LÓGICA DO BOT CORRIGIDA PARA IDIOMA ---
 
-function getBotResponse(input) {
+function getBotResponse(input, lang) {
     const lowerInput = input.toLowerCase().trim();
+    // Tenta usar o idioma atual, ou volta para português se a chave não existir
+    const msgs = translations[lang]?.botMsgs || translations['pt'].botMsgs; 
+    if (!msgs) return "Error: Translations not loaded."; 
     
     // 0. Respostas para Agradecimentos/Confirmação
-    if (/(^ok$|^tá$|obrigad[oa]|valeu|certo|sim|beleza|blz|fechado)/.test(lowerInput)) {
-        return formatBotResponse("Fico feliz em ajudar com a sua gestão de ferramentas! Se precisar de mais detalhes ou tiver novas dúvidas sobre o ControlTech, estou à disposição.");
+    if (/(^ok$|^tá$|obrigad[oa]|valeu|certo|sim|beleza|blz|fechado|thank\s*you|ok|correct|yes|thanks)/.test(lowerInput)) {
+        return formatBotResponse(msgs.helpHappy);
     }
     
     // 1. Respostas sobre Identificação/Login/Logout 🔑
-    if (/(login|entrar|acessar|autenticar|começo|qr\s*code|crachá)/.test(lowerInput)) {
-        return formatBotResponse("O processo de **autenticação** no ControlTech é totalmente seguro e simples. Para iniciar sua sessão e utilizar o sistema, por favor, utilize o **QR Code do seu crachá SENAI** na página de Login. Este é o método padrão de **login** e garante a rastreabilidade do usuário.");
+    if (/(login|entrar|acessar|autenticar|começo|qr\s*code|crachá|badge|start|access)/.test(lowerInput)) {
+        return formatBotResponse(msgs.loginInfo);
     }
     
     // Resposta de Logout
-    if (/(sair|logout|deslogar|encerrar\s*sessão|finalizar)/.test(lowerInput)) {
-        return formatBotResponse("Para encerrar sua sessão, vá para a aba **'Saída'** no menu lateral.\n\nLá, basta pressionar o botão de **'Sair'** (ou **'Encerrar Sessão'**) para confirmar o seu desligamento do sistema. Não é necessário escanear o crachá novamente. Este processo garante a finalização segura de sua sessão.");
+    if (/(sair|logout|deslogar|encerrar\s*sessão|finalizar|end\s*session|exit|leave)/.test(lowerInput)) {
+        return formatBotResponse(msgs.logoutInfo);
     }
 
     // Resposta sobre Landing Page (Início)
-    if (/(início|inicio|pagina\s*inicial|home|bem\s*vindo|landing\s*page)/.test(lowerInput)) {
-        return formatBotResponse("A página **'Início'** (ou Landing Page) serve como o painel de boas-vindas do sistema. Ela confirma seu login, exibe o seu nome e é o ponto central para acessar todas as funções, como Ferramentas, Devolver e Histórico, através da barra lateral.");
+    if (/(início|inicio|pagina\s*inicial|home|bem\s*vindo|landing\s*page|welcome)/.test(lowerInput)) {
+        return formatBotResponse(msgs.homeInfo);
     }
 
     // Resposta sobre Ajuda
-    if (/(ajuda|faq|suporte|contato|problema|problemas|perguntas\s*frequentes)/.test(lowerInput)) {
-        return formatBotResponse("A **Central de Ajuda** é o seu recurso para resolver dúvidas rápidas.\n\nEla contém:\n\n1. Uma seção de **Perguntas Frequentes (FAQ)**, cobrindo os processos de devolução e saída do sistema.\n2. Um **Formulário de Contato** ('Relate seu problema') para enviar solicitações específicas diretamente para o e-mail de suporte.");
+    if (/(ajuda|faq|suporte|contato|problema|problemas|perguntas\s*frequentes|help|support|contact)/.test(lowerInput)) {
+        return formatBotResponse(msgs.helpCenterInfo);
     }
 
     // --- REGRAS CRÍTICAS DE TRANSAÇÃO ---
     
     // 2A. Respostas sobre **Retirada/Pegar Ferramentas** 🛠️ 
-    const retiradaRegex = /(ferramenta[s]?|item|catálogo|preciso|emprestimo|pegar|retirar|capturar|usar|quero)/;
+    const retiradaRegex = /(ferramenta[s]?|item|catálogo|preciso|emprestimo|pegar|retirar|capturar|usar|quero|tool|tools|item|catalog|loan|check\s*out)/;
     if (retiradaRegex.test(lowerInput)) {
-        if (!/(devolver|devolução|entrega|devolvo)/.test(lowerInput)) {
-              return formatBotResponse("A aba **'Ferramentas'** é o coração do sistema, onde você encontra o **catálogo completo** de itens disponíveis. Para **retirar** uma ferramenta:\n\n1. Selecione o item desejado no catálogo.\n2. Registre o empréstimo, e ela ficará associada ao seu nome.\n\nO processo é rápido e garante o rastreamento.");
+        if (!/(devolver|devolução|entrega|devolvo|return|returning|give\s*back)/.test(lowerInput)) {
+              return formatBotResponse(msgs.toolsInfo);
         }
     }
     
     // 2B. Respostas sobre **Devolução/Entrega** 📦
-    if (/(devolver|devolução|entrego|entrega|devolvo)/.test(lowerInput)) {
-        return formatBotResponse("O procedimento de devolução é direto:\n\n1. Acesse a seção **'Devolver'** no menu lateral.\n2. **Busque ou identifique a ferramenta pelo seu nome** ou código.\n3. O sistema fará o **registro automático** da devolução, incluindo a **data e horário**.\n\nLembre-se: A devolução imediata e a verificação do estado da ferramenta são cruciais para o controle de inventário.");
+    if (/(devolver|devolução|entrego|entrega|devolvo|return|returning|give\s*back|deliver|delivery)/.test(lowerInput)) {
+        return formatBotResponse(msgs.returnInfo);
     }
 
     // 2C. Respostas sobre **Rastreabilidade/Histórico** 🔍
-    if (/(registro|quem\s*pegou|rastrear|monitoramento|historico|histórico|ver\s*quem\s*pegou|quem\s*está\s*com)/.test(lowerInput)) {
-        return formatBotResponse("A aba **'Histórico'** oferece **rastreabilidade total e transparência**.\n\nVocê pode consultar seus **registros de movimentação** (empréstimos e devoluções) e o **status atual** de qualquer ferramenta. O sistema armazena o nome do aluno, a identificação da ferramenta e a data/horário exato de cada ação.");
+    if (/(registro|quem\s*pegou|rastrear|monitoramento|historico|histórico|ver\s*quem\s*pegou|quem\s*está\s*com|history|log|trace|track)/.test(lowerInput)) {
+        return formatBotResponse(msgs.historyInfo);
     }
 
     // 3. Respostas sobre Desenvolvimento e Acessibilidade 🧑‍💻
-    if (/(quem\s*fez|desenvolvedores|criadores|equipe|idealizadores|cria|alunos|fundadores|arquitetos|criou|pessoas|criaram|fundou|desenvolveu|arquitetou|fizeram)/.test(lowerInput)) {
-        return formatBotResponse("O ControlTech é um projeto de **desenvolvimento inovador** realizado por cinco alunos do SENAI: **Eduardo Rodriges, Eliezer Beltrame, Felipe Rossi, Guilherme Augusto e Victor Hugo.**. Eles conceberam e implementaram toda a **arquitetura robusta e segura** do sistema para gestão de ferramentas.");
+    if (/(quem\s*fez|desenvolvedores|criadores|equipe|idealizadores|cria|alunos|fundadores|arquitetos|criou|pessoas|criaram|fundou|desenvolveu|arquitetou|fizeram|team|developer|developers|who\s*made|created)/.test(lowerInput)) {
+        return formatBotResponse(msgs.teamInfo);
     }
     // Acessibilidade
-    if (/(acessibilidade|vlibras|inclusão|surdo|como\s*foi\s*feito|Vlibras)/.test(lowerInput)) {
-        return formatBotResponse("Acessibilidade é uma prioridade fundamental! O ControlTech integra o recurso de **Acessibilidade do Governo (VLibras)**, disponível em todas as páginas. Basta localizar o ícone específico para utilizar a tradução em Libras.");
+    if (/(acessibilidade|vlibras|inclusão|surdo|como\s*foi\s*feito|Vlibras|accessibility|inclusive)/.test(lowerInput)) {
+        return formatBotResponse(msgs.accessibilityInfo);
     }
     // Navegação geral
-    if (/(navegação|onde\s*está|menus|abas|mexer|navegar|funções)/.test(lowerInput)) {
-        return formatBotResponse("A navegação principal do sistema é clara e acessível através da barra lateral, contendo as principais funções: **Ferramentas** (para retirada), **Devolver**, **Ajuda**, **ChatBot**, **Histórico** e **Sair**. A aba **ativa** é sempre destacada para sua orientação.");
+    if (/(navegação|onde\s*está|menus|abas|mexer|navegar|funções|navigation|menu|tabs|functions)/.test(lowerInput)) {
+        return formatBotResponse(msgs.navInfo);
     }
 
     // 4. Respostas Genéricas e Boas-vindas 👋
-    if (/(olá|oi|tudo\s*bem|saudação|bom\s*dia|boa\s*tarde)/.test(lowerInput)) {
-        return formatBotResponse("Saudações! Eu sou o Assistente Virtual da ControlTech. Fui desenvolvido para te auxiliar com qualquer questão sobre o **uso, regulamentos e funcionamento** do nosso sistema de gerenciamento de ferramentas. Em que área posso te dar suporte hoje?");
+    if (/(olá|oi|tudo\s*bem|saudação|bom\s*dia|boa\s*tarde|hello|hi|good\s*day|greetings)/.test(lowerInput)) {
+        return formatBotResponse(msgs.greeting);
     }
 
     // 5. Resposta Padrão (Fallback) ❓
-    return formatBotResponse("Não consegui encontrar uma correspondência exata para sua consulta. Por favor, tente reformular sua pergunta ou utilize termos mais específicos. Posso fornecer detalhes sobre:\n\n* **Devolução e Empréstimos**\n* **Login/Logout** (via QR Code)\n* **Rastreabilidade** (Histórico)\n\n* **A Equipe de Desenvolvimento** da ControlTech");
+    return formatBotResponse(msgs.fallback);
 }
 
 
@@ -341,9 +380,11 @@ function handleSendMessage() {
     appendMessage(input, 'user');
     // @ts-ignore
     chatInput.value = ''; // Limpa o campo após o envio
+    
+    const lang = localStorage.getItem('lang') || 'pt'; // Obtém o idioma atual
 
     setTimeout(() => {
-        const botResponse = getBotResponse(input);
+        const botResponse = getBotResponse(input, lang); // Passa o idioma para a função
         appendMessage(botResponse, 'bot');
     }, 500);
 }
@@ -371,10 +412,12 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Carrega o histórico de mensagens
     const historyLoaded = loadChatHistory();
+    const lang = localStorage.getItem('lang') || 'pt'; // Obtém o idioma atual para a mensagem inicial
+    const trans = translations[lang] || translations['pt'];
     
     // Mensagem inicial do bot (só se o histórico estiver vazio)
     if (!historyLoaded) {
-        const initialMessage = "Olá! Sou o Assistente Virtual do ControlTech. Sou especialista nas regras e no funcionamento do sistema. Em que posso te ajudar hoje?";
+        const initialMessage = trans.botInitialMessage; // Usa a mensagem inicial traduzida
         appendMessage(initialMessage, 'bot');
     }
 
@@ -385,12 +428,10 @@ document.addEventListener("DOMContentLoaded", () => {
     settingsBtn?.addEventListener('click', (e) => {
         e.preventDefault();
         
-        // CORREÇÃO: Apenas alterna a classe 'visible', confiando que o HTML/CSS esconde por padrão.
         themePopup?.classList.toggle('visible'); 
     });
     
     closePopupBtn?.addEventListener('click', () => {
-        // CORREÇÃO: Apenas remove a classe 'visible' para iniciar o fade-out suave.
         themePopup?.classList.remove('visible');
     });
     
