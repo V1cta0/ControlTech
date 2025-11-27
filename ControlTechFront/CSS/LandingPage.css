@@ -180,6 +180,7 @@ body {
 .header-logo-title {
     display: flex;
     align-items: center;
+    padding: 2em;
 }
 
 .main-header h1 {
