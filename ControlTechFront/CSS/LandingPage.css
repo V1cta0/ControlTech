@@ -23,10 +23,10 @@ body {
     position: fixed; 
     top: 0; 
     left: 0; 
-    height: 100vh; 
+    height: 120vh; 
     z-index: 100; 
     overflow-y: auto; 
-    width: 300px; 
+    width: 250px; 
     background-color: #004b8d;
     color: white;
     padding: 2rem 1.5rem;
