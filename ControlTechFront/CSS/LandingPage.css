@@ -780,9 +780,11 @@ body.dark-theme .cta-standalone-container {
 .delay-300 { transition-delay: 0.3s; }
 .delay-400 { transition-delay: 0.4s; }
 
+/* 2. Estado Final: Totalmente visível e na posição correta */
 .animate-visible {
     opacity: 1;
-    transform: translateX(0);
+    visibility: visible;
+    transform: translate(0, 0); /* Volta para a posição original */
 }
 
 /* ======================================= */
