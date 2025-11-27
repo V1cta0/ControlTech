@@ -337,13 +337,32 @@ body.dark-theme .lang-toggle-btn:hover { background-color: #004b8d; }
     color: white;
     padding: 15px 20px;
     display: flex; 
-    justify-content: flex-start;
+    /* CORREÇÃO: Alinha o botão no canto direito */
+    justify-content: space-between; 
     align-items: center;
     flex-shrink: 0; 
     border-radius: 0;
     box-shadow: 0 2px 4px rgba(0,0,0,0.15); 
     z-index: 10;
 }
+
+/* NOVO: Estilos para o botão de Limpar Histórico */
+.clear-history-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s, color 0.2s;
+    padding: 5px; /* Adiciona padding para área de clique */
+}
+
+.clear-history-btn:hover {
+    opacity: 1;
+    color: #ffd700; /* Dourado/Amarelo para destaque em hover */
+}
+
 
 .bot-profile {
     display: flex;
@@ -470,6 +489,14 @@ body.dark-theme .chatbot-header {
     box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
+body.dark-theme .clear-history-btn {
+    color: #b3cde0;
+}
+
+body.dark-theme .clear-history-btn:hover {
+    color: #f1c40f;
+}
+
 body.dark-theme .chatbot-body {
     background-color: #121212;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect width="10" height="10" fill="%23121212"/><circle cx="5" cy="5" r="1" fill="%23383838"/></svg>');
@@ -578,4 +605,6 @@ body.dark-theme .chatbot-footer input {
     .chatbot-footer input {
         padding: 10px 15px;
     }
+    
+    /* Manteve o botão de limpar na direita */
 }

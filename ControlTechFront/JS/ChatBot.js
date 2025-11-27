@@ -26,7 +26,7 @@ const translations = {
             'helpCenterInfo': "A **Central de Ajuda** é o seu recurso para resolver dúvidas rápidas.\n\nEla contém:\n\n1. Uma seção de **Perguntas Frequentes (FAQ)**, cobrindo os processos de devolução e saída do sistema.\n2. Um **Formulário de Contato** ('Relate seu problema') para enviar solicitações específicas diretamente para o e-mail de suporte.",
             'toolsInfo': "A aba **'Ferramentas'** é o coração do sistema, onde você encontra o **catálogo completo** de itens disponíveis. Para **retirar** uma ferramenta:\n\n1. Selecione o item desejado no catálogo.\n2. Registre o empréstimo, e ela ficará associada ao seu nome.\n\nO processo é rápido e garante o rastreamento.",
             'returnInfo': "O procedimento de devolução é direto:\n\n1. Acesse a seção **'Devolver'** no menu lateral.\n2. **Busque ou identifique a ferramenta pelo seu nome** ou código.\n3. O sistema fará o **registro automático** da devolução, incluindo a **data e horário**.\n\nLembre-se: A devolução imediata e a verificação do estado da ferramenta são cruciais para o controle de inventário.",
-            'historyInfo': "A aba **'Histórico'** oferece **rastreabilidade total e transparência**.\n\nVocê pode consultar seus **registros de movimentação** (empréstimos e devoluções) e o **status atual** de qualquer ferramenta. O sistema armazena o nome do aluno, a identificação da ferramenta e a data/horário exato de cada ação.",
+            'historyInfo': "A aba **'Histórico'** oferece **rastreabilidade total e transparência**.\n\nYou can consult your **movement records** (loans and returns) and the **current status** of any tool. The system stores the student's name, tool identification, and the exact date/time of each action.",
             'teamInfo': "O ControlTech é um projeto de **desenvolvimento inovador** realizado por cinco alunos do SENAI: **Eduardo Rodriges, Eliezer Beltrame, Felipe Rossi, Guilherme Augusto e Victor Hugo.**. Eles conceberam e implementaram toda a **arquitetura robusta e segura** do sistema para gestão de ferramentas.",
             'accessibilityInfo': "Acessibilidade é uma prioridade fundamental! O ControlTech integra o recurso de **Acessibilidade do Governo (VLibras)**, disponível em todas as páginas. Basta localizar o ícone específico para utilizar a tradução em Libras.",
             'navInfo': "A navegação principal do sistema é clara e acessível através da barra lateral, contendo as principais funções: **Ferramentas** (para retirada), **Devolver**, **Ajuda**, **ChatBot**, **Histórico** e **Sair**. A aba **ativa** é sempre destacada para sua orientação.",
@@ -204,7 +204,7 @@ function saveChatHistory() {
 
     const messages = Array.from(chatBody.children).map(child => {
         const sender = child.classList.contains('user-message') ? 'user' : 'bot';
-        // CORRIGIDO: Garante que o texto formatado (com <br>) é salvo.
+        // Garante que o texto formatado (com <br>) é salvo.
         const text = child.querySelector('p')?.innerHTML || ''; 
         return { text, sender };
     });
@@ -232,7 +232,7 @@ function loadChatHistory() {
                 messageContainer.classList.add(`${msg.sender}-message`);
                 
                 const messageParagraph = document.createElement('p');
-                // CORRIGIDO: Usa innerHTML para re-inserir o texto formatado.
+                // Usa innerHTML para re-inserir o texto formatado.
                 messageParagraph.innerHTML = msg.text; 
                 
                 messageContainer.appendChild(messageParagraph);
@@ -249,6 +249,23 @@ function loadChatHistory() {
     return false;
 }
 
+// NOVO: Função para limpar o histórico
+function clearChatHistory() {
+    const chatBody = document.getElementById('chatbot-body');
+    const currentLang = localStorage.getItem('lang') || 'pt';
+    const trans = translations[currentLang] || translations['pt'];
+
+    if (chatBody && confirm(currentLang === 'pt' ? 'Tem certeza que deseja limpar o histórico do chat?' : 'Are you sure you want to clear the chat history?')) {
+        localStorage.removeItem(CHAT_STORAGE_KEY);
+        chatBody.innerHTML = '';
+        
+        // Re-adiciona a mensagem inicial do bot após limpar
+        const initialMessage = trans.botInitialMessage; 
+        appendMessage(initialMessage, 'bot');
+    }
+}
+
+
 /**
  * Adiciona uma mensagem ao corpo do chat e salva o histórico.
  */
@@ -261,7 +278,7 @@ function appendMessage(text, sender) {
     messageContainer.classList.add(`${sender}-message`);
     
     const messageParagraph = document.createElement('p');
-    // CORRIGIDO: Usa innerHTML para quebras de linha (<br>).
+    // Usa innerHTML para quebras de linha (<br>).
     messageParagraph.innerHTML = text; 
     
     messageContainer.appendChild(messageParagraph);
@@ -395,6 +412,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Referências ChatBot
     const sendBtn = document.getElementById('send-btn');
     const chatInput = document.getElementById('chatbot-input');
+    // NOVO: Referência ao botão de limpar
+    const clearHistoryBtn = document.getElementById('clear-history-btn'); 
     
     // Inicializa Tema e Idioma
     loadTheme();
@@ -452,4 +471,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     } 
+
+    // NOVO: Listener para o botão de limpar histórico
+    if (clearHistoryBtn) {
+        clearHistoryBtn.addEventListener('click', clearChatHistory);
+    }
 });
