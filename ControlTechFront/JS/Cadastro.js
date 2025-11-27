@@ -90,10 +90,18 @@ cadastroQrInput?.addEventListener('change', () => {
 btnCadastrar?.addEventListener('click', async (e) => {
     e.preventDefault(); 
 
+    // VERIFICAÇÃO ADICIONAL DE NULO: Garante que os elementos existem antes de tentar ler .value
+    if (!nomeCadastroInput || !turmaCadastroInput) {
+        console.error("Erro: Elementos de input (nome ou turma/perfil) não encontrados no DOM.");
+        // @ts-ignore
+        if (statusMsgCadastro) statusMsgCadastro.textContent = "Erro de carregamento: Campo de entrada ausente.";
+        return;
+    }
+
     // @ts-ignore
     const nome = nomeCadastroInput.value.trim();
     // @ts-ignore
-    const turma = turmaCadastroInput.value.trim(); // <-- Usa 'turma'
+    const turma = turmaCadastroInput.value.trim(); // Linha 96 no seu código original
     
     if (!nome || !turma || !qrCodeLido) { 
         // @ts-ignore
@@ -106,7 +114,7 @@ btnCadastrar?.addEventListener('click', async (e) => {
 
     const usuarioData = {
         nome: nome,
-        perfil: turma, // <-- CHAVE MANTIDA como 'perfil' para o backend
+        perfil: turma, // CHAVE MANTIDA como 'perfil' para o backend
         qrCode: qrCodeLido
     };
 
