@@ -15,9 +15,9 @@ import java.io.File;
 // Importação necessária para Map.of()
 import java.util.Map;
 
+@CrossOrigin(origins = {"https://control-tech-six.vercel.app", "http://localhost:8080"})
 @RestController
 @RequestMapping("/api/qrcode")
-@CrossOrigin(origins = {"https://control-tech-six.vercel.app", "http://localhost:8080"})
 public class QrCodeController {
 
     @Autowired

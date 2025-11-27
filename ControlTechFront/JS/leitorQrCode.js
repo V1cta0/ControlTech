@@ -28,7 +28,8 @@ export function lerQrViaUpload(file, callbackSucesso, callbackErro) {
   const formData = new FormData();
   formData.append("file", file); 
 
-  fetch(`${API_BASE_URL}/api/qrcode/ler`, {
+  // --- ALTERAÇÃO DE ENDPOINT: de /ler para /decode ---
+  fetch(`${API_BASE_URL}/api/qrcode/decode`, { 
     method: "POST",
     body: formData
   })
@@ -40,7 +41,7 @@ export function lerQrViaUpload(file, callbackSucesso, callbackErro) {
   .catch(err => {
     // CORREÇÃO: Erro com Pop-up bonito
     console.error(err);
-    mostrarMensagem("Erro na Leitura", "Não foi possível identificar o QR Code. Tente uma imagem mais nítida.", "error");
+    mostrarMensagem("Erro na Leitura", "Não foi possível identificar o QR Code. (Verifique o Back-End)", "error");
     if (callbackErro) callbackErro(err);
   });
 }
