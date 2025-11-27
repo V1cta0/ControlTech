@@ -21,7 +21,7 @@ body {
 
 /* Barra Lateral */
 .sidebar {
-    width: 250px;
+    width: 298px;
     background-color: #004b8d;
     color: white;
     padding: 2rem 1.5rem;
@@ -439,7 +439,7 @@ textarea:focus {
     .sidebar {
         position: fixed;
         top: 0;
-        left: -260px; 
+        left: -300px; 
         width: 250px;
         height: 100vh;
         z-index: 2000; 
