@@ -640,11 +640,16 @@ body.dark-theme .cta-standalone-container {
     margin: 0 auto;
 }
 .feature-card {
-    /* CORREÇÃO ESTÉTICA: Borda mais visível e suave */
+    /* CORREÇÃO ESTÉTICA: Borda mais visível e suave (d3e0f0 é um azul claro muito sutil) */
     border: 1px solid #d3e0f0; 
-    /* CORREÇÃO ESTÉTICA: Sombra mais nítida para o efeito "flutuante" */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s, border-color 0.3s, border-top-color 0.4s;
+    
+    /* CORREÇÃO: Sombra mais nítida para o efeito "flutuante" */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    
+    /* NOVO/GOOFY: Leve inclinação padrão (cria interesse visual) */
+    transform: rotate(0.8deg);
+    
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 /* Para o texto do card (parágrafos dentro de .tool-card) */
 .tool-card p {
@@ -659,17 +664,19 @@ body.dark-theme .cta-standalone-container {
 .hover-border-glow {
     position: relative;
     overflow: hidden;
-    border-top: 5px solid #0061c0;
+    /* CORREÇÃO: Borda superior mais grossa para mais destaque */
+    border-top: 8px solid #0061c0; 
 }
 .hover-border-glow:hover {
-    border-top: 5px solid #ff9800; /* Muda a cor da borda ao passar o mouse */
-    /* MANTIDO: Box-shadow mais suave (0.2) */
-    box-shadow: 0 10px 40px rgba(0, 97, 192, 0.2); 
-    transform: translateY(-5px);
+    border-top: 8px solid #ff9800; /* Muda a cor da borda ao passar o mouse */
+    
+    /* NOVO/GOOFY: Efeito de "POP" exagerado (sobe, aumenta e gira ao contrário) */
+    transform: translateY(-10px) scale(1.05) rotate(-0.5deg);
+    
+    /* Sombra mais intensa para o "pop" */
+    box-shadow: 0 15px 40px rgba(0, 75, 141, 0.35); 
 }
 
-
-/* --- 8.3. Seção da Equipe (Team) - FLEX e CENTRALIZADA */
 .team-section {
     padding: 5rem 2rem;
     text-align: center;
@@ -691,8 +698,7 @@ body.dark-theme .cta-standalone-container {
     border-radius: 12px;
     /* CORREÇÃO ESTÉTICA: Borda mais visível e suave */
     border: 1px solid #d3e0f0; 
-    /* CORREÇÃO ESTÉTICA: Sombra mais nítida para o efeito "flutuante" */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     width: 150px;
     display: flex; 
     flex-direction: column;
