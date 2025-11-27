@@ -30,6 +30,9 @@ body {
     height: 100vh; 
     z-index: 100; 
     
+    /* ADIÇÃO ESTRUTURAL: Permite a rolagem interna se o conteúdo for maior que 100vh */
+    overflow-y: auto;
+    
     /* Demais estilos */
     width: 250px; /* FIXO: 250px (Desktop Padrão) */
     background-color: #004b8d;
@@ -792,135 +795,144 @@ body.dark-theme .cta-standalone-container {
     transform: translate(0, 0); /* Volta para a posição original */
 }
 
-
 /* ======================================= */
 /* 9. Responsividade (Mobile) */
 /* ======================================= */
 
 @media (max-width: 1024px) {
+
  .sidebar {
- /* Reduz a largura da sidebar de 250px para 220px */
  width: 220px; 
  }
 
  .main-content {
- margin-left: 220px; 
- padding: 0 1rem; 
+margin-left: 220px; 
  }
-
- .hero-section {
- height: 70vh;
- padding: 2rem 1.5rem;}
- .features-section, .team-section {
- padding: 4rem 1.5rem; 
- }
- .main-footer {
- padding: 3rem 1.5rem 1rem 1.5rem; }
+    
+    /* Ajustes para evitar o esmagamento do Hero e seções */
+    .hero-section {
+        /* Garante que o padding interno não cause quebra em 1024px */
+        padding: 2rem 1.5rem; 
+    }
+    
+    .features-section, .team-section {
+        /* Ajusta o padding horizontal para centralizar e dar espaço */
+        padding-left: 1.5rem; 
+        padding-right: 1.5rem; 
+    }
+    
+    .main-footer {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
 }
 
 
 /* Responsividade para Mobile (max-width: 768px) - Off-Canvas */
 @media (max-width: 768px) {
-    .dashboard-container {
-    flex-direction: column;
-    }
+ .dashboard-container {
+ flex-direction: column;
+ }
 
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: -300px;
-    height: 100vh;
-    width: 250px; /* Mantém a largura maior para o menu off-canvas */
-    z-index: 100;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+ .sidebar {
+position: fixed;
+ top: 0;
+ left: -300px;
+ height: 100vh;
+ width: 250px; /* Mantém a largura maior para o menu off-canvas */
+ z-index: 100;
+ box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+ }
+ .sidebar.active {
+ left: 0;
+ }
+ .user-profile { 
+ display: none;
+ }
+
+ .main-content {
+ padding: 4rem 0 0 0; 
+ margin-left: 0; 
+ }
+
+ .main-header {
+ padding: 1rem;
+ border-radius: 0;
+ justify-content: center;
+ }
+ .header-actions {
+display: none;
+ }
+
+ .hamburger-btn {
+ display: block;  }
+
+
+.features-section, .team-section {
+ padding: 3rem 1rem;
+ }
+ .features-grid {
+gap: 1rem;
+ }
+ .team-grid {
+ gap: 1.5rem;
+ }
+ .footer-content {
+ justify-content: flex-start;
+ flex-direction: column;
+ text-align: center;
+ gap: 2rem;
+ }
+ .footer-links h4, .footer-contact h4 {
+ text-align: center;
+ border-bottom: none;
+ }
+ .footer-contact p {
+ justify-content: center;
+ }
 }
-.sidebar.active {
-    left: 0;
+
+.perfis {
+ text-decoration: none;
+ color: #0061c0;
 }
-.user-profile { 
-    display: none;
+.scroll-indicator {
+ position: absolute;
+ bottom: 30px; /* Posição fixa no rodapé do hero */
+ left: 50%;
+ transform: translateX(-50%);
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ color: white; /* Cor visível no fundo azul do Hero */
+ z-index: 10; 
+ opacity: 0.9;
 }
-.main-content {
-    padding: 4rem 0 0 0; 
-    margin-left: 0; 
-}
 
-.main-header {
-    padding: 1rem;
-    border-radius: 0;
-    justify-content: center;
-    }
-    .header-actions {
-    display: none;
-    }
-
-    .hamburger-btn {
-    display: block;  }
-
-    .features-section, .team-section {
-    padding: 3rem 1rem;
-    }
-    .features-grid {
-    gap: 1rem;
-    }
-    .team-grid {
-    gap: 1.5rem;
-    }
-    .footer-content {
-    justify-content: flex-start;
-    flex-direction: column;
-    text-align: center;
-    gap: 2rem;
-    }
-    .footer-links h4, .footer-contact h4 {
-    text-align: center;
-    border-bottom: none;
-    }
-    .footer-contact p {
-    justify-content: center; }
-    }
-
-    .perfis {
-    text-decoration: none;
-    color: #0061c0;
-    }
-    .scroll-indicator {
-    position: absolute;
-    bottom: 30px;  left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white; 
-    z-index: 10; 
-    opacity: 0.9;
-    }
-
-    .scroll-indicator i {
+.scroll-indicator i {
     font-size: 1.5rem;
-    margin-top: -8px; /* Para a segunda seta ficar ligeiramente sobreposta */
-    animation: bounce-scroll 2s infinite;
-    }
+  margin-top: -8px; 
+ animation: bounce-scroll 2s infinite;
+}
 
-    .scroll-indicator i:nth-child(2) {
-    animation-delay: 0.3s; /* Cria o efeito de setas "seguindo" a primeira */
-    }
+.scroll-indicator i:nth-child(2) {
+ animation-delay: 0.3s; 
+}
 
-    @keyframes bounce-scroll {
-    0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-    }
-    40% {
-    transform: translateY(-15px); /* Salto maior */
-    }
-    60% {
-    transform: translateY(-7px);
-    }
-    }
+@keyframes bounce-scroll {
+ 0%, 20%, 50%, 80%, 100% {
+ transform: translateY(0);
+}
+ 40% {
+transform: translateY(-15px); /* Salto maior */
+ }
+ 60% {
+ transform: translateY(-7px);
+}
+}
 
-    /* Dark Theme: Ajusta a cor para um amarelo que se destaca no fundo escuro */
-    body.dark-theme .scroll-indicator {
-    color: #ff9800;
-    opacity: 1;
-    }
+body.dark-theme .scroll-indicator {
+ color: #ff9800;
+ opacity: 1;
+}
