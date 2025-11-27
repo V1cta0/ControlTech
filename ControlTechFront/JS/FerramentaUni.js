@@ -76,15 +76,26 @@ function iniciarCronometro(timestampAssociacao) {
     const chronometerDisplay = document.getElementById('chronometer-display');
     const timeElapsedContainer = document.getElementById('time-elapsed');
     
-    // TRATAMENTO DE FUZO HORÁRIO: Garante que a data é tratada como UTC.
-    // Esta lógica é uma defesa extra, caso o backend não esteja totalmente corrigido.
-    let dateString = timestampAssociacao;
-    if (typeof dateString === 'string' && dateString.slice(-1) !== 'Z' && dateString.indexOf('+') === -1) {
-        dateString += 'Z'; 
+    let dataAssociacao;
+
+    // CORREÇÃO CRÍTICA: Lida com a serialização do Java (LocalDateTime como array)
+    if (Array.isArray(timestampAssociacao) && timestampAssociacao.length >= 6) {
+        // Formato Java: [ano, mes(1-12), dia, hora, minuto, segundo, nanosec]
+        const [year, month, day, hour, minute, second] = timestampAssociacao;
+        
+        // Construtor JS Date: new Date(year, monthIndex(0-11), day, hour, minute, second, millisec)
+        // Usa Date.UTC() e subtrai 1 do mês (mês é 0-indexado em JS) para garantir UTC
+        dataAssociacao = new Date(Date.UTC(year, month - 1, day, hour, minute, second, 0));
+        
+    } else {
+        // Lógica de fallback para strings (ISO 8601), incluindo a correção anterior de timezone
+        let dateString = timestampAssociacao;
+        if (typeof dateString === 'string' && dateString.slice(-1) !== 'Z' && dateString.indexOf('+') === -1) {
+            dateString += 'Z'; 
+        }
+        dataAssociacao = new Date(dateString);
     }
-
-    const dataAssociacao = new Date(dateString);
-
+    
     // VERIFICAÇÃO DE VALIDADE DA DATA
     if (isNaN(dataAssociacao.getTime())) {
         console.error("Data de associação inválida após correção:", timestampAssociacao);
@@ -211,7 +222,6 @@ async function atualizarStatusDaFerramenta() {
     const ferramentaId = new URLSearchParams(window.location.search).get("id");
     const lang = localStorage.getItem('lang') || 'pt';
     try {
-        // CORREÇÃO 1: Usa API_BASE_URL
         const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}/usuario`);
         if (!res.ok) throw new Error("Erro");
         const usuarioStatus = await res.json(); 
@@ -234,7 +244,6 @@ async function carregarFerramenta() {
     const trans = translations[lang];
 
     try {
-        // CORREÇÃO 2: Usa API_BASE_URL
         const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}`);
         if (!res.ok) throw new Error(trans.erroCarregar);
 
@@ -293,7 +302,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     btnAssociar?.addEventListener("click", async () => {
         if (statusMsg) statusMsg.textContent = "";
         try {
-            // CORREÇÃO 3: Usa API_BASE_URL
             const assocRes = await fetch(`${API_BASE_URL}/api/ferramentas/associar/${ferramentaId}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
