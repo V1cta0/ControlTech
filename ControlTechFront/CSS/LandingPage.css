@@ -20,18 +20,13 @@ body {
 
 
 .sidebar {
-    /* PROPRIEDADES ESSENCIAIS PARA IR ATÉ O FINAL */
     position: fixed; 
     top: 0; 
     left: 0; 
     height: 100vh; 
     z-index: 100; 
-    
-    /* Permite rolagem interna caso o conteúdo seja maior que a tela */
     overflow-y: auto; 
-    
-    /* Demais estilos... (MANTIDOS) */
-    width: 250px; 
+    width: 300px; 
     background-color: #004b8d;
     color: white;
     padding: 2rem 1.5rem;
