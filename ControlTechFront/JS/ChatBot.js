@@ -317,7 +317,7 @@ function getBotResponse(input) {
     }
 
     // 5. Resposta Padrão (Fallback) ❓
-    return formatBotResponse("Não consegui encontrar uma correspondência exata para sua consulta. Por favor, tente reformular sua pergunta ou utilize termos mais específicos. Posso fornecer detalhes sobre:\n\n* **Devolução e Empréstimos**\n* **Login/Logout** (via QR Code)\n* **Rastreabilidade** (Histórico)\n* **A Equipe de Desenvolvimento** da ControlTech");
+    return formatBotResponse("Não consegui encontrar uma correspondência exata para sua consulta. Por favor, tente reformular sua pergunta ou utilize termos mais específicos. Posso fornecer detalhes sobre:\n\n* **Devolução e Empréstimos**\n* **Login/Logout** (via QR Code)\n* **Rastreabilidade** (Histórico)\n\n* **A Equipe de Desenvolvimento** da ControlTech");
 }
 
 
@@ -384,13 +384,16 @@ document.addEventListener("DOMContentLoaded", () => {
     // Eventos Popup Configurações (CORRIGIDOS)
     settingsBtn?.addEventListener('click', (e) => {
         e.preventDefault();
-        // CORREÇÃO: Apenas alterna a classe 'visible' e garante que 'hidden' é removida.
-        themePopup?.classList.toggle('visible');
+        
+        // 1. Remove a classe 'hidden' explicitamente (do HTML) para não conflitar com a transição.
         themePopup?.classList.remove('hidden'); 
+        
+        // 2. Alterna a classe principal de visibilidade para iniciar/terminar a transição.
+        themePopup?.classList.toggle('visible');
     });
     
     closePopupBtn?.addEventListener('click', () => {
-        // CORREÇÃO: Apenas remove a classe 'visible' para iniciar o fade-out suave.
+        // 3. Apenas remove a classe 'visible' para iniciar o fade-out suave.
         themePopup?.classList.remove('visible');
     });
     
@@ -398,7 +401,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const isDark = document.body.classList.contains('dark-theme');
         const newTheme = isDark ? 'light' : 'dark';
         
-        // CORREÇÃO: saveTheme agora aplica a classe no body.
+        // 4. Chama saveTheme, que agora aplica a classe no body.
         saveTheme(newTheme);
     });
     
