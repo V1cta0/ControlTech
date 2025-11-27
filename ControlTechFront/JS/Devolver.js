@@ -333,7 +333,7 @@ document.getElementById("confirmBtn")?.addEventListener("click", function () {
             const arrayBuffer = await res.arrayBuffer();
             const decoder = new TextDecoder('utf-8');
             const decodedMsg = decoder.decode(arrayBuffer);
-            return decodedMsg;
+            return decodedMsg; // Retorna o texto corretamente decodificado
         })
         .then(msg => {
             if (mensagemDiv) {
