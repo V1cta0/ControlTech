@@ -1,4 +1,4 @@
-// --- Dicionário de traduções (MANTIDO) ---
+// --- Dicionário de traduções ---
 const translations = {
     'pt': {
         'pageTitle': 'ChatBot - SENAI ControlTech',
@@ -26,21 +26,43 @@ const translations = {
         'botInitialMessage': 'Olá! Sou o Assistente Virtual do ControlTech. Sou especialista nas regras e no funcionamento do sistema. Em que posso te ajudar hoje?',
         'botMsgs': {
             'helpHappy': "Fico feliz em ajudar com a sua gestão de ferramentas! Se precisar de mais detalhes ou tiver novas dúvidas sobre o ControlTech, estou à disposição.",
+            
+            // NOVO TÓPICO: Sobre o Projeto
+            'projectInfo': "O **ControlTech** é um sistema completo de gerenciamento de ativos (ferramentas e componentes) desenvolvido para o ambiente SENAI. Nosso objetivo é fornecer **rastreabilidade total** sobre os empréstimos e devoluções, garantindo a organização e reduzindo o extravio de materiais.",
+            
+            // NOVO TÓPICO: Prazo
+            'prazoInfo': "O **prazo de devolução** padrão é de **7 dias** após a retirada, conforme as regras estabelecidas. O sistema é configurado para notificar o usuário sobre empréstimos pendentes, garantindo a disponibilidade dos itens para todos os alunos.",
+            
+            // EXPANDIDO: Login
             'loginInfo': "O processo de **autenticação** no ControlTech é totalmente seguro e simples. Para iniciar sua sessão e utilizar o sistema, por favor, utilize o **QR Code do seu crachá SENAI** na página de Login. Este é o método padrão de **login** e garante a rastreabilidade do usuário.",
+            
+            // EXPANDIDO: Equipe
+            'teamInfo': "O ControlTech é um projeto de **desenvolvimento inovador** realizado por cinco alunos do SENAI: **Eduardo Rodriges, Eliezer Beltrame, Felipe Rossi, Guilherme Augusto e Victor Hugo.**. Eles conceberam e implementaram toda a **arquitetura robusta e segura** do sistema para gestão de ferramentas.",
+
+            // DETALHES DE MEMBROS (Respostas mais específicas)
+            'memberDetails': "A equipe é composta por:\n\n* **Eduardo Rodriges:** Focado na integração de câmeras e na arquitetura da API.\n* **Eliezer Beltrame:** Especialista em UX/UI e lógica de Front-end.\n* **Felipe Rossi:** Responsável pela arquitetura de banco de dados e lógica de regras de negócio (Spring Boot).\n* **Guilherme Augusto:** Focado no desenvolvimento da interface do usuário (HTML/CSS) e responsividade.\n* **Victor Hugo:** Responsável pela documentação técnica e integração de segurança (QR Code).",
+            
+            // EXPANDIDO: Ferramentas
+            'toolsInfo': "A aba **'Ferramentas'** é o coração do sistema, onde você encontra o **catálogo completo** de itens disponíveis. Para **retirar/pegar** uma ferramenta:\n\n1. Selecione o item desejado no catálogo.\n2. Registre o empréstimo, e ela ficará associada ao seu nome.\n\nO processo é rápido e garante o rastreamento.",
+            
+            // EXPANDIDO: Devolução
+            'returnInfo': "O procedimento de devolução é direto:\n\n1. Acesse a seção **'Devolver'** no menu lateral.\n2. **Busque ou identifique a ferramenta pelo seu nome** ou código.\n3. O sistema fará o **registro automático** da devolução, incluindo a **data e horário**.\n\nLembre-se: A devolução imediata e a verificação do estado da ferramenta são cruciais para o controle de inventário.",
+            
+            // MANTIDOS: Logout, Ajuda, Histórico, Acessibilidade, Navegação
             'logoutInfo': "Para encerrar sua sessão, vá para a aba **'Saída'** no menu lateral.\n\nLá, basta pressionar o botão de **'Sair'** (ou **'Encerrar Sessão'**) para confirmar o seu desligamento do sistema. Não é necessário escanear o crachá novamente. Este processo garante a finalização segura de sua sessão.",
             'homeInfo': "A página **'Início'** (ou Landing Page) serve como o painel de boas-vindas do sistema. Ela confirma seu login, exibe o seu nome e é o ponto central para acessar todas as funções, como Ferramentas, Devolver e Histórico, através da barra lateral.",
             'helpCenterInfo': "A **Central de Ajuda** é o seu recurso para resolver dúvidas rápidas.\n\nEla contém:\n\n1. Uma seção de **Perguntas Frequentes (FAQ)**, cobrindo os processos de devolução e saída do sistema.\n2. Um **Formulário de Contato** ('Relate seu problema') para enviar solicitações específicas diretamente para o e-mail de suporte.",
-            'toolsInfo': "A aba **'Ferramentas'** é o coração do sistema, onde você encontra o **catálogo completo** de itens disponíveis. Para **retirar** uma ferramenta:\n\n1. Selecione o item desejado no catálogo.\n2. Registre o empréstimo, e ela ficará associada ao seu nome.\n\nO processo é rápido e garante o rastreamento.",
-            'returnInfo': "O procedimento de devolução é direto:\n\n1. Acesse a seção **'Devolver'** no menu lateral.\n2. **Busque ou identifique a ferramenta pelo seu nome** ou código.\n3. O sistema fará o **registro automático** da devolução, incluindo a **data e horário**.\n\nLembre-se: A devolução imediata e a verificação do estado da ferramenta são cruciais para o controle de inventário.",
             'historyInfo': "A aba **'Histórico'** oferece **rastreabilidade total e transparência**.\n\nYou can consult your **movement records** (loans and returns) and the **current status** of any tool. The system stores the student's name, tool identification, and the exact date/time of each action.",
-            'teamInfo': "O ControlTech é um projeto de **desenvolvimento inovador** realizado por cinco alunos do SENAI: **Eduardo Rodriges, Eliezer Beltrame, Felipe Rossi, Guilherme Augusto e Victor Hugo.**. Eles conceberam e implementaram toda a **arquitetura robusta e segura** do sistema para gestão de ferramentas.",
             'accessibilityInfo': "Acessibilidade é uma prioridade fundamental! O ControlTech integra o recurso de **Acessibilidade do Governo (VLibras)**, disponível em todas as páginas. Basta localizar o ícone específico para utilizar a tradução em Libras.",
             'navInfo': "A navegação principal do sistema é clara e acessível através da barra lateral, contendo as principais funções: **Ferramentas** (para retirada), **Devolver**, **Ajuda**, **ChatBot**, **Histórico** e **Sair**. A aba **ativa** é sempre destacada para sua orientação.",
             'greeting': "Saudações! Eu sou o Assistente Virtual da ControlTech. Fui desenvolvido para te auxiliar com qualquer questão sobre o **uso, regulamentos e funcionamento** do nosso sistema de gerenciamento de ferramentas. Em que área posso te dar suporte hoje?",
-            'fallback': "Não consegui encontrar uma correspondência exata para sua consulta. Por favor, tente reformular sua pergunta ou utilize termos mais específicos. Posso fornecer detalhes sobre:\n\n* **Devolução e Empréstimos**\n* **Login/Logout** (via QR Code)\n* **Rastreabilidade** (Histórico)\n\n* **A Equipe de Desenvolvimento** da ControlTech"
+            
+            // EXPANDIDO: Fallback
+            'fallback': "Não consegui encontrar uma correspondência exata para sua consulta. Tente usar termos mais específicos, como: **O que é o ControlTech?**, **Prazo de devolução**, **Login**, **Devolver**, **Equipe**, ou **Felipe Rossi**."
         }
     },
     'en': {
+        // ... (Traduções em inglês expandidas similarmente) ...
         'pageTitle': 'ChatBot - SENAI ControlTech',
         'sidebarTools': 'Tools',
         'sidebarReturn': 'Return',
@@ -57,23 +79,24 @@ const translations = {
         'langStatusPT': 'Portuguese',
         'langStatusEN': 'English',
         'welcomeMessage': 'Hello,',
-        // NOVAS STRINGS PARA O MODAL
         'clearModalTitle': 'Confirm Deletion',
         'clearModalMessage': 'Are you sure you want to clear the chat history? This action cannot be undone.',
         'clearConfirmBtn': 'Yes, Clear',
         'clearCancelBtn': 'Cancel',
-        // FIM NOVAS STRINGS
         'botInitialMessage': 'Hello! I am the ControlTech Virtual Assistant. I specialize in the rules and functionality of the system. How can I help you today?',
         'botMsgs': {
             'helpHappy': "I'm happy to help with your tool management! If you need more details or have new questions about ControlTech, I am available.",
+            'projectInfo': "ControlTech is a complete asset management system (tools and components) developed for the SENAI environment. Our goal is to provide **full traceability** over loans and returns, ensuring organization and reducing material loss.",
+            'prazoInfo': "The standard **return period** is **7 days** after checkout, according to established rules. The system is configured to notify the user about pending loans, ensuring item availability for all students.",
             'loginInfo': "The **authentication** process in ControlTech is totally secure and simple. To start your session and use the system, please use the **QR Code on your SENAI badge** on the Login page. This is the standard method for **login** and guarantees user traceability.",
+            'teamInfo': "ControlTech is an **innovative development project** carried out by five SENAI students: **Eduardo Rodriges, Eliezer Beltrame, Felipe Rossi, Guilherme Augusto, and Victor Hugo.**. They conceived and implemented the entire **robust and secure architecture** of the tool management system.",
+            'memberDetails': "The team is composed of:\n\n* **Eduardo Rodriges:** Focused on camera integration and API architecture.\n* **Eliezer Beltrame:** Specialist in UX/UI and Front-end logic.\n* **Felipe Rossi:** Responsible for database architecture and business rule logic (Spring Boot).\n* **Guilherme Augusto:** Focused on user interface development (HTML/CSS) and responsiveness.\n* **Victor Hugo:** Responsible for technical documentation and security integration (QR Code).",
+            'toolsInfo': "The **'Tools'** tab is the heart of the system, where you find the **complete catalog** of available items. To **check out** a tool:\n\n1. Select the desired item from the catalog.\n2. Register the loan, and it will be associated with your name.\n\nThe process is fast and ensures tracking.",
+            'returnInfo': "The return procedure is straightforward:\n\n1. Access the **'Return'** section in the side menu.\n2. **Search for or identify the tool by its name** or code.\n3. The system will make the **automatic registration** of the return, including the **date and time**.\n\nRemember: Immediate return and verification of the tool's condition are crucial for inventory control.",
             'logoutInfo': "To end your session, go to the **'Exit'** tab in the side menu.\n\nThere, just press the **'Exit'** (or **'End Session'**) button to confirm your departure from the system. It is not necessary to scan the badge again. This process ensures the secure finalization of your session.",
             'homeInfo': "The **'Home'** page (or Landing Page) serves as the system's welcome dashboard. It confirms your login, displays your name, and is the central point for accessing all functions, such as Tools, Return, and History, through the side bar.",
             'helpCenterInfo': "The **Help Center** is your resource for quickly resolving questions.\n\nIt contains:\n\n1. A **Frequently Asked Questions (FAQ)** section, covering the return and exit processes.\n2. A **Contact Form** ('Report your problem') to send specific requests directly to the support email.",
-            'toolsInfo': "The **'Tools'** tab is the heart of the system, where you find the **complete catalog** of available items. To **check out** a tool:\n\n1. Select the desired item from the catalog.\n2. Register the loan, and it will be associated with your name.\n\nThe process is fast and ensures tracking.",
-            'returnInfo': "The return procedure is straightforward:\n\n1. Access the **'Return'** section in the side menu.\n2. **Search for or identify the tool by its name** or code.\n3. The system will make the **automatic registration** of the return, including the **date and time**.\n\nRemember: Immediate return and verification of the tool's condition are crucial for inventory control.",
             'historyInfo': "The **'History'** tab offers **full traceability and transparency**.\n\nYou can consult your **movement records** (loans and returns) and the **current status** of any tool. The system stores the student's name, tool identification, and the exact date/time of each action.", 
-            'teamInfo': "ControlTech is an **innovative development project** carried out by five SENAI students: **Eduardo Rodriges, Eliezer Beltrame, Felipe Rossi, Guilherme Augusto, and Victor Hugo.**. They conceived and implemented the entire **robust and secure architecture** of the tool management system.",
             'accessibilityInfo': "Accessibility is a fundamental priority! ControlTech integrates the **Government Accessibility feature (VLibras)**, available on all pages. Just locate the specific icon to use the translation into Libras.",
             'navInfo': "The main navigation of the system is clear and accessible through the side bar, containing the main functions: **Tools** (for checkout), **Return**, **Help**, **ChatBot**, **History**, and **Exit**. The **active** tab is always highlighted for your orientation.",
             'greeting': "Greetings! I am the ControlTech Virtual Assistant. I was developed to assist you with any questions about the **use, regulations, and functioning** of our tool management system. In what area can I support you today?",
@@ -346,7 +369,7 @@ function formatBotResponse(text) {
 }
 
 
-// --- LÓGICA DO BOT (MANTIDA) ---
+// --- LÓGICA DO BOT (EXPANDIDA) ---
 function getBotResponse(input, lang) {
     const lowerInput = input.toLowerCase().trim();
     const msgs = translations[lang]?.botMsgs || translations['pt'].botMsgs; 
@@ -356,55 +379,82 @@ function getBotResponse(input, lang) {
         return formatBotResponse(msgs.helpHappy);
     }
     
-    if (/(login|entrar|acessar|autenticar|começo|qr\s*code|crachá|badge|start|access)/.test(lowerInput)) {
+    // NOVO TÓPICO: O que é o ControlTech?
+    if (/(o\s*que\s*é|qual\s*o\s*objetivo|sobre\s*a\s*controltech|o\s*que\s*faz|o\s*que\s*é\s*controltech|about\s*controltech|what\s*is\s*controltech)/.test(lowerInput)) {
+        return formatBotResponse(msgs.projectInfo);
+    }
+    
+    // NOVO TÓPICO: Prazo / Multa
+    if (/(prazo|multa|atraso|data\s*limite|devolver\s*até|due\s*date|fine|delay)/.test(lowerInput)) {
+        return formatBotResponse(msgs.prazoInfo);
+    }
+
+    // TÓPICO: Login/Autenticação
+    if (/(login|entrar|acessar|autenticar|começo|qr\s*code|crachá|badge|start|access|logar|identificar|registrar)/.test(lowerInput)) {
         return formatBotResponse(msgs.loginInfo);
     }
     
+    // TÓPICO: Logout
     if (/(sair|logout|deslogar|encerrar\s*sessão|finalizar|end\s*session|exit|leave)/.test(lowerInput)) {
         return formatBotResponse(msgs.logoutInfo);
     }
 
+    // TÓPICO: Página Inicial
     if (/(início|inicio|pagina\s*inicial|home|bem\s*vindo|landing\s*page|welcome)/.test(lowerInput)) {
         return formatBotResponse(msgs.homeInfo);
     }
 
-    if (/(ajuda|faq|suporte|contato|problema|problemas|perguntas\s*frequentes|help|support|contact)/.test(lowerInput)) {
+    // TÓPICO: Ajuda/Suporte
+    if (/(ajuda|faq|suporte|contato|problema|problemas|perguntas\s*frequentes|help|support|contact|dúvida|duvidas)/.test(lowerInput)) {
         return formatBotResponse(msgs.helpCenterInfo);
     }
 
-    const retiradaRegex = /(ferramenta[s]?|item|catálogo|preciso|emprestimo|pegar|retirar|capturar|usar|quero|tool|tools|item|catalog|loan|check\s*out)/;
+    // TÓPICO: Retirada/Ferramentas
+    const retiradaRegex = /(ferramenta[s]?|item|catálogo|preciso|emprestimo|pegar|retirar|capturar|usar|quero|tool|tools|item|catalog|loan|check\s*out|pego)/;
     if (retiradaRegex.test(lowerInput)) {
         if (!/(devolver|devolução|entrega|devolvo|return|returning|give\s*back)/.test(lowerInput)) {
               return formatBotResponse(msgs.toolsInfo);
         }
     }
     
+    // TÓPICO: Devolução
     if (/(devolver|devolução|entrego|entrega|devolvo|return|returning|give\s*back|deliver|delivery)/.test(lowerInput)) {
         return formatBotResponse(msgs.returnInfo);
     }
 
+    // TÓPICO: Rastreabilidade/Histórico
     if (/(registro|quem\s*pegou|rastrear|monitoramento|historico|histórico|ver\s*quem\s*pegou|quem\s*está\s*com|history|log|trace|track)/.test(lowerInput)) {
         return formatBotResponse(msgs.historyInfo);
     }
 
+    // TÓPICO: Membros Detalhados (Busca pelo nome completo ou apenas o nome)
+    if (/(eduardo|eliezer|felipe\s*rossi|guilherme|victor\s*hugo|quem\s*é|quem\s*são)/.test(lowerInput)) {
+        return formatBotResponse(msgs.memberDetails);
+    }
+    
+    // TÓPICO: Equipe (Geral)
     if (/(quem\s*fez|desenvolvedores|criadores|equipe|idealizadores|cria|alunos|fundadores|arquitetos|criou|pessoas|criaram|fundou|desenvolveu|arquitetou|fizeram|team|developer|developers|who\s*made|created)/.test(lowerInput)) {
         return formatBotResponse(msgs.teamInfo);
     }
     
+    // TÓPICO: Acessibilidade
     if (/(acessibilidade|vlibras|inclusão|surdo|como\s*foi\s*feito|Vlibras|accessibility|inclusive)/.test(lowerInput)) {
         return formatBotResponse(msgs.accessibilityInfo);
     }
     
+    // TÓPICO: Navegação
     if (/(navegação|onde\s*está|menus|abas|mexer|navegar|funções|navigation|menu|tabs|functions)/.test(lowerInput)) {
         return formatBotResponse(msgs.navInfo);
     }
 
+    // TÓPICO: Saudação
     if (lang === 'en' && /(hello|hi|good\s*day|greetings)/.test(lowerInput)) {
          return formatBotResponse(msgs.greeting);
     } else if (lang === 'pt' && /(olá|oi|tudo\s*bem|saudação|bom\s*dia|boa\s*tarde)/.test(lowerInput)) {
          return formatBotResponse(msgs.greeting);
     }
 
+    // TÓPICO: Fallback
     return formatBotResponse(msgs.fallback);
 }
 
