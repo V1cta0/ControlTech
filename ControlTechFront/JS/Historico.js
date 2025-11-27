@@ -3,7 +3,7 @@ import { API_BASE_URL } from './apiConfig.js';
 // --- CONFIGURAÇÃO DE TRADUÇÕES ---
 const translations = {
     'pt': {
-        'pageTitle': 'Ajuda - SENAI ControlTech',
+        'pageTitle': 'Histórico - SENAI ControlTech',
         'sidebarAbout': 'Início', 
         'sidebarTools': 'Ferramentas',
         'sidebarReturn': 'Devolver',
@@ -31,7 +31,7 @@ const translations = {
         'welcomeMessage': 'Olá,'
     },
     'en': {
-        'pageTitle': 'Help - SENAI ControlTech',
+        'pageTitle': 'History - SENAI ControlTech',
         'sidebarAbout': 'Home', 
         'sidebarTools': 'Tools',
         'sidebarReturn': 'Return',
@@ -141,11 +141,9 @@ function displayUserName(lang) {
 
 // --- LÓGICA PRINCIPAL CORRIGIDA ---
 
-// 1. Uso de Template String (Crase) para montar a URL
 const BASE_URL = `${API_BASE_URL}/api/historico`; 
 
 function carregarHistorico(usuarioId = null) {
-  // 2. Correção da URL com crase
   const url = usuarioId ? `${BASE_URL}/usuario/${usuarioId}` : `${BASE_URL}/todos`;
   
   const currentLang = localStorage.getItem('lang') || 'pt';
@@ -154,7 +152,6 @@ function carregarHistorico(usuarioId = null) {
 
   if (!historicoContainer) return;
 
-  // 3. Correção do HTML com crase
   historicoContainer.innerHTML = `<p>${currentLang === 'pt' ? 'Carregando histórico...' : 'Loading history...'}</p>`;
 
   fetch(url)
@@ -166,7 +163,6 @@ function carregarHistorico(usuarioId = null) {
       historicoContainer.innerHTML = ""; 
 
       if (!historicos || !Array.isArray(historicos) || historicos.length === 0) {
-        // 4. Correção do HTML com crase
         historicoContainer.innerHTML = `<p class="lista-vazia">${trans.msgNenhumHistorico}</p>`;
         return;
       }
@@ -178,25 +174,31 @@ function carregarHistorico(usuarioId = null) {
         let dataFormatada = 'N/A';
         let horaFormatada = '';
         
-        // Validação da data
+        // CORREÇÃO: Trata a data se for recebida como array [ano, mes, dia, hora, minuto, segundo, nanosec]
         if (h.dataDevolucao) {
-            try {
-                // Se a data vier como array [ano, mes, dia...], o JS precisa de ajuste, 
-                // mas se vier string ISO "2023-10-27T...", o new Date funciona direto.
-                const data = new Date(h.dataDevolucao);
-                 if (!isNaN(data)) {
-                    dataFormatada = data.toLocaleDateString(currentLang === 'pt' ? 'pt-BR' : 'en-US');
-                    horaFormatada = data.toLocaleTimeString(currentLang === 'pt' ? 'pt-BR' : 'en-US', { hour: '2-digit', minute: '2-digit' });
-                 }
-            } catch (e) {
-                 console.error("Erro data:", e);
+            let data;
+            
+            if (Array.isArray(h.dataDevolucao) && h.dataDevolucao.length >= 6) {
+                // Formato Java: [ano, mes(1-12), dia, hora, minuto, segundo, nanosec]
+                const [year, month, day, hour, minute, second] = h.dataDevolucao;
+                
+                // Construtor JS Date: new Date(year, monthIndex(0-11), day, hour, minute, second, millisec)
+                // Usa Date.UTC() e subtrai 1 do mês para garantir UTC
+                data = new Date(Date.UTC(year, month - 1, day, hour, minute, second, 0));
+            } else {
+                // Fallback para strings ISO (ex: "2023-10-27T...")
+                data = new Date(h.dataDevolucao);
+            }
+
+            if (data && !isNaN(data.getTime())) {
+                 dataFormatada = data.toLocaleDateString(currentLang === 'pt' ? 'pt-BR' : 'en-US');
+                 horaFormatada = data.toLocaleTimeString(currentLang === 'pt' ? 'pt-BR' : 'en-US', { hour: '2-digit', minute: '2-digit' });
             }
         }
 
-        // 5. Correção Crítica: Uso de crase (`) para o innerHTML multilinhas
         card.innerHTML = `
-          <h3>${h.nomeFerramenta || (currentLang === 'pt' ? 'Ferramenta?' : 'Tool?')}</h3>
-          <p><strong>${trans.cardUsuario}</strong> ${h.nomeUsuario || (currentLang === 'pt' ? 'Usuário?' : 'User?')}</p>
+          <h3>${h.nomeFerramenta || (currentLang === 'pt' ? 'Ferramenta Desconhecida' : 'Unknown Tool')}</h3>
+          <p><strong>${trans.cardUsuario}</strong> ${h.nomeUsuario || (currentLang === 'pt' ? 'Usuário Desconhecido' : 'Unknown User')}</p>
           <p><strong>${trans.cardData}</strong> ${dataFormatada} ${horaFormatada ? (currentLang === 'pt' ? 'às' : 'at') + ' ' + horaFormatada : ''}</p>
           <p class="observacoes"><strong>${trans.cardObs}</strong> ${h.observacoes || trans.cardNenhumaObs}</p>
         `;
@@ -205,7 +207,6 @@ function carregarHistorico(usuarioId = null) {
     })
     .catch(err => {
       console.error("Erro ao carregar:", err);
-      // 6. Correção do HTML com crase
       historicoContainer.innerHTML = `<p class="mensagem msg-error">${trans.msgErroHistorico}</p>`;
     });
 }
