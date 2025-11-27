@@ -1,4 +1,4 @@
-// --- Dicionário de traduções (MANTIDO) ---
+// --- Dicionário de traduções (CORRIGIDO) ---
 const translations = {
     'pt': {
         'pageTitle': 'ChatBot - SENAI ControlTech',
@@ -26,7 +26,7 @@ const translations = {
             'helpCenterInfo': "A **Central de Ajuda** é o seu recurso para resolver dúvidas rápidas.\n\nEla contém:\n\n1. Uma seção de **Perguntas Frequentes (FAQ)**, cobrindo os processos de devolução e saída do sistema.\n2. Um **Formulário de Contato** ('Relate seu problema') para enviar solicitações específicas diretamente para o e-mail de suporte.",
             'toolsInfo': "A aba **'Ferramentas'** é o coração do sistema, onde você encontra o **catálogo completo** de itens disponíveis. Para **retirar** uma ferramenta:\n\n1. Selecione o item desejado no catálogo.\n2. Registre o empréstimo, e ela ficará associada ao seu nome.\n\nO processo é rápido e garante o rastreamento.",
             'returnInfo': "O procedimento de devolução é direto:\n\n1. Acesse a seção **'Devolver'** no menu lateral.\n2. **Busque ou identifique a ferramenta pelo seu nome** ou código.\n3. O sistema fará o **registro automático** da devolução, incluindo a **data e horário**.\n\nLembre-se: A devolução imediata e a verificação do estado da ferramenta são cruciais para o controle de inventário.",
-            'historyInfo': "A aba **'Histórico'** oferece **rastreabilidade total e transparência**.\n\nYou can view your **movement records** (loans and returns) and the **current status** of any tool. The system stores the student's name, tool identification, and the exact date/time of each action.",
+            'historyInfo': "A aba **'Histórico'** oferece **rastreabilidade total e transparência**.\n\nVocê pode consultar seus **registros de movimentação** (empréstimos e devoluções) e o **status atual** de qualquer ferramenta. O sistema armazena o nome do aluno, a identificação da ferramenta e a data/horário exato de cada ação.",
             'teamInfo': "O ControlTech é um projeto de **desenvolvimento inovador** realizado por cinco alunos do SENAI: **Eduardo Rodriges, Eliezer Beltrame, Felipe Rossi, Guilherme Augusto e Victor Hugo.**. Eles conceberam e implementaram toda a **arquitetura robusta e segura** do sistema para gestão de ferramentas.",
             'accessibilityInfo': "Acessibilidade é uma prioridade fundamental! O ControlTech integra o recurso de **Acessibilidade do Governo (VLibras)**, disponível em todas as páginas. Basta localizar o ícone específico para utilizar a tradução em Libras.",
             'navInfo': "A navegação principal do sistema é clara e acessível através da barra lateral, contendo as principais funções: **Ferramentas** (para retirada), **Devolver**, **Ajuda**, **ChatBot**, **Histórico** e **Sair**. A aba **ativa** é sempre destacada para sua orientação.",
@@ -60,7 +60,7 @@ const translations = {
             'helpCenterInfo': "The **Help Center** is your resource for quickly resolving questions.\n\nIt contains:\n\n1. A **Frequently Asked Questions (FAQ)** section, covering the return and exit processes.\n2. A **Contact Form** ('Report your problem') to send specific requests directly to the support email.",
             'toolsInfo': "The **'Tools'** tab is the heart of the system, where you find the **complete catalog** of available items. To **check out** a tool:\n\n1. Select the desired item from the catalog.\n2. Register the loan, and it will be associated with your name.\n\nThe process is fast and ensures tracking.",
             'returnInfo': "The return procedure is straightforward:\n\n1. Access the **'Return'** section in the side menu.\n2. **Search for or identify the tool by its name** or code.\n3. The system will make the **automatic registration** of the return, including the **date and time**.\n\nRemember: Immediate return and verification of the tool's condition are crucial for inventory control.",
-            'historyInfo': "The **'History'** tab offers **full traceability and transparency**.\n\nYou can view your **movement records** (loans and returns) and the **current status** of any tool. The system stores the student's name, tool identification, and the exact date/time of each action.",
+            'historyInfo': "The **'History'** tab offers **full traceability and transparency**.\n\nYou can consult your **movement records** (loans and returns) and the **current status** of any tool. The system stores the student's name, tool identification, and the exact date/time of each action.", // CORRIGIDO
             'teamInfo': "ControlTech is an **innovative development project** carried out by five SENAI students: **Eduardo Rodriges, Eliezer Beltrame, Felipe Rossi, Guilherme Augusto, and Victor Hugo.**. They conceived and implemented the entire **robust and secure architecture** of the tool management system.",
             'accessibilityInfo': "Accessibility is a fundamental priority! ControlTech integrates the **Government Accessibility feature (VLibras)**, available on all pages. Just locate the specific icon to use the translation into Libras.",
             'navInfo': "The main navigation of the system is clear and accessible through the side bar, containing the main functions: **Tools** (for checkout), **Return**, **Help**, **ChatBot**, **History**, and **Exit**. The **active** tab is always highlighted for your orientation.",
@@ -71,7 +71,7 @@ const translations = {
 };
 
 // --- FUNÇÕES DE UTILIDADE PARA TRADUÇÃO ---
-
+// (Mantidas)
 function setText(id, key, trans) {
     const element = document.getElementById(id);
     if (element) element.textContent = trans[key] || '';
@@ -195,7 +195,6 @@ function displayUserName(lang) {
 
 
 // --- FUNÇÕES DE PERSISTÊNCIA E CHAT ---
-// (Mantidas)
 const CHAT_STORAGE_KEY = 'chatbotHistory';
 
 /**
@@ -351,9 +350,13 @@ function getBotResponse(input, lang) {
     }
 
     // 4. Respostas Genéricas e Boas-vindas 👋
-    if (/(olá|oi|tudo\s*bem|saudação|bom\s*dia|boa\s*tarde|hello|hi|good\s*day|greetings)/.test(lowerInput)) {
-        return formatBotResponse(msgs.greeting);
+    // Ajustado para dar prioridade a saudações em inglês se o idioma for 'en'
+    if (lang === 'en' && /(hello|hi|good\s*day|greetings)/.test(lowerInput)) {
+         return formatBotResponse(msgs.greeting);
+    } else if (lang === 'pt' && /(olá|oi|tudo\s*bem|saudação|bom\s*dia|boa\s*tarde)/.test(lowerInput)) {
+         return formatBotResponse(msgs.greeting);
     }
+
 
     // 5. Resposta Padrão (Fallback) ❓
     return formatBotResponse(msgs.fallback);
@@ -387,6 +390,95 @@ function handleSendMessage() {
         const botResponse = getBotResponse(input, lang); // Passa o idioma para a função
         appendMessage(botResponse, 'bot');
     }, 500);
+}
+
+
+// --- FUNÇÕES DE PERSISTÊNCIA E INICIALIZAÇÃO (MANTIDAS) ---
+const CHAT_STORAGE_KEY = 'chatbotHistory';
+
+/**
+ * Salva o histórico de mensagens no localStorage.
+ */
+function saveChatHistory() {
+    const chatBody = document.getElementById('chatbot-body');
+    if (!chatBody) return;
+
+    const messages = Array.from(chatBody.children).map(child => {
+        const sender = child.classList.contains('user-message') ? 'user' : 'bot';
+        const text = child.querySelector('p')?.innerHTML || ''; 
+        return { text, sender };
+    });
+
+    localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages));
+}
+
+/**
+ * Carrega e exibe o histórico de mensagens do localStorage.
+ */
+function loadChatHistory() {
+    const chatBody = document.getElementById('chatbot-body');
+    if (!chatBody) return false;
+
+    const historyJson = localStorage.getItem(CHAT_STORAGE_KEY);
+    if (!historyJson) return false;
+
+    try {
+        const history = JSON.parse(historyJson);
+        if (Array.isArray(history) && history.length > 0) {
+            chatBody.innerHTML = ''; 
+            history.forEach(msg => {
+                const messageContainer = document.createElement('div');
+                messageContainer.classList.add('message');
+                messageContainer.classList.add(`${msg.sender}-message`);
+                
+                const messageParagraph = document.createElement('p');
+                messageParagraph.innerHTML = msg.text; 
+                
+                messageContainer.appendChild(messageParagraph);
+                chatBody.appendChild(messageContainer);
+            });
+            chatBody.scrollTop = chatBody.scrollHeight;
+            return true;
+        }
+    } catch (e) {
+        console.error("Erro ao carregar histórico do chat:", e);
+        localStorage.removeItem(CHAT_STORAGE_KEY); 
+    }
+    return false;
+}
+
+/**
+ * Adiciona uma mensagem ao corpo do chat e salva o histórico.
+ */
+function appendMessage(text, sender) {
+    const chatBody = document.getElementById('chatbot-body');
+    if (!chatBody) return; 
+
+    const messageContainer = document.createElement('div');
+    messageContainer.classList.add('message');
+    messageContainer.classList.add(`${sender}-message`);
+    
+    const messageParagraph = document.createElement('p');
+    messageParagraph.innerHTML = text; 
+    
+    messageContainer.appendChild(messageParagraph);
+    chatBody.appendChild(messageContainer);
+
+    chatBody.scrollTop = chatBody.scrollHeight;
+    saveChatHistory(); 
+}
+
+/**
+ * Função utilitária para formatar a resposta do bot.
+ */
+function formatBotResponse(text) {
+    // 1. Substitui **texto** por <b>texto</b>
+    let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+
+    // 2. Converte quebras de linha para HTML para exibição
+    formattedText = formattedText.replace(/\n/g, '<br>');
+
+    return formattedText;
 }
 
 
