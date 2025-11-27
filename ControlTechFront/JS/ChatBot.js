@@ -385,7 +385,7 @@ document.addEventListener("DOMContentLoaded", () => {
     settingsBtn?.addEventListener('click', (e) => {
         e.preventDefault();
         
-        // 1. Remove a classe 'hidden' explicitamente (do HTML) para não conflitar com a transição.
+        // 1. Remove a classe 'hidden' do HTML para não conflitar com a transição.
         themePopup?.classList.remove('hidden'); 
         
         // 2. Alterna a classe principal de visibilidade para iniciar/terminar a transição.
