@@ -15,10 +15,9 @@ public class CorsFilterConfig {
 
         config.setAllowCredentials(true);
         config.addAllowedOrigin("https://control-tech-six.vercel.app");
-        config.addAllowedOrigin("http://localhost:3000"); // Local
 
-        config.addAllowedMethod("*"); // Permite GET, POST, etc.
-        config.addAllowedHeader("*"); // Permite todos os cabeçalhos
+        config.addAllowedMethod("*"); 
+        config.addAllowedHeader("*");
 
         source.registerCorsConfiguration("/**", config);
 
