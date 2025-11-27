@@ -268,18 +268,26 @@ function getBotResponse(input) {
         return formatBotResponse("O processo de **autenticação** no ControlTech é totalmente seguro e simples. Para iniciar sua sessão e utilizar o sistema, por favor, utilize o **QR Code do seu crachá SENAI** na página de Login. Este é o método padrão de **login** e garante a rastreabilidade do usuário.");
     }
     
-    // CORREÇÃO: Resposta de Logout
+    // Resposta de Logout
     if (/(sair|logout|deslogar|encerrar\s*sessão|finalizar)/.test(lowerInput)) {
         return formatBotResponse("Para encerrar sua sessão, vá para a aba **'Saída'** no menu lateral.\n\nLá, basta pressionar o botão de **'Sair'** (ou **'Encerrar Sessão'**) para confirmar o seu desligamento do sistema. Não é necessário escanear o crachá novamente. Este processo garante a finalização segura de sua sessão.");
     }
 
-    // --- REGRAS CRÍTICAS DE TRANSAÇÃO (PEGAR/DEVOLVER/HISTÓRICO) ---
+    // ✅ NOVO: Resposta sobre Landing Page (Início)
+    if (/(início|pagina\s*inicial|home|bem\s*vindo|landing\s*page)/.test(lowerInput)) {
+        return formatBotResponse("A página **'Início'** (ou Landing Page) serve como o painel de boas-vindas do sistema. Ela confirma seu login, exibe o seu nome e é o ponto central para acessar todas as funções, como Ferramentas, Devolver e Histórico, através da barra lateral.");
+    }
+
+    // ✅ NOVO: Resposta sobre Ajuda
+    if (/(ajuda|faq|suporte|contato|problema|problemas|perguntas\s*frequentes)/.test(lowerInput)) {
+        return formatBotResponse("A **Central de Ajuda** é o seu recurso para resolver dúvidas rápidas.\n\nEla contém:\n\n1. Uma seção de **Perguntas Frequentes (FAQ)**, cobrindo os processos de devolução e saída do sistema.\n2. Um **Formulário de Contato** ('Relate seu problema') para enviar solicitações específicas diretamente para o e-mail de suporte.");
+    }
+
+    // --- REGRAS CRÍTICAS DE TRANSAÇÃO ---
     
-    // CORREÇÃO: 2A. Respostas sobre **Retirada/Pegar Ferramentas** 🛠️ 
-    // Gatilhos para cobrir "pegar ferramenta" e "fazer empréstimo".
+    // 2A. Respostas sobre **Retirada/Pegar Ferramentas** 🛠️ 
     const retiradaRegex = /(ferramenta[s]?|item|catálogo|preciso|emprestimo|pegar|retirar|capturar|usar|quero)/;
     if (retiradaRegex.test(lowerInput)) {
-        // Exclui palavras-chave de devolução para evitar confusão.
         if (!/(devolver|devolução|entrega|devolvo)/.test(lowerInput)) {
               return formatBotResponse("A aba **'Ferramentas'** é o coração do sistema, onde você encontra o **catálogo completo** de itens disponíveis. Para **retirar** uma ferramenta:\n\n1. Selecione o item desejado no catálogo.\n2. Registre o empréstimo, e ela ficará associada ao seu nome.\n\nO processo é rápido e garante o rastreamento.");
         }
@@ -290,7 +298,7 @@ function getBotResponse(input) {
         return formatBotResponse("O procedimento de devolução é direto:\n\n1. Acesse a seção **'Devolver'** no menu lateral.\n2. **Busque ou identifique a ferramenta pelo seu nome** ou código.\n3. O sistema fará o **registro automático** da devolução, incluindo a **data e horário**.\n\nLembre-se: A devolução imediata e a verificação do estado da ferramenta são cruciais para o controle de inventário.");
     }
 
-    // CORREÇÃO: 2C. Respostas sobre **Rastreabilidade/Histórico** 🔍 (Texto mais direto)
+    // 2C. Respostas sobre **Rastreabilidade/Histórico** 🔍
     if (/(registro|quem\s*pegou|rastrear|monitoramento|historico|histórico|ver\s*quem\s*pegou|quem\s*está\s*com)/.test(lowerInput)) {
         return formatBotResponse("A aba **'Histórico'** oferece **rastreabilidade total e transparência**.\n\nVocê pode consultar seus **registros de movimentação** (empréstimos e devoluções) e o **status atual** de qualquer ferramenta. O sistema armazena o nome do aluno, a identificação da ferramenta e a data/horário exato de cada ação.");
     }
