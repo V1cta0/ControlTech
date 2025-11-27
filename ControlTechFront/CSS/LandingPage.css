@@ -18,23 +18,20 @@ body {
     min-height: 100vh;
 }
 
-/* ======================================= */
-/* 2. Barra Lateral (Sidebar) e Navegação */
-/* ======================================= */
 
 .sidebar {
-    /* PROPRIEDADES PARA FIXAR A BARRA LATERAL: */
+    /* PROPRIEDADES ESSENCIAIS PARA IR ATÉ O FINAL */
     position: fixed; 
     top: 0; 
     left: 0; 
     height: 100vh; 
     z-index: 100; 
     
-    /* ADIÇÃO ESTRUTURAL: Permite a rolagem interna se o conteúdo for maior que 100vh */
-    overflow-y: auto;
+    /* Permite rolagem interna caso o conteúdo seja maior que a tela */
+    overflow-y: auto; 
     
-    /* Demais estilos */
-    width: 250px; /* FIXO: 250px (Desktop Padrão) */
+    /* Demais estilos... (MANTIDOS) */
+    width: 250px; 
     background-color: #004b8d;
     color: white;
     padding: 2rem 1.5rem;
