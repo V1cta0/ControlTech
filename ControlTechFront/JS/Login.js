@@ -209,8 +209,6 @@ function handleLoginSuccess(qrCodeContent) {
             if (statusMsgLogin) statusMsgLogin.textContent = "Erro no login.";
         });
 }
-
-// ----- Login via Upload (CORRIGIDO O ALERT) -----
 const btnLerQrUpload = document.getElementById('btnLerQr');
 const loginQrInput = document.getElementById('loginQrInput');
 
@@ -218,40 +216,72 @@ btnLerQrUpload?.addEventListener('click', () => {
     // @ts-ignore
     const file = loginQrInput.files[0];
     
-    // 1. Validação de arquivo vazio
     if (!file) {
         showAlert("Atenção", "Selecione um arquivo de QR Code primeiro.");
         return;
     }
 
-    stopCamera('login'); // Garante que câmera para se for fazer upload
+    stopCamera('login'); 
 
     btnLerQrUpload.classList.add('loading');
     btnLerQrUpload.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
     
     const loginControls = document.getElementById('loginControls');
 
-    lerQrViaUpload(file, (usuario) => {
-        btnLerQrUpload.classList.remove('loading');
-        btnLerQrUpload.innerHTML = '<i class="fas fa-qrcode"></i> Ler QR Code por Arquivo';
+    // 1. CHAMA LER QR VIA UPLOAD (DECODIFICA IMAGEM PARA TEXTO)
+    lerQrViaUpload(file, (qrResponse) => {
+        // O qrResponse do /api/qrcode/decode é: { "qrCode": "TEXTO_LIDO" }
+        const qrCodeContent = qrResponse.qrCode;
 
-        if (loginControls) loginControls.style.display = 'none';
-        exibirUsuario(usuario);
-        salvarUsuarioLogado(usuario);
+        if (!qrCodeContent) {
+             btnLerQrUpload.classList.remove('loading');
+             btnLerQrUpload.innerHTML = '<i class="fas fa-qrcode"></i> Ler QR Code por Arquivo';
+             showAlert("Erro de Leitura", "O QR Code não pôde ser decodificado.");
+             if (infoAluno) infoAluno.style.display = "none";
+             return;
+        }
 
-        if (statusMsgLogin) statusMsgLogin.textContent = "Login bem-sucedido!";
-        if (infoAluno) infoAluno.style.display = "block";
+        // 2. BUSCA O USUÁRIO COMPLETO USANDO O CÓDIGO DO QR
+        if (statusMsgLogin) statusMsgLogin.textContent = "Buscando usuário...";
+        
+        fetch(`${API_BASE_URL}/api/usuarios/por-codigo/${qrCodeContent}`)
+            .then(res => {
+                if (!res.ok) throw new Error("Código não encontrado");
+                return res.json();
+            })
+            .then(usuarioCompleto => {
+                // 3. SUCESSO: Salva e exibe o objeto completo
+                btnLerQrUpload.classList.remove('loading');
+                btnLerQrUpload.innerHTML = '<i class="fas fa-qrcode"></i> Ler QR Code por Arquivo';
 
-        setTimeout(() => { window.location.href = '/HTML/LandingPage.html'; }, 500);
+                if (loginControls) loginControls.style.display = 'none';
+                
+                // É necessário embrulhar em { usuario: usuarioCompleto } para manter o padrão de exibirUsuario/salvarUsuarioLogado
+                exibirUsuario({ usuario: usuarioCompleto }); 
+                salvarUsuarioLogado({ usuario: usuarioCompleto }); // Salva corretamente no localStorage
+
+                if (statusMsgLogin) statusMsgLogin.textContent = "Login bem-sucedido!";
+                if (infoAluno) infoAluno.style.display = "block";
+
+                setTimeout(() => { window.location.href = '/HTML/LandingPage.html'; }, 500);
+            })
+            .catch(err => {
+                // 3. ERRO: Falha ao buscar usuário com o código
+                btnLerQrUpload.classList.remove('loading');
+                btnLerQrUpload.innerHTML = '<i class="fas fa-qrcode"></i> Ler QR Code por Arquivo';
+                console.error(err);
+                showAlert("Erro de Login", "Usuário não encontrado para o código lido.");
+                if (statusMsgLogin) statusMsgLogin.textContent = "Erro no login.";
+                if (infoAluno) infoAluno.style.display = "none";
+            });
 
     }, (err) => {
-        // 2. AQUI ESTAVA O PROBLEMA DO ALERT FEIO
+        // 1. ERRO: Falha na decodificação da imagem
         btnLerQrUpload.classList.remove('loading');
         btnLerQrUpload.innerHTML = '<i class="fas fa-qrcode"></i> Ler QR Code por Arquivo';
 
         console.error("Erro upload:", err);
         
-        // Agora chama o nosso Modal Bonito
         showAlert("Erro de Leitura", "A imagem enviada não é um QR Code válido ou está ilegível.");
         
         if (infoAluno) infoAluno.style.display = "none";
