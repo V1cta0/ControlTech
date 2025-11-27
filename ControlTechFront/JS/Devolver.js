@@ -143,7 +143,6 @@ function displayUserName(lang) {
 
 // --- LÓGICA PRINCIPAL ---
 
-// CORREÇÃO: Usa API_BASE_URL
 const BASE_URL = `${API_BASE_URL}/api/ferramentas`; 
 
 function showAlert(titulo, mensagem) {
@@ -158,7 +157,6 @@ function showAlert(titulo, mensagem) {
         modal.classList.remove('hidden'); 
         
         const fechar = () => modal.classList.add('hidden');
-        x
         if (btnOk) btnOk.onclick = fechar;
     
         modal.onclick = (e) => { 
@@ -256,11 +254,35 @@ function ativarModalBotoes() {
     document.querySelectorAll(".btnDevolver").forEach(btn => {
         btn.replaceWith(btn.cloneNode(true));
     });
+    
     document.querySelectorAll(".btnDevolver").forEach(btn => {
+        // CORREÇÃO 1: Validação da observação antes de abrir o modal (evita loop)
         btn.addEventListener("click", function () {
-            ferramentaParaDevolver = this;
+            const parentCard = this.closest('.ferramenta-item');
+            const observacoesInput = parentCard?.querySelector(".obsInput");
+            const observacoes = observacoesInput?.value.trim() || "";
+            const currentLang = localStorage.getItem('lang') || 'pt';
+            const trans = translations[currentLang];
+            
+            if (!observacoes) {
+                const titulo = trans.tituloAviso || "Campo Obrigatório";
+                const mensagem = trans.msgObsObrigatoria || "A descrição é obrigatória.";
+                showAlert(titulo, mensagem);
+                
+                if (observacoesInput) {
+                    observacoesInput.style.border = "2px solid red";
+                    observacoesInput.addEventListener('input', function() {
+                        this.style.border = "";
+                    }, { once: true });
+                    setTimeout(() => observacoesInput.focus(), 100);
+                }
+                return; // Sai sem abrir o modal
+            }
+
+            // Se a observação estiver preenchida, procede para o modal de confirmação
+            ferramentaParaDevolver = this; 
             const modal = document.getElementById("confirmModal");
-            if (modal) modal.classList.remove("hidden");
+            if (modal) modal.classList.remove("hidden"); 
         });
     });
 }
@@ -277,23 +299,15 @@ document.getElementById("confirmBtn")?.addEventListener("click", function () {
     const trans = translations[currentLang];
     const mensagemDiv = document.getElementById("mensagem");
 
-    if (!observacoes) {
-        const modalConfirm = document.getElementById("confirmModal");
-        if (modalConfirm) modalConfirm.classList.add("hidden");
-        
-        const titulo = trans.tituloAviso || "Campo Obrigatório";
-        const mensagem = trans.msgObsObrigatoria || "A descrição é obrigatória.";
-        showAlert(titulo, mensagem);
-        
-        if (observacoesInput) {
-            observacoesInput.style.border = "2px solid red";
-            observacoesInput.addEventListener('input', function() {
-                this.style.border = "";
-            }, { once: true });
-            setTimeout(() => observacoesInput.focus(), 100);
-        }
-        return; 
-    }
+    // Validação duplicada, mas mantida por segurança.
+     if (!observacoes) {
+         const modal = document.getElementById("confirmModal");
+         if (modal) modal.classList.add("hidden");
+         ferramentaParaDevolver = null;
+         showAlert(trans.tituloAviso, trans.msgObsObrigatoria);
+         return;
+     }
+
 
     if(mensagemDiv) {
         mensagemDiv.textContent = currentLang === 'pt' ? 'Processando devolução...' : 'Processing return...';
@@ -314,7 +328,12 @@ document.getElementById("confirmBtn")?.addEventListener("click", function () {
                 } catch(e) {}
                 throw new Error(errorMsg);
             }
-            return res.text();
+            
+            // CORREÇÃO 2: Decodificação robusta para UTF-8, garantindo a acentuação no frontend.
+            const arrayBuffer = await res.arrayBuffer();
+            const decoder = new TextDecoder('utf-8');
+            const decodedMsg = decoder.decode(arrayBuffer);
+            return decodedMsg;
         })
         .then(msg => {
             if (mensagemDiv) {

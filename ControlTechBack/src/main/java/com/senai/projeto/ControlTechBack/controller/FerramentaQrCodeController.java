@@ -224,10 +224,14 @@ public class FerramentaQrCodeController {
         // Desassociar ferramenta do usuário
         ferramenta.setUsuario(null);
         ferramenta.setDataDevolucao(null);
-        ferramenta.setDataAssociacao(null); // NOVO: Limpa a data de associação
-        ferramentaService.salvarOuAtualizar(ferramenta); // Método público para salvar alterações
+        ferramenta.setDataAssociacao(null);
+        ferramentaService.salvarOuAtualizar(ferramenta);
 
-        return ResponseEntity.ok("Devolução realizada com sucesso");
+        // CORREÇÃO DEFINITIVA DE CODIFICAÇÃO: Usa MediaType.valueOf para forçar a definição
+        // explícita do charset=UTF-8, o que é mais robusto em alguns ambientes Spring.
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf("text/plain;charset=UTF-8"))
+                .body("Devolução realizada com sucesso");
     }
     @GetMapping("/usuario/cracha/{cracha}")
     public ResponseEntity<List<FerramentaUsuarioDTO>> listarFerramentasDoUsuarioPorCracha(@PathVariable String cracha) {
