@@ -1,7 +1,6 @@
 package com.senai.projeto.ControlTechBack.DTO;
 
-// NOVA IMPORTAÇÃO: Importa a anotação Jackson
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat; // Import necessário
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,6 @@ public class UsuarioStatusDTO {
     private String nome;
     private String perfil;
 
-    // NOVO: Formata LocalDateTime no padrão ISO-8601 (ex: 2025-11-27T17:39:00)
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
     private LocalDateTime dataAssociacao;
 }

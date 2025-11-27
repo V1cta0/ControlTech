@@ -2,13 +2,11 @@ import { API_BASE_URL } from './apiConfig.js';
 
 const translations = {
     'pt': {
-        'pageTitle': 'Ajuda - SENAI ControlTech',
-        'sidebarAbout': 'Início', 
+        'pageTitle': 'Detalhes da Ferramenta - ControlTech',
         'sidebarTools': 'Ferramentas',
         'sidebarReturn': 'Devolver',
         'sidebarHelp': 'Ajuda',
         'sidebarHistory': 'Histórico',
-        'sidebarChatBot': 'ChatBot', 
         'sidebarExit': 'Sair',
         'sidebarSettings': 'Configurações',
         'labelDescricao': '<strong>Descrição:</strong>',
@@ -34,13 +32,11 @@ const translations = {
         'timeDisplayInitial': '--:--:--',
     },
     'en': {
-        'pageTitle': 'Help - SENAI ControlTech',
-        'sidebarAbout': 'Home', 
+        'pageTitle': 'Tool Details - ControlTech',
         'sidebarTools': 'Tools',
         'sidebarReturn': 'Return',
         'sidebarHelp': 'Help',
         'sidebarHistory': 'History',
-        'sidebarChatBot': 'ChatBot', 
         'sidebarExit': 'Exit',
         'sidebarSettings': 'Settings',
         'labelDescricao': '<strong>Description:</strong>',
@@ -80,7 +76,8 @@ function iniciarCronometro(timestampAssociacao) {
     const chronometerDisplay = document.getElementById('chronometer-display');
     const timeElapsedContainer = document.getElementById('time-elapsed');
     
-    // CORREÇÃO: Trata a string para garantir que new Date a interprete como UTC (adiciona 'Z')
+    // TRATAMENTO DE FUZO HORÁRIO: Garante que a data é tratada como UTC.
+    // Esta lógica é uma defesa extra, caso o backend não esteja totalmente corrigido.
     let dateString = timestampAssociacao;
     if (typeof dateString === 'string' && dateString.slice(-1) !== 'Z' && dateString.indexOf('+') === -1) {
         dateString += 'Z'; 
@@ -108,7 +105,6 @@ function iniciarCronometro(timestampAssociacao) {
         const diffSeconds = Math.floor(diffMs / 1000);
         
         if (diffSeconds < 0) {
-            // Se for negativo (relógio do servidor fora de sincronia), mostra 00:00:00
             chronometerDisplay.textContent = '00:00:00'; 
             return; 
         } 
@@ -215,6 +211,7 @@ async function atualizarStatusDaFerramenta() {
     const ferramentaId = new URLSearchParams(window.location.search).get("id");
     const lang = localStorage.getItem('lang') || 'pt';
     try {
+        // CORREÇÃO 1: Usa API_BASE_URL
         const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}/usuario`);
         if (!res.ok) throw new Error("Erro");
         const usuarioStatus = await res.json(); 
@@ -237,6 +234,7 @@ async function carregarFerramenta() {
     const trans = translations[lang];
 
     try {
+        // CORREÇÃO 2: Usa API_BASE_URL
         const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}`);
         if (!res.ok) throw new Error(trans.erroCarregar);
 
@@ -295,6 +293,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     btnAssociar?.addEventListener("click", async () => {
         if (statusMsg) statusMsg.textContent = "";
         try {
+            // CORREÇÃO 3: Usa API_BASE_URL
             const assocRes = await fetch(`${API_BASE_URL}/api/ferramentas/associar/${ferramentaId}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
