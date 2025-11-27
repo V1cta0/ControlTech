@@ -193,11 +193,14 @@ function handleLoginSuccess(qrCodeContent) {
             return res.json();
         })
         .then(usuario => {
-        if (statusMsgLogin) statusMsgLogin.textContent = "Sucesso! Redirecionando...";
-        if (infoAluno) infoAluno.style.display = "block";
+            salvarUsuarioLogado({ usuario: usuario });
+            if (loginControls) loginControls.style.display = 'none';
+            exibirUsuario({ usuario: usuario }); 
 
+            if (statusMsgLogin) statusMsgLogin.textContent = "Sucesso! Redirecionando...";
+            if (infoAluno) infoAluno.style.display = "block";
 
-        setTimeout(() => { window.location.href = '/HTML/LandingPage.html'; }, 500); 
+            setTimeout(() => { window.location.href = '/HTML/LandingPage.html'; }, 500); 
         })
         .catch(err => {
             console.error(err);
