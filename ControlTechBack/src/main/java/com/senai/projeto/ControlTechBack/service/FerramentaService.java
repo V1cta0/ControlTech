@@ -127,7 +127,7 @@ public class FerramentaService {
                     if (f.getUsuario() != null) {
                         dto.setUsuarioId(f.getUsuario().getId());
                         dto.setUsuarioNome(f.getUsuario().getNome());
-                        dto.setUsuarioPerfil(f.getUsuario().getPerfil());
+                        dto.setUsuarioPerfil(f.getUsuario().getTurma());
                         dto.setUsuarioQrCode(f.getUsuario().getQrCode());
                     }
                     return dto;

@@ -180,7 +180,7 @@ public class FerramentaQrCodeController {
         UsuarioStatusDTO dto = new UsuarioStatusDTO(
                 usuario.getId(),
                 usuario.getNome(),
-                usuario.getPerfil(),
+                usuario.getTurma(),
                 ferramenta.getDataAssociacao() // NOVO CAMPO
         );
         return ResponseEntity.ok(dto);

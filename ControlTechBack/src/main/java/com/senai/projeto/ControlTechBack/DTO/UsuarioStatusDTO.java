@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class UsuarioStatusDTO {
     private Long id;
     private String nome;
-    private String perfil;
+    private String turma;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
     private LocalDateTime dataAssociacao;
