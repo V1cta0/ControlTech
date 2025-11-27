@@ -639,7 +639,10 @@ body.dark-theme .cta-standalone-container {
     margin: 0 auto;
 }
 .feature-card {
-    border: 2px solid #e0e0e0;
+    /* CORREÇÃO ESTÉTICA: Borda mais visível e suave */
+    border: 1px solid #d3e0f0; 
+    /* CORREÇÃO ESTÉTICA: Sombra mais nítida para o efeito "flutuante" */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s, border-color 0.3s, border-top-color 0.4s;
 }
 /* Para o texto do card (parágrafos dentro de .tool-card) */
@@ -659,7 +662,7 @@ body.dark-theme .cta-standalone-container {
 }
 .hover-border-glow:hover {
     border-top: 5px solid #ff9800; /* Muda a cor da borda ao passar o mouse */
-    /* CORREÇÃO: Suaviza o box-shadow azul para não ser "muito forte" */
+    /* MANTIDO: Box-shadow mais suave (0.2) */
     box-shadow: 0 10px 40px rgba(0, 97, 192, 0.2); 
     transform: translateY(-5px);
 }
@@ -669,7 +672,7 @@ body.dark-theme .cta-standalone-container {
 .team-section {
     padding: 5rem 2rem;
     text-align: center;
-    /* CORREÇÃO: Deixa o fundo um pouco mais claro para não ser tão forte o contraste */
+    /* CORREÇÃO: Fundo suave (#f3f3f3) */
     background-color: #f3f3f3; 
 }
 .team-grid.flex-centered {
@@ -685,9 +688,10 @@ body.dark-theme .cta-standalone-container {
     padding: 1.5rem;
     background: white;
     border-radius: 12px;
-    /* CORREÇÃO: Adiciona borda sutil para definir o box no light theme */
-    border: 1px solid #e0e0e0; 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    /* CORREÇÃO ESTÉTICA: Borda mais visível e suave */
+    border: 1px solid #d3e0f0; 
+    /* CORREÇÃO ESTÉTICA: Sombra mais nítida para o efeito "flutuante" */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
     width: 150px;
     display: flex; 
     flex-direction: column;
