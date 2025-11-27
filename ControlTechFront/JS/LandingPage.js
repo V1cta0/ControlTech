@@ -61,26 +61,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    const saveTheme = (theme) => { 
-        localStorage.setItem('theme', theme); 
-        const currentLang = localStorage.getItem('lang') || 'pt'; 
-        document.body.classList.toggle('dark-theme', theme === 'dark'); 
-        updateThemeStatusText(theme, currentLang); 
-        updateThemeToggleButtonVisuals(theme); 
-    };
-    
-    const loadTheme = () => { 
-        const savedTheme = localStorage.getItem('theme') || 'dark'; 
-        const currentLang = localStorage.getItem('lang') || 'pt'; 
-        document.body.classList.toggle('dark-theme', savedTheme === 'dark'); 
-        updateThemeStatusText(savedTheme, currentLang); 
-        updateThemeToggleButtonVisuals(savedTheme); 
-    };
+        const saveTheme = (theme) => { 
+            localStorage.setItem('theme', theme); 
+            const currentLang = localStorage.getItem('lang') || 'pt'; 
+            document.body.classList.toggle('dark-theme', theme === 'dark'); 
+            updateThemeStatusText(theme, currentLang); 
+            updateThemeToggleButtonVisuals(theme); 
+        };
 
-    // =======================================
-    // 3. CAPTURA E EXIBIÇÃO DO NOME (CHAVE: 'usuarioLogado')
-    // =======================================
-    
+        const loadTheme = () => { 
+            // CORRIGIDO: Se não houver tema salvo, o padrão será 'light'.
+            const savedTheme = localStorage.getItem('theme') || 'light'; 
+            const currentLang = localStorage.getItem('lang') || 'pt'; 
+            document.body.classList.toggle('dark-theme', savedTheme === 'dark'); 
+            updateThemeStatusText(savedTheme, currentLang); 
+            updateThemeToggleButtonVisuals(savedTheme); 
+        };
+
     function displayUserName(lang) { 
         const trans = translations[lang] || translations.pt;
         let userInfo = null; 
