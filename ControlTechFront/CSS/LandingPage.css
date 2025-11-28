@@ -23,8 +23,9 @@ body {
     position: fixed; 
     top: 0; 
     left: 0; 
-    height: 110%; 
+    height: 100vh; 
     z-index: 100; 
+    bottom: -100px;
     overflow-y: auto; 
     width: 250px; 
     background-color: #004b8d;
