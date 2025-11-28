@@ -20,14 +20,7 @@ body {
 
 
 .sidebar {
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    height: 100vh; 
-    z-index: 100; 
-    bottom: -10vh;
-    overflow-y: auto; 
-    width: 250px; 
+    width: 250px;
     background-color: #004b8d;
     color: white;
     padding: 2rem 1.5rem;
@@ -36,6 +29,7 @@ body {
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
     transition: left 0.3s ease-in-out, background-color 0.3s, box-shadow 0.3s; 
 }
+
 
 .sidebar-header {
     margin-bottom: 2rem;
