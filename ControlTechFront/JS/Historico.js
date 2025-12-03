@@ -198,8 +198,7 @@ function carregarHistorico(usuarioId = null) {
 
         card.innerHTML = `
           <h3>${h.nomeFerramenta || (currentLang === 'pt' ? 'Ferramenta Desconhecida' : 'Unknown Tool')}</h3>
-          <p><strong>${trans.cardUsuario}</strong> ${h.nomeUsuario || (currentLang === 'pt' ? 'Usuário Desconhecido' : 'Unknown User')}</p>
-          <p><strong>${trans.cardData}</strong> ${dataFormatada} ${horaFormatada ? (currentLang === 'pt' ? 'às' : 'at') + ' ' + horaFormatada : ''}</p>
+          <p><strong>${trans.cardUsuario}</strong> ${h.nomeUsuario || (currentLang === 'pt' ? 'Usuário Desconhecido' : 'Unknown User')} (${h.usuarioTurma || 'N/A'})</p> <p><strong>${trans.cardData}</strong> ${dataFormatada} ${horaFormatada ? (currentLang === 'pt' ? 'às' : 'at') + ' ' + horaFormatada : ''}</p>
           <p class="observacoes"><strong>${trans.cardObs}</strong> ${h.observacoes || trans.cardNenhumaObs}</p>
         `;
         historicoContainer.appendChild(card);

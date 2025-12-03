@@ -193,13 +193,14 @@ function displayUserName(lang) {
     }
 };
 
-function atualizarStatus(usuarioNome, dataAssociacao) { 
+function atualizarStatus(usuarioNome, usuarioTurma, dataAssociacao) { 
     const statusMsg = document.getElementById("statusMsg");
     const btnAssociar = document.getElementById("btnAssociar");
     const timeElapsedContainer = document.getElementById('time-elapsed');
+    const userTurmaStatus = document.getElementById('user-turma-status'); 
     const lang = localStorage.getItem('lang') || 'pt';
     const trans = translations[lang];
-
+    
     if (cronometroIntervalId) {
         clearInterval(cronometroIntervalId);
         cronometroIntervalId = null;
@@ -208,13 +209,14 @@ function atualizarStatus(usuarioNome, dataAssociacao) {
 
     if (usuarioNome) {
         if (statusMsg) statusMsg.innerHTML = `${trans.statusEmUso}<strong>${usuarioNome}</strong>`;
+        if (userTurmaStatus) userTurmaStatus.textContent = `(${usuarioTurma || 'N/A'})`; 
         if (statusMsg) statusMsg.style.color = "green"; 
         if (btnAssociar) btnAssociar.disabled = true; 
-        if (dataAssociacao) iniciarCronometro(dataAssociacao);
+
     } else {
         if (statusMsg) statusMsg.innerHTML = trans.statusDisponivel;
-        if (statusMsg) statusMsg.style.color = "gray"; 
-        if (btnAssociar) btnAssociar.disabled = false; 
+        if (userTurmaStatus) userTurmaStatus.textContent = ''; 
+        if (statusMsg) statusMsg.style.color = "gray";
     }
 }
 
@@ -225,9 +227,9 @@ async function atualizarStatusDaFerramenta() {
         const res = await fetch(`${API_BASE_URL}/api/ferramentas/${ferramentaId}/usuario`);
         if (!res.ok) throw new Error("Erro");
         const usuarioStatus = await res.json(); 
-        atualizarStatus(usuarioStatus.nome, usuarioStatus.dataAssociacao); 
+        atualizarStatus(usuarioStatus.usuarioNome, usuarioStatus.usuarioTurma, usuarioStatus.dataAssociacao); 
     } catch (err) {
-        atualizarStatus(null, null); 
+        atualizarStatus(null, null, null); 
     }
 }
 

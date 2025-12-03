@@ -115,7 +115,7 @@ btnCadastrar?.addEventListener('click', async (e) => {
 
     const usuarioData = {
         nome: nome,
-        perfil: turma, // CHAVE MANTIDA como 'perfil' para o backend
+        turma: turma, // CHAVE MANTIDA como 'perfil' para o backend
         qrCode: qrCodeLido
     };
 
