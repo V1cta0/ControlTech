@@ -173,7 +173,7 @@ function displayUserData(user) {
     infoCard.innerHTML = `
         <h3 style="color: #004b8d; margin-bottom: 0.5rem;">${user.nome || 'N/A'}</h3>
         <p><strong>ID:</strong> ${user.id || 'N/A'}</p>
-        <p><strong>${trans.labelTurma}:</strong> ${user.turma || 'N/A'}</p> `;
+        <p><strong>${trans.labelTurma}</strong> ${user.turma || 'N/A'}</p> `;
     placeholder.style.display = 'none';
     infoCard.style.display = 'block';
     confirmarBtn.disabled = false;

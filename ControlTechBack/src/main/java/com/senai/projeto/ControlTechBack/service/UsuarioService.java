@@ -35,7 +35,7 @@ public class UsuarioService {
 
         Usuario usuario = new Usuario();
         usuario.setNome(dto.getNome());
-        usuario.setTurma(dto.getPerfil() != null ? dto.getPerfil() : "USUARIO");
+        usuario.setTurma(dto.getTurma() != null ? dto.getTurma() : "USUARIO");
         usuario.setQrCode(qrCode);
 
         Usuario salvo = usuarioRepository.save(usuario);
