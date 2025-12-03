@@ -175,6 +175,20 @@ export function startCamera(mode, onScanSuccess) {
     }
 }
 
+// ----- Função de redirecionamento unificada -----
+function performRedirect() {
+    const params = new URLSearchParams(window.location.search);
+    const redirectUrl = params.get('redirect');
+
+    if (redirectUrl) {
+        // Redireciona para o URL de destino (FerramentaUni.html?id=X&action=assoc)
+        window.location.href = decodeURIComponent(redirectUrl);
+    } else {
+        // Comportamento padrão: redirecionar para a landing page
+        window.location.href = './HTML/LandingPage.html';
+    }
+}
+
 // ----- Login via Câmera -----
 document.getElementById('btnToggleCameraLogin')?.addEventListener('click', () => {
     stopCamera('cadastro'); // Garante que a outra esteja desligada
@@ -201,7 +215,8 @@ function handleLoginSuccess(qrCodeContent) {
             if (statusMsgLogin) statusMsgLogin.textContent = "Sucesso! Redirecionando...";
             if (infoAluno) infoAluno.style.display = "block";
 
-            setTimeout(() => { window.location.href = '/HTML/LandingPage.html'; }, 500); 
+            // CORREÇÃO: Redireciona usando a função performRedirect
+            setTimeout(performRedirect, 500); 
         })
         .catch(err => {
             console.error(err);
@@ -263,7 +278,8 @@ btnLerQrUpload?.addEventListener('click', () => {
                 if (statusMsgLogin) statusMsgLogin.textContent = "Login bem-sucedido!";
                 if (infoAluno) infoAluno.style.display = "block";
 
-                setTimeout(() => { window.location.href = '/HTML/LandingPage.html'; }, 500);
+                // CORREÇÃO: Redireciona usando a função performRedirect
+                setTimeout(performRedirect, 500);
             })
             .catch(err => {
                 // 3. ERRO: Falha ao buscar usuário com o código
@@ -287,6 +303,52 @@ btnLerQrUpload?.addEventListener('click', () => {
         if (infoAluno) infoAluno.style.display = "none";
     });
 });
+
+// NOVO BLOCO: Lógica de login por usuário/senha (assumindo que o formulário é `login-form`)
+document.getElementById('login-form')?.addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const usernameInput = document.getElementById('username'); // Assumindo IDs padrão
+    const passwordInput = document.getElementById('password'); // Assumindo IDs padrão
+    
+    if (!usernameInput || !passwordInput) {
+        console.error("Campos de login não encontrados.");
+        return;
+    }
+
+    // @ts-ignore
+    const username = usernameInput.value; 
+    // @ts-ignore
+    const password = passwordInput.value;
+    
+    if (statusMsgLogin) statusMsgLogin.textContent = "Verificando credenciais...";
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/usuarios/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: username, senha: password })
+        });
+
+        if (response.ok) {
+            const usuarioLogado = await response.json();
+            salvarUsuarioLogado(usuarioLogado); // Assume que esta função manipula o localStorage
+            
+            if (statusMsgLogin) statusMsgLogin.textContent = "Sucesso! Redirecionando...";
+            // CORREÇÃO: Redireciona usando a função performRedirect
+            setTimeout(performRedirect, 500);
+            
+        } else {
+            const errorData = await response.json().catch(() => ({ erro: "Erro de autenticação" }));
+            showAlert("Erro de Login", errorData.erro || "Credenciais inválidas.");
+            if (statusMsgLogin) statusMsgLogin.textContent = "Erro no login.";
+        }
+    } catch (error) {
+        console.error('Erro de rede/API:', error);
+        showAlert("Erro de Conexão", "Não foi possível conectar ao servidor.");
+        if (statusMsgLogin) statusMsgLogin.textContent = "Erro de conexão.";
+    }
+});
+
 
 function salvarUsuarioLogado(usuario) {
     const dadosReais = usuario.usuario || usuario; 

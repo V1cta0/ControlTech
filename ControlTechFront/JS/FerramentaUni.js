@@ -266,9 +266,72 @@ async function carregarFerramenta() {
     }
 }
 
+// NOVO: Função auxiliar para a lógica de associação, usada tanto no clique quanto na auto-associação
+async function handleAssociation(ferramentaId, ferramenta, statusMsg, popup) {
+    const lang = localStorage.getItem('lang') || 'pt';
+    const trans = translations[lang];
+
+    let usuarioLogado = null;
+    try { usuarioLogado = JSON.parse(localStorage.getItem("usuarioLogado")); } catch (e) {}
+
+    const idUsuario = usuarioLogado?.id ?? usuarioLogado?.usuarioId;
+    
+    // VERIFICAÇÃO DE LOGIN E REDIRECIONAMENTO COM CONTEXTO
+    if (!idUsuario) {
+        // Armazena o caminho completo da URL atual + a flag de ação
+        const currentPath = window.location.pathname; // Ex: /HTML/FerramentaUni.html
+        const currentQuery = window.location.search;  // Ex: ?id=1
+        
+        // Define o URL de redirecionamento, codificando a action=assoc
+        const redirectUrl = encodeURIComponent(currentPath + currentQuery + "&action=assoc");
+        
+        alert(trans.erroSessao); 
+        // Redireciona para o login com o parâmetro de retorno
+        window.location.href = `/index.html?redirect=${redirectUrl}`;
+        return; 
+    }
+    
+    // Lógica de Associação (se estiver logado)
+    if (statusMsg) statusMsg.textContent = "";
+    try {
+        const assocRes = await fetch(`${API_BASE_URL}/api/ferramentas/associar/${ferramentaId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ usuarioId: idUsuario })
+        });
+
+        let resposta;
+        try { resposta = await assocRes.json(); } catch { 
+            const texto = await assocRes.text();
+            throw new Error(lang === 'pt' ? "Resposta inválida do servidor: " + texto : "Invalid server response: " + texto);
+        }
+
+        if (!assocRes.ok) throw new Error(resposta.erro || trans.erroFalhaAssociar);
+
+        setInnerHtml("popupMessage", "popupSucesso", trans, {
+            ferramentaNome: resposta.ferramentaNome,
+            usuarioNome: resposta.usuarioNome
+        });
+        popup.style.display = "flex";
+
+        atualizarStatus(resposta.usuarioNome, resposta.dataAssociacao);
+        if (ferramenta) ferramenta.usuarioNome = resposta.usuarioNome; // Atualiza o objeto local se existir
+
+    } catch (err) {
+        console.error(err);
+        if (statusMsg) {
+            statusMsg.textContent = `${lang === 'pt' ? 'Erro' : 'Error'}: ${err.message}`;
+            statusMsg.style.color = "red";
+        }
+    }
+}
+
+
 document.addEventListener("DOMContentLoaded", async () => {
     const params = new URLSearchParams(window.location.search);
     const ferramentaId = params.get("id");
+    const autoAssoc = params.get("action") === "assoc"; // NOVO: Flag de associação automática
+
     const btnAssociar = document.getElementById("btnAssociar");
     const statusMsg = document.getElementById("statusMsg");
     const hamburgerBtn = document.getElementById('hamburger-btn');
@@ -283,55 +346,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     loadTheme();
     loadLanguage(); 
-
-    const lang = localStorage.getItem('lang') || 'pt';
-    const trans = translations[lang];
-
-    let usuarioLogado = null;
-    try { usuarioLogado = JSON.parse(localStorage.getItem("usuarioLogado")); } catch (e) {}
-
-    const idUsuario = usuarioLogado?.id ?? usuarioLogado?.usuarioId;
-    if (!idUsuario) {
-        alert(trans.erroSessao);
-        window.location.href = "/index.html";
-        return;
-    }
+    
+    // REMOVIDO: O bloco que verificava o login e forçava o redirecionamento imediato.
 
     let ferramenta = await carregarFerramenta();
+    
+    // NOVO: Verifica se deve associar automaticamente (após login bem-sucedido)
+    if (autoAssoc) {
+        // Remove a flag da URL para evitar associações repetidas no refresh.
+        const cleanUrl = window.location.href.replace(/&action=assoc/g, '');
+        window.history.replaceState(null, null, cleanUrl);
+        
+        // Executa a lógica de associação
+        await handleAssociation(ferramentaId, ferramenta, statusMsg, popup);
+    }
 
+    // Associa a função ao botão de clique
     btnAssociar?.addEventListener("click", async () => {
-        if (statusMsg) statusMsg.textContent = "";
-        try {
-            const assocRes = await fetch(`${API_BASE_URL}/api/ferramentas/associar/${ferramentaId}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ usuarioId: idUsuario })
-            });
-
-            let resposta;
-            try { resposta = await assocRes.json(); } catch { 
-                const texto = await assocRes.text();
-                throw new Error(lang === 'pt' ? "Resposta inválida do servidor: " + texto : "Invalid server response: " + texto);
-            }
-
-            if (!assocRes.ok) throw new Error(resposta.erro || trans.erroFalhaAssociar);
-
-            setInnerHtml("popupMessage", "popupSucesso", trans, {
-                ferramentaNome: resposta.ferramentaNome,
-                usuarioNome: resposta.usuarioNome
-            });
-            popup.style.display = "flex";
-
-            atualizarStatus(resposta.usuarioNome, resposta.dataAssociacao);
-            ferramenta.usuarioNome = resposta.usuarioNome;
-
-        } catch (err) {
-            console.error(err);
-            if (statusMsg) {
-                statusMsg.textContent = `${lang === 'pt' ? 'Erro' : 'Error'}: ${err.message}`;
-                statusMsg.style.color = "red";
-            }
-        }
+        await handleAssociation(ferramentaId, ferramenta, statusMsg, popup);
     });
     
     closePopupBtn?.addEventListener("click", () => popup.style.display = "none");
