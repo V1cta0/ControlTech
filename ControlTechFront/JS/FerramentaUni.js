@@ -19,7 +19,7 @@ const translations = {
         'popupBtnFechar': 'Fechar',
         'erroCarregar': 'Erro ao carregar ferramenta',
         'erroFalhaAssociar': 'Falha ao associar.',
-        'erroSessao': 'Sessão expirada. Faça login.',
+        'erroSessao': 'Sessão expirada. Faça login.', // Texto usado no pop-up visual
         'settingsPopupTitle': 'Configurações',
         'themeLabel': 'Alternar Tema:',
         'themeStatusLight': 'Tema Claro',
@@ -271,23 +271,28 @@ async function handleAssociation(ferramentaId, ferramenta, statusMsg, popup) {
     const lang = localStorage.getItem('lang') || 'pt';
     const trans = translations[lang];
 
+    const popupMessage = document.getElementById("popupMessage");
+    
     let usuarioLogado = null;
     try { usuarioLogado = JSON.parse(localStorage.getItem("usuarioLogado")); } catch (e) {}
 
     const idUsuario = usuarioLogado?.id ?? usuarioLogado?.usuarioId;
     
-    // VERIFICAÇÃO DE LOGIN E REDIRECIONAMENTO COM CONTEXTO
+    // VERIFICAÇÃO DE LOGIN E REDIRECIONAMENTO COM POP-UP VISUAL
     if (!idUsuario) {
-        // Armazena o caminho completo da URL atual + a flag de ação
-        const currentPath = window.location.pathname; // Ex: /HTML/FerramentaUni.html
-        const currentQuery = window.location.search;  // Ex: ?id=1
+        // 1. Prepara a mensagem visual
+        if (popupMessage) {
+            // Usando um ícone de aviso visualmente atraente do Font Awesome
+            popupMessage.innerHTML = `<i class="fas fa-exclamation-triangle" style="color: #ffc107; font-size: 24px; margin-right: 15px;"></i> <strong>${trans.erroSessao}</strong>`;
+            // Define um atributo para identificar o erro de sessão
+            popupMessage.setAttribute('data-action', 'redirect');
+            popupMessage.style.color = "var(--text-color-dark, #333)"; 
+        }
         
-        // Define o URL de redirecionamento, codificando a action=assoc
-        const redirectUrl = encodeURIComponent(currentPath + currentQuery + "&action=assoc");
+        // 2. Exibe o pop-up
+        if (popup) popup.style.display = "flex";
         
-        alert(trans.erroSessao); 
-        // Redireciona para o login com o parâmetro de retorno
-        window.location.href = `/index.html?redirect=${redirectUrl}`;
+        // 3. O redirecionamento ocorrerá quando o usuário clicar em Fechar (tratado no listener DOMContentLoaded)
         return; 
     }
     
@@ -308,14 +313,20 @@ async function handleAssociation(ferramentaId, ferramenta, statusMsg, popup) {
 
         if (!assocRes.ok) throw new Error(resposta.erro || trans.erroFalhaAssociar);
 
+        // Lógica para Pop-up de Sucesso (mantida)
         setInnerHtml("popupMessage", "popupSucesso", trans, {
             ferramentaNome: resposta.ferramentaNome,
             usuarioNome: resposta.usuarioNome
         });
-        popup.style.display = "flex";
+        
+        // Limpa o atributo data-action se houver
+        if (popupMessage) popupMessage.removeAttribute('data-action'); 
+        if (popupMessage) popupMessage.style.color = "var(--text-color-dark, #333)";
+
+        if (popup) popup.style.display = "flex";
 
         atualizarStatus(resposta.usuarioNome, resposta.dataAssociacao);
-        if (ferramenta) ferramenta.usuarioNome = resposta.usuarioNome; // Atualiza o objeto local se existir
+        if (ferramenta) ferramenta.usuarioNome = resposta.usuarioNome;
 
     } catch (err) {
         console.error(err);
@@ -330,7 +341,7 @@ async function handleAssociation(ferramentaId, ferramenta, statusMsg, popup) {
 document.addEventListener("DOMContentLoaded", async () => {
     const params = new URLSearchParams(window.location.search);
     const ferramentaId = params.get("id");
-    const autoAssoc = params.get("action") === "assoc"; // NOVO: Flag de associação automática
+    const autoAssoc = params.get("action") === "assoc"; // Flag de associação automática
 
     const btnAssociar = document.getElementById("btnAssociar");
     const statusMsg = document.getElementById("statusMsg");
@@ -343,21 +354,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     const closeSettingsPopupBtn = document.getElementById('close-popup-btn'); 
     const themeToggleBtn = document.getElementById('theme-toggle-btn');
     const langToggleBtn = document.getElementById('lang-toggle-btn');
+    const popupMessage = document.getElementById("popupMessage"); // Elemento de mensagem do pop-up
 
     loadTheme();
     loadLanguage(); 
     
-    // REMOVIDO: O bloco que verificava o login e forçava o redirecionamento imediato.
-
     let ferramenta = await carregarFerramenta();
     
-    // NOVO: Verifica se deve associar automaticamente (após login bem-sucedido)
+    // Lógica de auto-associação (executa se a flag estiver presente e o usuário estiver logado)
     if (autoAssoc) {
         // Remove a flag da URL para evitar associações repetidas no refresh.
         const cleanUrl = window.location.href.replace(/&action=assoc/g, '');
         window.history.replaceState(null, null, cleanUrl);
-        
-        // Executa a lógica de associação
         await handleAssociation(ferramentaId, ferramenta, statusMsg, popup);
     }
 
@@ -366,7 +374,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         await handleAssociation(ferramentaId, ferramenta, statusMsg, popup);
     });
     
-    closePopupBtn?.addEventListener("click", () => popup.style.display = "none");
+    // --- LÓGICA CONDICIONAL DE FECHAR O POP-UP ---
+    closePopupBtn?.addEventListener("click", () => {
+        
+        // Verifica se o atributo 'data-action' está definido como 'redirect' (indicando erro de sessão)
+        if (popup.style.display === "flex" && popupMessage.getAttribute('data-action') === 'redirect') {
+            
+            // Prepara a URL de redirecionamento para o login, mantendo o contexto para auto-associação
+            const currentPath = window.location.pathname; 
+            const currentQuery = window.location.search.replace(/&action=assoc/g, ''); 
+            const redirectUrl = encodeURIComponent(currentPath + currentQuery + "&action=assoc");
+            
+            // Limpa o atributo antes de redirecionar
+            popupMessage.removeAttribute('data-action'); 
+            popup.style.display = "none";
+            
+            // Redireciona
+            window.location.href = `/index.html?redirect=${redirectUrl}`;
+        } else {
+            // Se for qualquer outra mensagem (sucesso, etc.), apenas fecha o pop-up
+            popup.style.display = "none";
+        }
+    });
+
     hamburgerBtn?.addEventListener('click', () => sidebar?.classList.toggle('active'));
     settingsBtn?.addEventListener('click', (e) => {
         e.preventDefault();
