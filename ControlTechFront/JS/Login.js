@@ -358,7 +358,7 @@ function salvarUsuarioLogado(usuario) {
     const usuarioFormatado = {
         id: idUsuario,
         nome: dadosReais.nome || "Usuário", 
-        turma: dadosReais.perfil, // <-- MUDANÇA: A chave no localStorage agora é 'turma'
+        turma: dadosReais.turma, 
         qrCode: dadosReais.qrCode
     };
     localStorage.setItem("usuarioLogado", JSON.stringify(usuarioFormatado));
