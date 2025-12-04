@@ -1,5 +1,3 @@
-// ControlTechBack/src/main/java/com/senai/projeto/ControlTechBack/config/WebConfig.java
-
 package com.senai.projeto.ControlTechBack.config;
 
 import org.springframework.context.annotation.Configuration;
@@ -18,11 +16,11 @@ public class WebConfig implements WebMvcConfigurer {
                         // ORIGENS PERMITIDAS
                         "http://localhost:3000",
                         "http://localhost:8080",
-                        "https://control-tech-six.vercel.app",
-                        "https://controltech.up.railway.app"
+                        "https://control-tech-six.vercel.app", // Domínio do Front-end (Vercel)
+                        "https://controltech.up.railway.app"  // CORRIGIDO: Domínio do Back-end Railway (necessário em alguns casos)
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
-                .allowCredentials(true);
+                .allowCredentials(true); // Adicionado para compatibilidade com autenticação futura
     }
 }
