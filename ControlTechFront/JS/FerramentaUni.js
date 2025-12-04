@@ -10,7 +10,7 @@ const translations = {
         'sidebarExit': 'Sair',
         'sidebarSettings': 'Configurações',
         'labelDescricao': '<strong>Descrição:</strong>',
-        'labelPatrimonio': '<strong>Patrimônio:</strong>', // CHAVE DE TRADUÇÃO CORRETA
+        'labelPatrimonio': '<strong>Patrimônio:</strong>', 
         'btnVoltar': 'Voltar',
         'btnAssociar': 'Associar ao meu usuário',
         'statusDisponivel': '⚪ Disponível',
@@ -19,7 +19,7 @@ const translations = {
         'popupBtnFechar': 'Fechar',
         'erroCarregar': 'Erro ao carregar ferramenta',
         'erroFalhaAssociar': 'Falha ao associar.',
-        'erroSessao': 'Sessão expirada. Faça login.', // Texto usado no pop-up visual
+        'erroSessao': 'Sessão expirada. Faça login.', 
         'settingsPopupTitle': 'Configurações',
         'themeLabel': 'Alternar Tema:',
         'themeStatusLight': 'Tema Claro',
@@ -40,7 +40,7 @@ const translations = {
         'sidebarExit': 'Exit',
         'sidebarSettings': 'Settings',
         'labelDescricao': '<strong>Description:</strong>',
-        'labelPatrimonio': '<strong>Asset ID:</strong>', // CHAVE DE TRADUÇÃO CORRETA
+        'labelPatrimonio': '<strong>Asset ID:</strong>', 
         'btnVoltar': 'Back',
         'btnAssociar': 'Associate to my user',
         'statusDisponivel': '⚪ Available',
@@ -155,7 +155,7 @@ const updateTranslations = (lang) => {
     setSpanText('settings-btn', 'sidebarSettings', trans);
 
     setInnerHtml('label-descricao', 'labelDescricao', trans); 
-    setInnerHtml('label-patrimonio', 'labelPatrimonio', trans); // CORRIGIDO: Usa a chave 'labelPatrimonio' e o ID 'label-patrimonio'
+    setInnerHtml('label-patrimonio', 'labelPatrimonio', trans); 
     setText('btn-voltar-text', 'btnVoltar', trans);
     setText('btn-associar-text', 'btnAssociar', trans);
     setText('popup-btn-fechar', 'popupBtnFechar', trans);
@@ -238,7 +238,7 @@ async function carregarFerramenta() {
     const toolNome = document.getElementById("toolNome");
     const toolId = document.getElementById("toolId");
     const toolDescricao = document.getElementById("toolDescricao");
-    const toolPatrimonio = document.getElementById("toolPatrimonio"); // CORRIGIDO: Referência ao novo ID
+    const toolPatrimonio = document.getElementById("toolPatrimonio"); 
     const toolImage = document.getElementById("toolImage"); 
     const btnAssociar = document.getElementById("btnAssociar");
     const statusMsg = document.getElementById("statusMsg");
@@ -254,7 +254,7 @@ async function carregarFerramenta() {
         if (toolNome) toolNome.textContent = ferramenta.nome;
         if (toolId) toolId.textContent = ferramenta.id;
         if (toolDescricao) toolDescricao.textContent = ferramenta.descricao || (lang === 'pt' ? 'Sem descrição' : 'No description');
-        if (toolPatrimonio) toolPatrimonio.textContent = ferramenta.patrimonio; // CORRIGIDO: Usa a propriedade 'patrimonio'
+        if (toolPatrimonio) toolPatrimonio.textContent = ferramenta.patrimonio; 
         if (toolImage) toolImage.src = ferramenta.imagemUrl || '/img/tools.png'; 
 
         await atualizarStatusDaFerramenta();

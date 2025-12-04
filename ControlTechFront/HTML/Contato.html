@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ControlTech - Nossa Equipe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0e27;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* FUNDO ANIMADO COM PARTÍCULAS */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #0f1729 100%);
+        }
+
+        .background-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(0, 150, 255, 0.08) 0%, transparent 50%);
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-50px, -50px); }
+        }
+
+        /* HEADER PREMIUM */
+        header {
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 20px 0;
+            box-shadow: 0 4px 30px rgba(0, 217, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00d9ff 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
+            letter-spacing: 2px;
+        }
+
+        .btn-site {
+            background: linear-gradient(135deg, #00d9ff 0%, #a78bfa 100%);
+            color: #0a0e27;
+            padding: 14px 35px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0, 217, 255, 0.3);
+        }
+
+        .btn-site::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-site:hover::before {
+            left: 100%;
+        }
+
+        .btn-site:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 35px rgba(0, 217, 255, 0.5);
+        }
+
+        /* SEÇÃO PRINCIPAL */
+        .main-section {
+            max-width: 1400px;
+            margin: 80px auto;
+            padding: 0 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .title {
+            text-align: center;
+            color: white;
+            margin-bottom: 80px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .title h1 {
+            font-size: 56px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ffffff 0%, #00d9ff 50%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .title p {
+            font-size: 20px;
+            opacity: 0.8;
+            color: #b4b4b4;
+            font-weight: 300;
+        }
+
+        /* GRID DOS CARDS */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        /* CARDS PREMIUM */
+        .member-card {
+            background: linear-gradient(145deg, rgba(26, 26, 62, 0.6), rgba(17, 24, 39, 0.8));
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 
+                0 15px 50px rgba(0,0,0,0.5),
+                inset 0 1px 1px rgba(255,255,255,0.1);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeInUp 0.8s ease;
+            border: 1px solid rgba(0, 217, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 217, 255, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .member-card:hover::before {
+            opacity: 1;
+        }
+
+        .member-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 
+                0 25px 60px rgba(0, 217, 255, 0.3),
+                0 0 50px rgba(167, 139, 250, 0.2),
+                inset 0 1px 1px rgba(255,255,255,0.2);
+            border-color: rgba(0, 217, 255, 0.5);
+        }
+
+        /* FOTO COM EFEITO */
+        .member-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 25px;
+            display: block;
+            border: 4px solid;
+            border-image: linear-gradient(145deg, #00d9ff, #a78bfa) 1;
+            background: transparent;
+            box-shadow: 
+                0 0 30px rgba(0, 217, 255, 0.4),
+                0 10px 25px rgba(0,0,0,0.3);
+            transition: all 0.4s ease;
+        }
+
+        .member-card:hover .member-photo {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 
+                0 0 50px rgba(0, 217, 255, 0.6),
+                0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .member-name {
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #00d9ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .member-role {
+            font-size: 15px;
+            color: #a78bfa;
+            margin-bottom: 20px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* SKILLS PREMIUM */
+        .member-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 25px;
+            min-height: 40px;
+        }
+
+        .skill-tag {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(167, 139, 250, 0.2));
+            backdrop-filter: blur(10px);
+            color: #00d9ff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .skill-tag:hover {
+            transform: translateY(-3px) scale(1.05);
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.4), rgba(167, 139, 250, 0.4));
+            box-shadow: 0 5px 15px rgba(0, 217, 255, 0.3);
+            border-color: #00d9ff;
+        }
+
+        /* BOTÕES SOCIAIS PREMIUM */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: white;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transition: all 0.5s;
+            transform: translate(-50%, -50%);
+        }
+
+        .social-btn:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-5px) scale(1.15);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        .whatsapp {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+        }
+
+        .instagram {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+
+        .github {
+            background: linear-gradient(135deg, #333 0%, #000 100%);
+        }
+
+        .linkedin {
+            background: linear-gradient(135deg, #0077b5 0%, #00547a 100%);
+        }
+
+        /* FOOTER PREMIUM */
+        footer {
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 80px;
+            border-top: 1px solid rgba(0, 217, 255, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        footer p {
+            margin-bottom: 10px;
+            color: #b4b4b4;
+            font-weight: 300;
+        }
+
+        footer p:first-child {
+            font-size: 16px;
+        }
+
+        footer p:last-child {
+            font-size: 14px;
+            background: linear-gradient(135deg, #00d9ff 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+
+        /* ANIMAÇÕES */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* RESPONSIVIDADE */
+        @media (max-width: 768px) {
+            .title h1 {
+                font-size: 38px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+
+            .btn-site {
+                padding: 12px 25px;
+                font-size: 14px;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .main-section {
+                padding: 0 20px;
+                margin: 50px auto;
+            }
+
+            .header-container {
+                padding: 0 20px;
+            }
+
+            .member-photo {
+                width: 150px;
+                height: 150px;
+            }
+        }
+
+        /* SCROLLBAR PERSONALIZADA */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0e27;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #00d9ff 0%, #a78bfa 100%);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #00b8d4 0%, #8b5cf6 100%);
+        }
+    </style>
+</head>
+<body>
+    <!-- FUNDO ANIMADO -->
+    <div class="background-animation"></div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="header-container">
+            <div class="logo">CONTROLTECH</div>
+            <a href="#" class="btn-site">Acessar Site</a>
+        </div>
+    </header>
+
+    <!-- SEÇÃO PRINCIPAL -->
+    <div class="main-section">
+        <div class="title">
+            <h1>Conheça Os Integrantes Da ControlTech</h1>
+            <p>Desenvolvedores</p>
+        </div>
+
+        <div class="team-grid">
+            <!-- INTEGRANTE 1 -->
+            <div class="member-card">
+                <img src="https://i.postimg.cc/fTjpSdWN/Foto.jpg" alt="Felipe de Freitas Rossi" class="member-photo">
+                <h3 class="member-name">Felipe de Freitas Rossi</h3>
+                <p class="member-role">Full Stack Developer</p>
+                <div class="member-skills">
+                    <span class="skill-tag">HTML</span>
+                    <span class="skill-tag">CSS</span>
+                    <span class="skill-tag">JavaScript</span>
+                    <span class="skill-tag">React</span>
+                    <span class="skill-tag">Node.js</span>
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">SQL</span>
+                    <span class="skill-tag">TypeScript</span>
+                    <span class="skill-tag">Java</span>
+                    <span class="skill-tag">QA</span>
+                    <span class="skill-tag">Lógica de Programação</span>
+                </div>
+                <div class="social-links">
+                    <a href="https://wa.me/5516996167381" target="_blank" class="social-btn whatsapp" title="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://instagram.com/Fezinn_08" target="_blank" class="social-btn instagram" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/FelipeFreitasRossi" target="_blank" class="social-btn linkedin" title="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://github.com/FelipeFreitasRossi" target="_blank" class="social-btn github" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- INTEGRANTE 2 -->
+            <div class="member-card">
+                <img src="https://via.placeholder.com/150" alt="Victor Hugo Dos Santos" class="member-photo">
+                <h3 class="member-name">Victor Hugo Dos Santos</h3>
+                <p class="member-role">Full Stack</p>
+                <div class="member-skills">
+                    <span class="skill-tag">HTML</span>
+                    <span class="skill-tag">CSS</span>
+                    <span class="skill-tag">SQL</span>
+                    <span class="skill-tag">Java</span>
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">bat</span>
+                    <span class="skill-tag">TypeScript</span>
+                    <span class="skill-tag">Node</span>
+                    <span class="skill-tag">Docker</span>
+                    <span class="skill-tag">Lógica de Programação</span>
+                    <span class="skill-tag">QA</span>
+                </div>
+                <div class="social-links">
+                    <a href="https://wa.me/5516993588706" target="_blank" class="social-btn whatsapp" title="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://instagram.com/vh.santos_18" target="_blank" class="social-btn instagram" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/victor-hugo-dos-santos-a9a613397/" target="_blank" class="social-btn linkedin" title="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://github.com/V1cta0" target="_blank" class="social-btn github" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- INTEGRANTE 3 -->
+            <div class="member-card">
+                <img src="https://via.placeholder.com/150" alt="Eliezer Santos Beltrame" class="member-photo">
+                <h3 class="member-name">Eliezer Santos Beltrame</h3>
+                <p class="member-role">Desenvolvedor Front-End</p>
+                <div class="member-skills">
+                    <span class="skill-tag">HTML</span>
+                    <span class="skill-tag">CSS</span>
+                    <span class="skill-tag">JS</span>
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">Build tools</span>
+                    <span class="skill-tag">React</span>
+                </div>
+                <div class="social-links">
+                    <a href="https://wa.me/5516992936960" target="_blank" class="social-btn whatsapp" title="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://instagram.com/EliezerBeltrame" target="_blank" class="social-btn instagram" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <!-- <a href="https://linkedin.com/in/EliezerSantosBeltrame" target="_blank" class="social-btn linkedin" title="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i> -->
+                    </a>
+                    <a href="https://github.com/EliezerBeltrame" target="_blank" class="social-btn github" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- INTEGRANTE 4 -->
+            <div class="member-card">
+                <img src="https://i.postimg.cc/fyj6jSsT/gui.jpg" alt="Guilherme Augusto Sobrinho" class="member-photo">
+                <h3 class="member-name">Guilherme Augusto Sobrinho</h3>
+                <p class="member-role">Desenvolvedor back-end</p>
+                <div class="member-skills">
+                    <span class="skill-tag">Java</span>
+                    <span class="skill-tag">Javascript</span>
+                    <span class="skill-tag">HTML</span>
+                    <span class="skill-tag">SQL</span>
+                </div>
+                <div class="social-links">
+                    <a href="https://wa.me/5516997079059" target="_blank" class="social-btn whatsapp" title="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://instagram.com/guirxm" target="_blank" class="social-btn instagram" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://share.google/a0Mq6Pzb1yDZIDTpa" target="_blank" class="social-btn linkedin" title="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    <a href="https://github.com/guirxm" target="_blank" class="social-btn github" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- INTEGRANTE 5 -->
+            <div class="member-card">
+                <img src="https://via.placeholder.com/150" alt="Eduardo Rodrigues" class="member-photo">
+                <h3 class="member-name">Eduardo Rodrigues</h3>
+                <p class="member-role">Dsenvolvedor Back-End</p>
+                <div class="member-skills">
+                    <span class="skill-tag">JavaScript</span>
+                    <span class="skill-tag">HTML</span>
+                    <span class="skill-tag">SQL</span>
+                    <span class="skill-tag">Lógica de programação</span>
+                    <span class="skill-tag">C#</span>
+                    <span class="skill-tag">Go</span>
+                    <span class="skill-tag">Ruby</span>
+                </div>
+                <div class="social-links">
+                    <a href="https://wa.me/5516981019983" target="_blank" class="social-btn whatsapp" title="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://instagram.com/_edu_44" target="_blank" class="social-btn instagram" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://github.com/EduardoRodrigues0" target="_blank" class="social-btn github" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2025 ControlTech - Todos os direitos reservados</p>
+        <p>Desenvolvido com excelência pela equipe ControlTech</p>
+    </footer>
+
+    <script>
+        // Animação dos cards ao carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.member-card');
+            
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.15}s`;
+            });
+        });
+
+        // Botão "Acessar Site"
+        document.querySelector('.btn-site').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Adicione aqui o link do seu site!');
+        });
+
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const bg = document.querySelector('.background-animation::before');
+            if (bg) {
+                bg.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
