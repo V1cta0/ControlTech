@@ -22,9 +22,8 @@ public class Ferramenta {
 
     private String nome;
     private String descricao;
-    // private Integer quantidadeEstoque; // Removido: Usaremos Patrimônio
+    private Integer quantidadeEstoque;
 
-    private String patrimonio; // NOVO: Campo de Patrimônio
 
     private LocalDate dataDevolucao;
     private LocalDateTime dataAssociacao; // NOVO CAMPO

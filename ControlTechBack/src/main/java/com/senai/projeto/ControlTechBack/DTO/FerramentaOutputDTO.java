@@ -7,7 +7,9 @@ public class FerramentaOutputDTO {
     private Long id;
     private String nome;
     private String descricao;
-    private String patrimonio;
+    private int quantidadeEstoque;
+
+    // 🔹 adicionar o vínculo
     private Long usuarioId;
     private String usuarioNome;
 }

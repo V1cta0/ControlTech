@@ -1,6 +1,10 @@
 package com.senai.projeto.ControlTechBack.DTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,11 +18,13 @@ import java.time.LocalDate;
 @Data
 public class FerramentaDTO {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
     private String nome;
     private String descricao;
-    private String patrimonio;
+    private Integer quantidadeEstoque;
     private LocalDate dataDevolucao;
 
 }
