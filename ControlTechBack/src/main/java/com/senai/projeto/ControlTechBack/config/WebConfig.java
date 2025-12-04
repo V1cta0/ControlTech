@@ -16,11 +16,11 @@ public class WebConfig implements WebMvcConfigurer {
                         // ORIGENS PERMITIDAS
                         "http://localhost:3000",
                         "http://localhost:8080",
-                        "https://control-tech-six.vercel.app", // Domínio do Front-end (Vercel)
-                        "https://controltech.up.railway.app"  // CORRIGIDO: Domínio do Back-end Railway (necessário em alguns casos)
+                        "https://control-tech-six.vercel.app", // Front-end
+                        "https://controltech.up.railway.app"  // Back-end
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
-                .allowCredentials(true); // Adicionado para compatibilidade com autenticação futura
+                .allowCredentials(true);
     }
 }
