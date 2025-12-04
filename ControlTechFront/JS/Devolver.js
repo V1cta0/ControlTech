@@ -225,10 +225,10 @@ function carregarFerramentas(usuarioId) {
             ferramentas.forEach(f => {
                 const div = document.createElement("div");
                 div.className = "ferramenta-item";
-
                 div.innerHTML = `
                 <p><i class="fas fa-hashtag icon-sm"></i> <strong>ID:</strong> ${f.ferramentaId || 'N/A'}</p>
                 <p><i class="fas fa-tag icon-sm"></i> <strong>Nome:</strong> ${f.ferramentaNome || (currentLang === 'pt' ? 'Nome Ind.' : 'Name Unav.')}</p>
+                <p><i class="fas fa-barcode icon-sm"></i> <strong>Patrimônio:</strong> ${f.patrimonio || 'N/A'}</p> 
                 <p class="obs-container">
                     <label for="obs-${f.ferramentaId}" class="sr-only"><i class="fas fa-comment-alt icon-sm"></i> Observações</label> 
                     <input type="text" id="obs-${f.ferramentaId}" class="obsInput" placeholder="${trans.obsPlaceholder}" required>

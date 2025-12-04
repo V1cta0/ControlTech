@@ -2,7 +2,7 @@ import { API_BASE_URL } from './apiConfig.js';
 
 const translations = {
     'pt': {
-        'pageTitle': 'Ajuda - SENAI ControlTech',
+        'pageTitle': 'Ferramentas - SENAI ControlTech',
         'sidebarAbout': 'Início', 
         'sidebarTools': 'Ferramentas',
         'sidebarReturn': 'Devolver',
@@ -31,7 +31,7 @@ const translations = {
         'welcomeMessage': 'Olá,'
     },
     'en': {
-        'pageTitle': 'Help - SENAI ControlTech',
+        'pageTitle': 'Tools - SENAI ControlTech',
         'sidebarAbout': 'Home', 
         'sidebarTools': 'Tools',
         'sidebarReturn': 'Return',
