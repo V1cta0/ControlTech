@@ -56,6 +56,10 @@ public class HistoricoService {
         dto.setId(h.getId());
         dto.setNomeFerramenta(h.getFerramenta().getNome());
         dto.setNomeUsuario(h.getUsuario().getNome());
+        // CORRIGIDO: Linha que mapeia a turma
+        if (h.getUsuario() != null) {
+            dto.setUsuarioTurma(h.getUsuario().getTurma());
+        }
         dto.setDataDevolucao(h.getDataDevolucao()); // mantemos LocalDateTime original
         dto.setObservacoes(h.getObservacoes());
         return dto;
