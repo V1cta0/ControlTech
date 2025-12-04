@@ -51,7 +51,17 @@ public class DataInitializer implements CommandLineRunner {
                     .descricao("Estação de solda com controle de temperatura")
                     .patrimonio("PAT-003")
                     .build();
+            Ferramenta f4 = Ferramenta.builder()
+                    .nome("Alicate Universal")
+                    .descricao("Alicate de 8 polegadas com isolamento, cabo ergonômico.")
+                    .patrimonio("PAT-004")
+                    .build();
 
+            Ferramenta f5 = Ferramenta.builder()
+                    .nome("Chave de Fenda")
+                    .descricao("Conjunto de chaves de fenda com 6 peças, ponta magnetizada.")
+                    .patrimonio("PAT-005")
+                    .build();
             // 3. Salve todas no banco de dados
             ferramentaRepository.saveAll(Arrays.asList(f1, f2, f3));
 
