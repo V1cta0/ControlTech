@@ -32,24 +32,24 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println(">>> [DataInitializer] Banco de dados vazio. Populando dados iniciais...");
 
             // 2. Crie as ferramentas usando o @Builder da sua entidade
-
+            // CORRIGIDO: Usando 'patrimonio' no Builder (tipo String)
             Ferramenta f1 = Ferramenta.builder()
                     .nome("Multímetro Digital")
                     .descricao("Multímetro digital com true RMS, modelo ET-2082E")
-                    .quantidadeEstoque(5)
+                    .patrimonio("PAT-001")
                     // Os outros campos (usuario, datas) ficam null por padrão
                     .build();
 
             Ferramenta f2 = Ferramenta.builder()
                     .nome("Fonte de Alimentação DC")
                     .descricao("Fonte de 0-30V, 0-5A, ajustável")
-                    .quantidadeEstoque(3)
+                    .patrimonio("PAT-002")
                     .build();
 
             Ferramenta f3 = Ferramenta.builder()
                     .nome("Estação de Solda")
                     .descricao("Estação de solda com controle de temperatura")
-                    .quantidadeEstoque(4)
+                    .patrimonio("PAT-003")
                     .build();
 
             // 3. Salve todas no banco de dados
