@@ -2,7 +2,6 @@ package com.senai.projeto.ControlTechBack.controller;
 
 import com.senai.projeto.ControlTechBack.DTO.*;
 import com.senai.projeto.ControlTechBack.QrCode.QRCodeGenerator;
-import com.senai.projeto.ControlTechBack.QrCode.QRCodeReader;
 import com.senai.projeto.ControlTechBack.entity.Ferramenta;
 import com.senai.projeto.ControlTechBack.entity.Usuario;
 import com.senai.projeto.ControlTechBack.service.FerramentaService;
@@ -11,19 +10,14 @@ import com.senai.projeto.ControlTechBack.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/ferramentas")
-@CrossOrigin(origins = "*")
+// Removida anotação @CrossOrigin - confiamos no WebConfig para CORS
 public class FerramentaQrCodeController {
 
     @Autowired
@@ -34,77 +28,62 @@ public class FerramentaQrCodeController {
 
     @Autowired
     private HistoricoService historicoService;
-    // ✅ Listar todas
+
+    // ✅ Listar todas (GET /api/ferramentas)
     @GetMapping
     public List<FerramentaDTO> listarTodas() {
         return ferramentaService.listarTodas();
     }
 
-    // ✅ Buscar por ID
+    // ✅ Buscar por ID (GET /api/ferramentas/{id})
     @GetMapping("/{id}")
     public ResponseEntity<FerramentaDTO> buscarPorId(@PathVariable Long id) {
         FerramentaDTO dto = ferramentaService.buscarPorId(id);
         return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
     }
-    // ✅ Criar ferramenta com JSON simples (sem QRCode)
-    @PostMapping("/post")
-    public ResponseEntity<?> criarFerramentaJson(@RequestBody FerramentaDTO dto) {
+
+    // ✅ Criar ferramenta (POST /api/ferramentas) - Unificado para JSON
+    @PostMapping
+    public ResponseEntity<?> criarFerramenta(@RequestBody FerramentaDTO dto) {
         try {
             FerramentaDTO criado = ferramentaService.salvar(dto);
-            return ResponseEntity.ok(criado);
+            return ResponseEntity.status(HttpStatus.CREATED).body(criado);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().body("Erro ao cadastrar ferramenta: " + e.getMessage());
+            // Retorna um JSON de erro para o Front-end
+            return ResponseEntity.badRequest().body(Map.of("erro", "Erro ao cadastrar ferramenta: " + e.getMessage()));
         }
     }
 
+    // O antigo método com @PostMapping("/post") e o método complexo com MultipartFile foram substituídos por um POST simples e limpo.
 
-    // ✅ Criar Ferramenta (com QR opcional)
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> criarFerramenta(
-            @RequestParam(value = "file", required = false) MultipartFile file,
-            @RequestPart("ferramenta") FerramentaDTO dto) {
-        try {
-            if (file != null && !file.isEmpty()) {
-                File tempFile = File.createTempFile("ferramenta", ".png");
-                file.transferTo(tempFile);
-                String qrCode = QRCodeReader.lerQRCode(tempFile.getAbsolutePath()).trim();
-                // você pode salvar o QRCode no DTO se quiser
-                tempFile.delete();
-            }
-            FerramentaDTO criado = ferramentaService.salvar(dto);
-            return ResponseEntity.ok(criado);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Erro ao cadastrar ferramenta: " + e.getMessage());
-        }
-    }
-
-    // ✅ Atualizar ferramenta
+    // ✅ Atualizar ferramenta (PUT /api/ferramentas/{id})
     @PutMapping("/{id}")
     public ResponseEntity<FerramentaDTO> atualizar(@PathVariable Long id, @RequestBody FerramentaDTO dto) {
         try {
             FerramentaDTO atualizado = ferramentaService.atualizar(id, dto);
             return ResponseEntity.ok(atualizado);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
+            // Captura exceção de "Ferramenta não encontrada"
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
-    // ✅ Deletar ferramenta
+    // ✅ Deletar ferramenta (DELETE /api/ferramentas/{id})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         ferramentaService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 
-    // ✅ Gerar QR Code da ferramenta
+    // ✅ Gerar QR Code da ferramenta (GET /api/ferramentas/{id}/qrcode)
     @GetMapping("/{id}/qrcode")
     public ResponseEntity<byte[]> gerarQrCode(@PathVariable Long id) {
         try {
             FerramentaDTO dto = ferramentaService.buscarPorId(id);
             if (dto == null) return ResponseEntity.notFound().build();
 
+            // O QR Code é o ID da ferramenta
             String qrText = String.valueOf(dto.getId());
             byte[] qrImage = QRCodeGenerator.gerarQRCodeBytes(qrText, 400, 400);
 
@@ -115,7 +94,8 @@ public class FerramentaQrCodeController {
             return ResponseEntity.internalServerError().build();
         }
     }
-    // ATUALIZADO: Retorna a dataAssociacao
+
+    // ✅ Associar usuário (POST /api/ferramentas/associar/{id})
     @PostMapping("/associar/{id}")
     public ResponseEntity<Map<String, Object>> associarUsuario(
             @PathVariable Long id,
@@ -141,28 +121,25 @@ public class FerramentaQrCodeController {
         Usuario usuario = optUsuario.get();
 
         try {
-            // Service deve apenas executar a lógica, não retornar String
             ferramentaService.associarUsuario(ferramenta, usuario);
 
-            // ATUALIZADO: Retorna a dataAssociacao para o Front-end
             return ResponseEntity.ok(Map.of(
                     "mensagem", "Associado com sucesso!",
                     "ferramentaId", ferramenta.getId(),
                     "ferramentaNome", ferramenta.getNome(),
                     "usuarioId", usuario.getId(),
                     "usuarioNome", usuario.getNome(),
-                    "dataAssociacao", ferramenta.getDataAssociacao() // NOVO CAMPO
+                    "dataAssociacao", ferramenta.getDataAssociacao() // Retorna o LocalDateTime
             ));
 
         } catch (Exception e) {
-            // Captura qualquer exceção do service e retorna JSON
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("erro", "Erro ao associar: " + e.getMessage()));
         }
     }
 
-    // ATUALIZADO: Retorna a dataAssociacao
+    // ✅ Status do Usuário da Ferramenta (GET /api/ferramentas/{id}/usuario)
     @GetMapping("/{id}/usuario")
     public ResponseEntity<UsuarioStatusDTO> usuarioDaFerramenta(@PathVariable Long id) {
         Optional<Ferramenta> ferrOpt = ferramentaService.buscarEntidadePorId(id);
@@ -173,38 +150,39 @@ public class FerramentaQrCodeController {
 
         if (usuario == null) {
             // Retorna DTO com campos nulos e dataAssociacao nula
-            return ResponseEntity.ok(new UsuarioStatusDTO(null, null, null, null)); // dataAssociacao nula
+            return ResponseEntity.ok(new UsuarioStatusDTO(null, null, null, null));
         }
 
         // Retorna DTO com dados do usuário e a data de associação
         UsuarioStatusDTO dto = new UsuarioStatusDTO(
                 usuario.getId(),
                 usuario.getNome(),
-                usuario.getTurma(),
-                ferramenta.getDataAssociacao() // NOVO CAMPO
+                usuario.getTurma(), // Turma é lida do objeto Usuario
+                ferramenta.getDataAssociacao() // Data de associação é lida do objeto Ferramenta
         );
         return ResponseEntity.ok(dto);
     }
 
 
+    // ✅ Listar usuários associados a ferramentas (GET /api/ferramentas/usuarios/associacao)
     @GetMapping("/usuarios/associacao")
     public ResponseEntity<List<UsuarioOutputDTO>> listarUsuariosAssociados() {
         List<UsuarioOutputDTO> usuarios = usuarioService.listarUsuariosAssociados();
         return ResponseEntity.ok(usuarios);
     }
-    // Retorna todas as ferramentas associadas a um usuário
+
+    // ✅ Listar ferramentas por ID de usuário (GET /api/ferramentas/usuario/{usuarioId})
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<List<FerramentaUsuarioDTO>> listarFerramentasDoUsuario(@PathVariable Long usuarioId) {
         List<FerramentaUsuarioDTO> lista = ferramentaService.listarFerramentasPorUsuario(usuarioId);
         return ResponseEntity.ok(lista);
     }
 
-    // ATUALIZADO: Limpa a dataAssociacao
+    // ✅ Devolver ferramenta (POST /api/ferramentas/{id}/devolver)
     @PostMapping("/{id}/devolver")
     public ResponseEntity<String> devolver(@PathVariable Long id,
                                            @RequestParam(required = false) String observacoes) {
 
-        // Buscar a ferramenta
         Optional<Ferramenta> ferrOpt = ferramentaService.buscarEntidadePorId(id);
         if (ferrOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ferramenta não encontrada");
@@ -218,25 +196,25 @@ public class FerramentaQrCodeController {
                     .body("Ferramenta não está associada a nenhum usuário");
         }
 
-        // Registrar no histórico de devolução
+        // 1. Registrar no histórico de devolução
         historicoService.registrarDevolucao(ferramenta, usuario, observacoes);
 
-        // Desassociar ferramenta do usuário
+        // 2. Desassociar ferramenta do usuário e limpar datas de associação
         ferramenta.setUsuario(null);
         ferramenta.setDataDevolucao(null);
         ferramenta.setDataAssociacao(null);
         ferramentaService.salvarOuAtualizar(ferramenta);
 
-        // CORREÇÃO DEFINITIVA DE CODIFICAÇÃO: Usa MediaType.valueOf para forçar a definição
-        // explícita do charset=UTF-8, o que é mais robusto em alguns ambientes Spring.
+        // 3. Resposta com codificação UTF-8
         return ResponseEntity.ok()
                 .contentType(MediaType.valueOf("text/plain;charset=UTF-8"))
                 .body("Devolução realizada com sucesso");
     }
+
+    // ✅ Listar ferramentas por código de crachá (GET /api/ferramentas/usuario/cracha/{cracha})
     @GetMapping("/usuario/cracha/{cracha}")
     public ResponseEntity<List<FerramentaUsuarioDTO>> listarFerramentasDoUsuarioPorCracha(@PathVariable String cracha) {
         List<FerramentaUsuarioDTO> lista = ferramentaService.listarFerramentasPorCracha(cracha);
         return ResponseEntity.ok(lista);
     }
-
 }

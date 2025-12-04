@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime; // Importado
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -56,7 +56,8 @@ public class FerramentaService {
                 .orElseThrow(() -> new RuntimeException("Ferramenta não encontrada"));
         existente.setNome(dto.getNome());
         existente.setDescricao(dto.getDescricao());
-        existente.setQuantidadeEstoque(dto.getQuantidadeEstoque());
+        // ✅ CORRETO: Usa patrimonio
+        existente.setPatrimonio(dto.getPatrimonio());
         existente.setDataDevolucao(dto.getDataDevolucao());
         Ferramenta atualizada = ferramentaRepository.save(existente);
         return converterParaDTO(atualizada);
@@ -89,7 +90,7 @@ public class FerramentaService {
         dto.setId(ferramenta.getId());
         dto.setNome(ferramenta.getNome());
         dto.setDescricao(ferramenta.getDescricao());
-        dto.setQuantidadeEstoque(ferramenta.getQuantidadeEstoque());
+        dto.setPatrimonio(ferramenta.getPatrimonio()); // ✅ CORRETO
         dto.setDataDevolucao(ferramenta.getDataDevolucao());
         return dto;
     }
@@ -98,7 +99,7 @@ public class FerramentaService {
         Ferramenta f = new Ferramenta();
         f.setNome(dto.getNome());
         f.setDescricao(dto.getDescricao());
-        f.setQuantidadeEstoque(dto.getQuantidadeEstoque());
+        f.setPatrimonio(dto.getPatrimonio()); // ✅ CORRETO
         f.setDataDevolucao(dto.getDataDevolucao());
         return f;
     }
@@ -113,7 +114,6 @@ public class FerramentaService {
     }
 
     public List<FerramentaUsuarioDTO> listarFerramentasPorUsuario(Long usuarioId) {
-        // Agora busca no banco SÓ o que precisa
         List<Ferramenta> ferramentas = ferramentaRepository.findByUsuarioId(usuarioId);
 
         return ferramentas.stream()
@@ -121,13 +121,13 @@ public class FerramentaService {
                     FerramentaUsuarioDTO dto = new FerramentaUsuarioDTO();
                     dto.setFerramentaId(f.getId());
                     dto.setFerramentaNome(f.getNome());
-                    dto.setQuantidadeEstoque(f.getQuantidadeEstoque());
+                    dto.setPatrimonio(f.getPatrimonio()); // ✅ CORRETO
                     dto.setDataDevolucao(f.getDataDevolucao());
-                    // ... preencher dados do usuario ...
+
                     if (f.getUsuario() != null) {
                         dto.setUsuarioId(f.getUsuario().getId());
                         dto.setUsuarioNome(f.getUsuario().getNome());
-                        dto.setUsuarioPerfil(f.getUsuario().getTurma());
+                        dto.setUsuarioTurma(f.getUsuario().getTurma()); // ✅ CORRETO: Obtém a turma
                         dto.setUsuarioQrCode(f.getUsuario().getQrCode());
                     }
                     return dto;
@@ -136,14 +136,22 @@ public class FerramentaService {
     }
 
     public List<FerramentaUsuarioDTO> listarFerramentasPorCracha(String cracha) {
-        // Busca otimizada
         List<Ferramenta> ferramentas = ferramentaRepository.findByUsuarioQrCode(cracha);
 
         return ferramentas.stream()
                 .map(f -> {
-                    // ... (mesma lógica de mapeamento acima)
                     FerramentaUsuarioDTO dto = new FerramentaUsuarioDTO();
-                    // ... preencha os dados ...
+                    dto.setFerramentaId(f.getId());
+                    dto.setFerramentaNome(f.getNome());
+                    dto.setPatrimonio(f.getPatrimonio()); // ✅ CORRETO
+                    dto.setDataDevolucao(f.getDataDevolucao());
+
+                    if (f.getUsuario() != null) {
+                        dto.setUsuarioId(f.getUsuario().getId());
+                        dto.setUsuarioNome(f.getUsuario().getNome());
+                        dto.setUsuarioTurma(f.getUsuario().getTurma()); // ✅ CORRETO: Obtém a turma
+                        dto.setUsuarioQrCode(f.getUsuario().getQrCode());
+                    }
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -157,7 +165,7 @@ public class FerramentaService {
         // Remove o usuário associado
         ferramenta.setUsuario(null);
         // Limpa a data de associação também
-        ferramenta.setDataAssociacao(null); // NOVO: LIMPA O CAMPO DE TEMPO
+        ferramenta.setDataAssociacao(null); // LIMPA O CAMPO DE TEMPO
         // Opcional: atualiza data de devolução para hoje
         ferramenta.setDataDevolucao(LocalDate.now());
 
@@ -177,7 +185,7 @@ public class FerramentaService {
         dto.setId(ferramenta.getId());
         dto.setNome(ferramenta.getNome());
         dto.setDescricao(ferramenta.getDescricao());
-        dto.setQuantidadeEstoque(ferramenta.getQuantidadeEstoque());
+        dto.setPatrimonio(ferramenta.getPatrimonio()); // ✅ CORRETO
 
         if (ferramenta.getUsuario() != null) {
             dto.setUsuarioId(ferramenta.getUsuario().getId());

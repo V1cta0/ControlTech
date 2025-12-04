@@ -22,7 +22,7 @@ public class Ferramenta {
 
     private String nome;
     private String descricao;
-    private Integer quantidadeEstoque;
+    private String patrimonio;
 
 
     private LocalDate dataDevolucao;
