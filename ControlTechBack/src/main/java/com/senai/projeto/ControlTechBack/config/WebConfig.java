@@ -1,26 +1,20 @@
+
 package com.senai.projeto.ControlTechBack.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+        // Permite qualquer origem com credenciais
         registry.addMapping("/**")
-                .allowedOrigins(
-                        // ORIGENS PERMITIDAS
-                        "http://localhost:3000",
-                        "http://localhost:8080",
-                        "https://control-tech-six.vercel.app", // Front-end
-                        "https://controltech.up.railway.app"  // Back-end
-                )
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true);
+                .allowedOriginPatterns("*")  // Permite qualquer origem usando padrões
+                .allowedMethods("*")         // Permite qualquer método HTTP (GET, POST, PUT, DELETE, etc.)
+                .allowedHeaders("*")         // Permite qualquer cabeçalho
+                .allowCredentials(true)      // Permite o envio de credenciais (cookies, cabeçalhos de autenticação, etc.)
+                .maxAge(3600);               // Define o tempo de cache do CORS
     }
 }
