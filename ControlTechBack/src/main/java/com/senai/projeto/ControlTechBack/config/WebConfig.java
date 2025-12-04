@@ -8,11 +8,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        // CORRIGIDO: Removido o problemático allowedOriginPatterns("*") e adicionadas as origens explícitas.
+        // CORRIGIDO: Substituímos o problemático allowedOriginPatterns por allowedOrigins com a lista de domínios.
         registry.addMapping("/**")
                 .allowedOrigins(
                         "https://control-tech-six.vercel.app",  // Domínio do seu Front-end
-                        "https://controltech.up.railway.app",   // Domínio do seu Back-end (Garantia)
+                        "https://controltech.up.railway.app",   // Domínio do seu Back-end
                         "http://localhost:3000",                // Desenvolvimento local
                         "http://localhost:8080"                 // Desenvolvimento local
                 )
